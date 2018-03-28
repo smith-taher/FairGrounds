@@ -7,12 +7,14 @@ const rateButton = document.getElementById('rate');
 let showPageButton = function(buttonDom, newViewableDom) {
     buttonDom.addEventListener('click', function(){
         let visiblePage = document.getElementsByClassName('viewable-on')[0];
-        console.log(visiblePage);
         visiblePage.className = 'viewable-off';
         newViewableDom.className = "viewable-on";
     });
 };
 
+let renderButtons = function() {
+    let userViewArticles = showPageButton(viewButton, viewArticles);
+    let userRateArticles = showPageButton(rateButton, rateArticles);
+}
 
-showPageButton(viewButton, viewArticles);
-showPageButton(rateButton, rateArticles);
+renderButtons();
