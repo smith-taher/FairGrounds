@@ -11,7 +11,7 @@ var generateArticle = function(response) {
     var article = fetch(req)
         .then(function(response) {
             console.log(response.json());
+        return article;
         })
-    return article;
 };
 module.exports = generateArticle;
