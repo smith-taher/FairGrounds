@@ -6,6 +6,17 @@ html, body {
 }
 
 #container {
+    height: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+}
+
+.viewable-on {
+    display: flex;
+}
+
+.viewable-off {
+    display: none;
 }
