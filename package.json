@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/smith-taher/FairGrounds#readme",
   "dependencies": {
+    "jsonwebtoken": "^8.2.0",
     "pg-promise": "^8.2.2"
   }
 }
