@@ -1,0 +1,22 @@
+{
+  "name": "fairgrounds",
+  "version": "1.0.0",
+  "description": "",
+  "main": "newsAPI.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smith-taher/FairGrounds.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/smith-taher/FairGrounds/issues"
+  },
+  "homepage": "https://github.com/smith-taher/FairGrounds#readme",
+  "dependencies": {
+    "pg-promise": "^8.2.2"
+  }
+}
