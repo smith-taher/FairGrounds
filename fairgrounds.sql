@@ -40,7 +40,12 @@ SET default_with_oids = false;
 CREATE TABLE public.articles (
     articleid integer NOT NULL,
     topic character varying(200) NOT NULL,
-    url character varying(200) NOT NULL
+    url character varying(200) NOT NULL,
+    author character varying(200),
+    description character varying(300),
+    publishedat character varying(200),
+    source character varying(200),
+    urltoimage character varying(300)
 );
 
 
@@ -139,7 +144,7 @@ ALTER TABLE ONLY public.users ALTER COLUMN userid SET DEFAULT nextval('public.us
 -- Data for Name: articles; Type: TABLE DATA; Schema: public; Owner: robby
 --
 
-COPY public.articles (articleid, topic, url) FROM stdin;
+COPY public.articles (articleid, topic, url, author, description, publishedat, source, urltoimage) FROM stdin;
 \.
 
 
@@ -159,6 +164,7 @@ COPY public.users (username, password, userid, leaning, email) FROM stdin;
 robby	password	1	85	rcackerley@me.com
 rachel	password	2	20	rachel@rachel.com
 joel	password	3	47	joel@joel.com
+testuser1	password	4	61	test@test.com
 \.
 
 
@@ -173,7 +179,7 @@ SELECT pg_catalog.setval('public.articles_articleid_seq', 1, false);
 -- Name: users_userid_seq; Type: SEQUENCE SET; Schema: public; Owner: robby
 --
 
-SELECT pg_catalog.setval('public.users_userid_seq', 3, true);
+SELECT pg_catalog.setval('public.users_userid_seq', 4, true);
 
 
 --
