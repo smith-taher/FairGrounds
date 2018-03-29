@@ -20,3 +20,18 @@ html, body {
 .viewable-off {
     display: none;
 }
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 200px;
+    width: 200px;
+    background: gray;
+  }
+
+  .spacing{
+	padding: 5px;
+}
