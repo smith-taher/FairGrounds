@@ -21,11 +21,19 @@ let getUsersDb = () => {
 }
 
 let getArticleDb = (id) => {
-  return db.query(`SELECT * from articles where article = ${id}`);
+  return db.query(`SELECT * from articles where articleid = ${id}`);
 }
 
 let getArticlesDb = () => {
   return db.query(`SELECT * from articles`);
+}
+
+let getRatingDb = (id) => {
+  return db.query(`SELECT * from ratings where ratingid = ${id}`);
+}
+
+let getArticlesDb = () => {
+  return db.query(`SELECT * from ratings`);
 }
 
 let rateArticleDb = (userid, articleid, rating) => {
@@ -57,8 +65,17 @@ let getArticle = (request, response) => {
   getArticleDb(id).then((data) => response.end(JSON.stringify(data)));
 }
 
-let getUsers = (request, response) => {
+let getArticles = (request, response) => {
   getArticlesDb().then((data) => response.end(JSON.stringify(data)));
+}
+
+let getRating = (request, response) => {
+  let id = getSuffix(request.url, '/articles/');
+  getRatingDb(id).then((data) => response.end(JSON.stringify(data)));
+}
+
+let getRating = (request, response) => {
+  getRatingsDb().then((data) => response.end(JSON.stringify(data)));
 }
 
 //Routes and server
@@ -86,9 +103,9 @@ let routes = [
   { method: 'GET', path: /^\/articles\/?$/, handler: getArticles },
   // { method: 'POST', path: /^\/articles\/?$/, handler: postArticle },
   // { method: 'DELETE', path: /^\/ratings\/([0-9]+)$/, handler: deleteRating},
-  // { method: 'GET', path: /^\/ratings\/([0-9]+)$/, handler: getRating },
+  { method: 'GET', path: /^\/ratings\/([0-9]+)$/, handler: getRating },
   // { method: 'PUT', path: /^\/ratings\/([0-9]+)$/, handler: putRating },
-  // { method: 'GET', path: /^\/ratings\/?$/, handler: getRatings },
+  { method: 'GET', path: /^\/ratings\/?$/, handler: getRatings },
   // { method: 'POST', path: /^\/ratings\/?$/, handler: postRating }
 ];
 

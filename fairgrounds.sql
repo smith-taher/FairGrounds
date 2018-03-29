@@ -78,6 +78,7 @@ ALTER SEQUENCE public.articles_articleid_seq OWNED BY public.articles.articleid;
 --
 
 CREATE TABLE public.ratings (
+    ratingid serial PRIMARY KEY,
     userid integer,
     articleid integer,
     fair integer,
