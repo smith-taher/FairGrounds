@@ -53,7 +53,7 @@ let routes = [
   { method: 'PUT', path: /^\/users\/([0-9]+)$/, handler: putUser },
   { method: 'GET', path: /^\/users\/?$/, handler: getUsers },
   { method: 'POST', path: /^\/users\/?$/, handler: postUser },
-  { method: 'GET', path: /^\/signin\/?$/, handler: signIn },
+  { method: 'POST', path: /^\/signin\/?$/, handler: signIn },
   { method: 'DELETE', path: /^\/articles\/([0-9]+)$/, handler: deleteArticle },
   { method: 'GET', path: /^\/articles\/([0-9]+)$/, handler: getArticle },
   { method: 'PUT', path: /^\/articles\/([0-9]+)$/, handler: putArticle },
