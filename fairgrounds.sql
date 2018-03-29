@@ -38,7 +38,7 @@ SET default_with_oids = false;
 --
 
 CREATE TABLE public.articles (
-    articleid integer NOT NULL,
+    articleid serial UNIQUE PRIMARY KEY,
     topic character varying(200) NOT NULL,
     url character varying(200) NOT NULL,
     author character varying(200),

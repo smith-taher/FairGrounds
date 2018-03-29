@@ -13,11 +13,19 @@ let createUserDb = (username, password, leaning, email) => {
 };
 
 let getUserDb = (id) => {
-  return db.query(`SELECT * from users where userid = ${id}`);
+  return db.query(`SELECT * from users where articleid = ${id}`);
 }
 
 let getUsersDb = () => {
   return db.query(`SELECT * from users`);
+}
+
+let getArticleDb = (id) => {
+  return db.query(`SELECT * from articles where article = ${id}`);
+}
+
+let getArticlesDb = () => {
+  return db.query(`SELECT * from articles`);
 }
 
 let rateArticleDb = (userid, articleid, rating) => {
@@ -42,6 +50,15 @@ let getUser = (request, response) => {
 
 let getUsers = (request, response) => {
   getUsersDb().then((data) => response.end(JSON.stringify(data)));
+}
+
+let getArticle = (request, response) => {
+  let id = getSuffix(request.url, '/articles/');
+  getArticleDb(id).then((data) => response.end(JSON.stringify(data)));
+}
+
+let getUsers = (request, response) => {
+  getArticlesDb().then((data) => response.end(JSON.stringify(data)));
 }
 
 //Routes and server
