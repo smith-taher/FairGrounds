@@ -1,6 +1,6 @@
 const http = require('http');
 const pg = require('pg-promise')();
-const db = pg('postgres://robby@localhost:5432/fairgrounds');
+const db = pg('postgres://rachelpoulos@localhost:5432/fairgrounds');
 // const getNews = require('./newsAPI');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
@@ -86,6 +86,7 @@ let deleteArticle = (request, response) => {
 let deleteRating = (request, response) => {
   let id = getSuffix(request.url, '/rating/');
   deleteRatingDb(id).then((data) => response.end(JSON.stringify('Rating Deleted')));
+}
 
 //functions to generate token for login
 let validateCredentials = (username, password) => {
