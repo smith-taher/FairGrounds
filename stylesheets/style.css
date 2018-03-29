@@ -21,17 +21,25 @@ html, body {
     display: none;
 }
 
-.overlay {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    height: 200px;
-    width: 200px;
-    background: gray;
-  }
+.logo {
+  margin-top: 25%;
+  width: 300px;
+  display: block;
+  margin-bottom: 30px;
+}
 
-  .spacing{
-	padding: 5px;
+.bg {
+  background: #efefef;
+  display: flex;
+  justify-content: center;
+}
+
+input {
+  height: 20px;
+  border: 0;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+input::placeholder {
+
 }
