@@ -20,3 +20,26 @@ html, body {
 .viewable-off {
     display: none;
 }
+
+.logo {
+  margin-top: 25%;
+  width: 300px;
+  display: block;
+  margin-bottom: 30px;
+}
+
+.bg {
+  background: #efefef;
+  display: flex;
+  justify-content: center;
+}
+
+input {
+  height: 20px;
+  border: 0;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+input::placeholder {
+
+}

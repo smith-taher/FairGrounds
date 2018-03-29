@@ -9,7 +9,7 @@ let login = (username, password) => {
     'username': username,
     'password': password
   };
-  return fetch('/sign-in', {method: 'GET', body: JSON.stringify(credentials)})
+  return fetch('http://localhost:3000/signin', {method: 'POST', body: JSON.stringify(credentials)})
 };
 
 let showPageButton = function(buttonDom, newViewableDom) {
@@ -24,5 +24,8 @@ let renderButtons = function() {
     let userViewArticles = showPageButton(viewButton, viewArticles);
     let userRateArticles = showPageButton(rateButton, rateArticles);
 }
+login('robby', 'password').then(response => response.text()).then(token => {
+  localStorage.setItem('token', token);
+})
 
 renderButtons();
