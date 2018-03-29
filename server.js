@@ -32,7 +32,7 @@ let getSuffix = (fullUrl, prefix) => fullUrl.slice(prefix.length);
 
 let getUser = (request, response) => {
   let id = getSuffix(request.url, '/users/');
-  getUserDb(id);
+  getUserDb(id).then((data) => response.end(JSON.stringify(data)));
 }
 
 //Routes and server
