@@ -42,7 +42,7 @@ let matches = (request, method, path) => {
          path.exec(request.url);
 };
 
-let notFound = function(request, response) {
+let notFound = (request, response) => {
   response.statusCode = 404;
   response.end('404, nothing here!');
 };
