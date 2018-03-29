@@ -42,6 +42,11 @@ let matches = (request, method, path) => {
          path.exec(request.url);
 };
 
+let notFound = function(request, response) {
+  response.statusCode = 404;
+  response.end('404, nothing here!');
+};
+
 let routes = [
   { method: 'DELETE', path: /^\/users\/([0-9]+)$/, handler: deleteUser },
   { method: 'GET', path: /^\/users\/([0-9]+)$/, handler: getUser },
