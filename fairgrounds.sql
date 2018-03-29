@@ -96,7 +96,7 @@ ALTER TABLE public.ratings OWNER TO robby;
 CREATE TABLE public.users (
     username character varying(200) UNIQUE NOT NULL,
     password character varying(200) UNIQUE NOT NULL,
-    userid serial PRIMARY KEY NOT NULL,
+    userid serial PRIMARY KEY,
     leaning integer,
     email character varying(200) UNIQUE NOT NULL
 );
