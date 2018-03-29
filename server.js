@@ -13,7 +13,7 @@ let createUserDb = (username, password, leaning, email) => {
 };
 
 let getUserDb = (id) => {
-  return db.query(`SELECT * from users where articleid = ${id}`);
+  return db.query(`SELECT * from users where userid = ${id}`);
 }
 
 let getUsersDb = () => {
