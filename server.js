@@ -1,7 +1,11 @@
 const http = require('http');
 const pg = require('pg-promise')();
-const db = pg('postgres://rachelpoulos@localhost:5432/fairgrounds');
-const getNews = require('./newsAPI');
+const db = pg('postgres://robby@localhost:5432/fairgrounds');
+// const getNews = require('./newsAPI');
+const jwt = require('jsonwebtoken');
+const fs = require('fs');
+
+const signature = '@!#$%%^&#$!@#^&***()ROBBY';
 
 
 //functions to talk to DB
@@ -30,10 +34,6 @@ let getArticlesDb = () => {
 
 let getRatingDb = (id) => {
   return db.query(`SELECT * from ratings where ratingid = ${id}`);
-}
-
-let getArticlesDb = () => {
-  return db.query(`SELECT * from ratings`);
 }
 
 let rateArticleDb = (userid, articleid, rating) => {
@@ -74,8 +74,58 @@ let getRating = (request, response) => {
   getRatingDb(id).then((data) => response.end(JSON.stringify(data)));
 }
 
-let getRating = (request, response) => {
+let getRatings = (request, response) => {
   getRatingsDb().then((data) => response.end(JSON.stringify(data)));
+}
+
+//functions to generate token for login
+let validateCredentials = (username, password) => {
+  return db.query(`SELECT username, password, userid from users where
+    username = '${username}' and password = '${password}';`);
+}
+
+let createToken = user => {
+  console.log(user.userid);
+  return jwt.sign({
+    userId: user.userid,
+  }, signature, { expiresIn: '7d' });
+}
+
+let signIn = (request, response) => {
+  let body = '';
+  request.on('data', (chunk) => {
+    body += chunk.toString();
+  });
+  request.on('end', () => {
+    let credentials = JSON.parse(body);
+    let {username, password} = credentials;
+    var credentialsPromise = validateCredentials(username, password);
+    credentialsPromise.then( queryOutcome => {
+
+      if (queryOutcome.length > 0) {
+        let token = createToken(queryOutcome[0]);
+        console.log(token);
+        // response.setHeader('jwt', token);
+        response.end(token);
+      } else {
+        response.end('Username not found');
+      }
+    }).catch( results => {
+      console.log(results);
+    });
+  });
+};
+
+let renderFile = (request, response) => {
+  var fileName = request.url.slice(1);
+  // console.log(fileName);
+  fs.readFile(fileName, 'utf-8', (err, data) => {
+    if (err) {
+        data = err;
+        data = JSON.stringify(data);
+    }
+    response.end(data);
+  })
 }
 
 //Routes and server
@@ -96,7 +146,7 @@ let routes = [
   // { method: 'PUT', path: /^\/users\/([0-9]+)$/, handler: putUser },
   { method: 'GET', path: /^\/users\/?$/, handler: getUsers },
   // { method: 'POST', path: /^\/users\/?$/, handler: postUser },
-  // { method: 'POST', path: /^\/signin\/?$/, handler: signIn },
+  { method: 'POST', path: /^\/signin\/?$/, handler: signIn },
   // { method: 'DELETE', path: /^\/articles\/([0-9]+)$/, handler: deleteArticle },
   { method: 'GET', path: /^\/articles\/([0-9]+)$/, handler: getArticle },
   // { method: 'PUT', path: /^\/articles\/([0-9]+)$/, handler: putArticle },
@@ -107,11 +157,12 @@ let routes = [
   // { method: 'PUT', path: /^\/ratings\/([0-9]+)$/, handler: putRating },
   { method: 'GET', path: /^\/ratings\/?$/, handler: getRatings },
   // { method: 'POST', path: /^\/ratings\/?$/, handler: postRating }
+  { method: 'GET', path: /.*/, handler: renderFile}
 ];
 
 let server = http.createServer(function(request, response) {
       let route = routes.find(route => matches(request, route.method, route.path));
-  
+
       (route ? route.handler : notFound)(request, response);
 });
 
