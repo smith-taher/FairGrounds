@@ -1,5 +1,6 @@
 const http = require('http');
-const db = require('./db.js');
+const pg = require('pg-promise')();
+const db = pg('postgres://rachelpoulos@localhost:5432/fairgrounds');
 const getNews = require('./newsAPI');
 
 
@@ -13,6 +14,26 @@ let createUserDb = (username, password, leaning, email) => {
 
 let getUserDb = (id) => {
   return db.query(`SELECT * from users where userid = ${id}`);
+}
+
+let getUsersDb = () => {
+  return db.query(`SELECT * from users`);
+}
+
+let getArticleDb = (id) => {
+  return db.query(`SELECT * from articles where articleid = ${id}`);
+}
+
+let getArticlesDb = () => {
+  return db.query(`SELECT * from articles`);
+}
+
+let getRatingDb = (id) => {
+  return db.query(`SELECT * from ratings where ratingid = ${id}`);
+}
+
+let getArticlesDb = () => {
+  return db.query(`SELECT * from ratings`);
 }
 
 let rateArticleDb = (userid, articleid, rating) => {
@@ -35,6 +56,28 @@ let getUser = (request, response) => {
   getUserDb(id).then((data) => response.end(JSON.stringify(data)));
 }
 
+let getUsers = (request, response) => {
+  getUsersDb().then((data) => response.end(JSON.stringify(data)));
+}
+
+let getArticle = (request, response) => {
+  let id = getSuffix(request.url, '/articles/');
+  getArticleDb(id).then((data) => response.end(JSON.stringify(data)));
+}
+
+let getArticles = (request, response) => {
+  getArticlesDb().then((data) => response.end(JSON.stringify(data)));
+}
+
+let getRating = (request, response) => {
+  let id = getSuffix(request.url, '/articles/');
+  getRatingDb(id).then((data) => response.end(JSON.stringify(data)));
+}
+
+let getRating = (request, response) => {
+  getRatingsDb().then((data) => response.end(JSON.stringify(data)));
+}
+
 //Routes and server
 
 let matches = (request, method, path) => {
@@ -48,22 +91,22 @@ let notFound = (request, response) => {
 };
 
 let routes = [
-  { method: 'DELETE', path: /^\/users\/([0-9]+)$/, handler: deleteUser },
+  // { method: 'DELETE', path: /^\/users\/([0-9]+)$/, handler: deleteUser },
   { method: 'GET', path: /^\/users\/([0-9]+)$/, handler: getUser },
-  { method: 'PUT', path: /^\/users\/([0-9]+)$/, handler: putUser },
+  // { method: 'PUT', path: /^\/users\/([0-9]+)$/, handler: putUser },
   { method: 'GET', path: /^\/users\/?$/, handler: getUsers },
-  { method: 'POST', path: /^\/users\/?$/, handler: postUser },
-  { method: 'POST', path: /^\/signin\/?$/, handler: signIn },
-  { method: 'DELETE', path: /^\/articles\/([0-9]+)$/, handler: deleteArticle },
+  // { method: 'POST', path: /^\/users\/?$/, handler: postUser },
+  // { method: 'POST', path: /^\/signin\/?$/, handler: signIn },
+  // { method: 'DELETE', path: /^\/articles\/([0-9]+)$/, handler: deleteArticle },
   { method: 'GET', path: /^\/articles\/([0-9]+)$/, handler: getArticle },
-  { method: 'PUT', path: /^\/articles\/([0-9]+)$/, handler: putArticle },
+  // { method: 'PUT', path: /^\/articles\/([0-9]+)$/, handler: putArticle },
   { method: 'GET', path: /^\/articles\/?$/, handler: getArticles },
-  { method: 'POST', path: /^\/articles\/?$/, handler: postArticle },
-  { method: 'DELETE', path: /^\/ratings\/([0-9]+)$/, handler: deleteRating},
+  // { method: 'POST', path: /^\/articles\/?$/, handler: postArticle },
+  // { method: 'DELETE', path: /^\/ratings\/([0-9]+)$/, handler: deleteRating},
   { method: 'GET', path: /^\/ratings\/([0-9]+)$/, handler: getRating },
-  { method: 'PUT', path: /^\/ratings\/([0-9]+)$/, handler: putRating },
+  // { method: 'PUT', path: /^\/ratings\/([0-9]+)$/, handler: putRating },
   { method: 'GET', path: /^\/ratings\/?$/, handler: getRatings },
-  { method: 'POST', path: /^\/ratings\/?$/, handler: postRating }
+  // { method: 'POST', path: /^\/ratings\/?$/, handler: postRating }
 ];
 
 let server = http.createServer(function(request, response) {

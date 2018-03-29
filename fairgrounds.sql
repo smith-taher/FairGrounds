@@ -38,7 +38,7 @@ SET default_with_oids = false;
 --
 
 CREATE TABLE public.articles (
-    articleid integer NOT NULL,
+    articleid serial PRIMARY KEY,
     topic character varying(200) NOT NULL,
     url character varying(200) NOT NULL,
     author character varying(200),
@@ -78,6 +78,7 @@ ALTER SEQUENCE public.articles_articleid_seq OWNED BY public.articles.articleid;
 --
 
 CREATE TABLE public.ratings (
+    ratingid serial PRIMARY KEY,
     userid integer,
     articleid integer,
     fair integer,
