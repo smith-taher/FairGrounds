@@ -13,32 +13,53 @@ const signature = '@!#$%%^&#$!@#^&***()ROBBY';
 let createUserDb = (user) => 
     db.query(`INSERT INTO users
     (username, password, leaning, email)
-    VALUES('${user.username}', '${user.password}', '${user.leaning}', '${user.email}');`);
-
-let getUserDb = (id) => db.query(`SELECT * from users where userid = ${id}`);
-
-let getUsersDb = () => db.query(`SELECT * from users`);
-
-let getArticleDb = (id) => db.query(`SELECT * from articles where articleid = ${id}`);
-
-let getArticlesDb = () => db.query(`SELECT * from articles`);
-
-let getRatingDb = (id) => db.query(`SELECT * from ratings where ratingid = ${id}`);
-
-let getRatingsDb = () => db.query(`SELECT * from ratings`);
-
-let deleteUserDb = (id) => db.query(`DELETE FROM users WHERE userid = ${id}`);
-
-let deleteArticleDb = (id) => db.query(`DELETE FROM articles WHERE articleid = ${id}`);
-
-let deleteRatingDb = (id) => db.query(`DELETE FROM ratings WHERE ratingid = ${id}`);
+    VALUES('${user.username}', '${user.password}', 
+    '${user.leaning}', '${user.email}');`);
 
 let rateArticleDb = (rating) => 
-  db.query(`INSERT INTO ratings(userid, articleid, ${rating.rating}) VALUES('${rating.userid}', '${rating.articleid}', 1);`);
+  db.query(`INSERT INTO ratings
+  (userid, articleid, ${rating.rating}) 
+  VALUES('${rating.userid}', '${rating.articleid}', 1);`);
 
 let addArticleDb = (article) => 
-  db.query(`INSERT INTO articles(topic, url, author, description, publishedAt, source, urlToImage)
-  VALUES('${article.topic}', '${article.url}', '${article.author}', '${article.description}', '${article.publishedAt}', '${article.source}', '${article.urlToImage}');`);
+  db.query(`INSERT INTO articles
+  (topic, url, author, description, publishedAt, source, urlToImage)
+  VALUES('${article.topic}', '${article.url}',
+  '${article.author}', '${article.description}', 
+  '${article.publishedAt}', '${article.source}', 
+  '${article.urlToImage}');`);
+
+let getUserDb = (id) => 
+  db.query(`SELECT * from users where userid = ${id};`);
+
+let getArticleDb = (id) => 
+  db.query(`SELECT * from articles where articleid = ${id};`);
+
+let getRatingDb = (id) => 
+  db.query(`SELECT * from ratings where ratingid = ${id};`);
+
+let getUsersDb = () => 
+  db.query(`SELECT * from users;`);
+
+let getArticlesDb = () => 
+  db.query(`SELECT * from articles;`);
+
+let getRatingsDb = () => 
+  db.query(`SELECT * from ratings;`);
+
+let deleteUserDb = (id) => 
+  db.query(`DELETE FROM users WHERE userid = ${id};`);
+
+let deleteArticleDb = (id) => 
+  db.query(`DELETE FROM articles WHERE articleid = ${id};`);
+
+let deleteRatingDb = (id) => 
+  db.query(`DELETE FROM ratings WHERE ratingid = ${id};`);
+
+let editUserDb = (id, updateString) =>
+  db.query(`UPDATE users
+  SET ${updateString}
+  WHERE userid = ${id};`);
 
 //helper functions
 
@@ -53,6 +74,14 @@ let readIncoming = (request, callback) => {
       callback(incoming);
   });
 };
+
+let updateString = (object) => {
+  let newString = '';
+  Object.keys(object).map((key) => {
+    newString += key + '=' + "'" + object[key] + "'" + ', ';
+ });
+ return newString.slice(0, newString.length - 2);
+}
 
 //handlers
 
@@ -98,26 +127,35 @@ let deleteRating = (request, response) => {
   deleteRatingDb(id).then((data) => response.end(JSON.stringify('Rating Deleted')));
 }
 
-let postUser = function(request, response) {
-  readIncoming(request, function(incoming) {
+let postUser = (request, response) => {
+  readIncoming(request, (incoming) => {
       let user = JSON.parse(incoming);
-      createUserDb(user).then((data) => response.end(data + 'Created user!'));      
+      createUserDb(user).then((data) => response.end('Created user!'));      
   });
 };
 
-let postRating = function(request, response) {
-  readIncoming(request, function(incoming) {
+let postRating = (request, response) => {
+  readIncoming(request, (incoming) => {
       let rating = JSON.parse(incoming);
-      rateArticleDb(rating).then((data) => response.end(data + 'Added rating!'));      
+      rateArticleDb(rating).then((data) => response.end('Added rating!'));      
   });
 };
 
-let postArticle = function(request, response) {
-  readIncoming(request, function(incoming) {
+let postArticle = (request, response) => {
+  readIncoming(request, (incoming) => {
       let article = JSON.parse(incoming);
-      addArticleDb(article).then((data) => response.end(data + 'Added article!'));      
+      addArticleDb(article).then((data) => response.end('Added article!'));      
   });
 };
+
+let editUser = (request, response) => {
+  readIncoming(request, (incoming) => {
+    let id = getSuffix(request.url, '/users/');
+    let update = JSON.parse(incoming);
+    let setInfo = updateString(update);
+    editUserDb(id, setInfo).then((data) => response.end('Updated user!'));
+  })
+}
 
 //functions to generate token for login
 let validateCredentials = (username, password) => 
@@ -178,7 +216,7 @@ let notFound = (request, response) => {
 let routes = [
   { method: 'DELETE', path: /^\/users\/([0-9]+)$/, handler: deleteUser },
   { method: 'GET', path: /^\/users\/([0-9]+)$/, handler: getUser },
-  // { method: 'PUT', path: /^\/users\/([0-9]+)$/, handler: putUser },
+  { method: 'PUT', path: /^\/users\/([0-9]+)$/, handler: editUser },
   { method: 'GET', path: /^\/users\/?$/, handler: getUsers },
   { method: 'POST', path: /^\/users\/?$/, handler: postUser },
   { method: 'DELETE', path: /^\/articles\/([0-9]+)$/, handler: deleteArticle },
