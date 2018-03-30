@@ -241,8 +241,8 @@ let signIn = (request, response) => {
     readIncoming(request, (incoming) => {
     let credentials = JSON.parse(incoming);
     let {username, password} = credentials;
-    var credentialsPromise = validateCredentials(username, password);
-    credentialsPromise.then( queryOutcome => {
+    validateCredentials(username, password)
+    .then( queryOutcome => {
 
       if (queryOutcome.length > 0) {
         let token = createToken(queryOutcome[0]);
