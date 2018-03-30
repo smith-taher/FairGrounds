@@ -36,9 +36,9 @@ let deleteRatingDb = (id) => db.query(`DELETE FROM ratings WHERE ratingid = ${id
 let rateArticleDb = (rating) => 
   db.query(`INSERT INTO ratings(userid, articleid, ${rating.rating}) VALUES('${rating.userid}', '${rating.articleid}', 1);`);
 
-let addArticleDb = (url, author, description, publishedAt, source, urlToImage, topic) => 
+let addArticleDb = (article) => 
   db.query(`INSERT INTO articles(topic, url, author, description, publishedAt, source, urlToImage)
-  VALUES('${topic}', '${url}', '${author}', '${description}', '${publishedAt}', '${source}', '${urlToImage}');`);
+  VALUES('${article.topic}', '${article.url}', '${article.author}', '${article.description}', '${article.publishedAt}', '${article.source}', '${article.urlToImage}');`);
 
 //helper functions
 
@@ -112,6 +112,13 @@ let postRating = function(request, response) {
   });
 };
 
+let postArticle = function(request, response) {
+  readIncoming(request, function(incoming) {
+      let article = JSON.parse(incoming);
+      addArticleDb(article).then((data) => response.end(data + 'Added article!'));      
+  });
+};
+
 //functions to generate token for login
 let validateCredentials = (username, password) => 
     db.query(`SELECT username, password, userid from users where
@@ -181,10 +188,10 @@ let routes = [
   { method: 'GET', path: /^\/articles\/([0-9]+)$/, handler: getArticle },
   // { method: 'PUT', path: /^\/articles\/([0-9]+)$/, handler: putArticle },
   { method: 'GET', path: /^\/articles\/?$/, handler: getArticles },
-  // { method: 'POST', path: /^\/articles\/?$/, handler: postArticle },
+  { method: 'POST', path: /^\/articles\/?$/, handler: postArticle },
   { method: 'DELETE', path: /^\/ratings\/([0-9]+)$/, handler: deleteRating},
   { method: 'GET', path: /^\/ratings\/([0-9]+)$/, handler: getRating },
-  // { method: 'PUT', path: /^\/ratings\/([0-9]+)$/, handler: putRating },
+  { method: 'PUT', path: /^\/ratings\/([0-9]+)$/, handler: putRating },
   { method: 'GET', path: /^\/ratings\/?$/, handler: getRatings },
   { method: 'POST', path: /^\/ratings\/?$/, handler: postRating }
   { method: 'GET', path: /.*/, handler: renderFile}
