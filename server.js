@@ -12,22 +12,18 @@ const signature = '@!#$%%^&#$!@#^&***()ROBBY';
 
 let createUserDb = (user) => 
     db.query(`INSERT INTO users
-    (username, password, leaning, email)
-    VALUES('${user.username}', '${user.password}', 
-    '${user.leaning}', '${user.email}');`);
+    (${user.inserts})
+    VALUES(${user.values});`);
 
 let rateArticleDb = (rating) => 
   db.query(`INSERT INTO ratings
-  (userid, articleid, ${rating.rating}) 
-  VALUES('${rating.userid}', '${rating.articleid}', 1);`);
+  (${rating.inserts}) 
+  VALUES(${rating.value}, 1);`);
 
 let addArticleDb = (article) => 
   db.query(`INSERT INTO articles
-  (topic, url, author, description, publishedAt, source, urlToImage)
-  VALUES('${article.topic}', '${article.url}',
-  '${article.author}', '${article.description}', 
-  '${article.publishedAt}', '${article.source}', 
-  '${article.urlToImage}');`);
+  (${article.inserts})
+  VALUES(${article.values});`);
 
 let getUserDb = (id) => 
   db.query(`SELECT * from users where userid = ${id};`);
@@ -93,6 +89,16 @@ let updateString = (object) => {
  return newString.slice(0, newString.length - 2);
 }
 
+let insertsValuesObject = (object) => {
+  let newInserts = '';
+  let newValues = '';
+  Object.keys(object).map((key) => {
+    newInserts += key + ', ';
+    newValues += "'" + object[key] + "'" + ', ';
+ });
+ return {inserts: newInserts.slice(0, newInserts.length - 2), values: newValues.slice(0, newValues.length - 2)};
+}
+
 //handlers
 
 let getUser = (request, response) => {
@@ -139,21 +145,22 @@ let deleteRating = (request, response) => {
 
 let postUser = (request, response) => {
   readIncoming(request, (incoming) => {
-      let user = JSON.parse(incoming);
+      let user = insertsValuesObject(JSON.parse(incoming));
+      console.log(user);
       createUserDb(user).then((data) => response.end('Created user!'));      
   });
 };
 
 let postRating = (request, response) => {
   readIncoming(request, (incoming) => {
-      let rating = JSON.parse(incoming);
+      let rating = insertsValuesObject(JSON.parse(incoming));
       rateArticleDb(rating).then((data) => response.end('Added rating!'));      
   });
 };
 
 let postArticle = (request, response) => {
   readIncoming(request, (incoming) => {
-      let article = JSON.parse(incoming);
+      let article = insertValuesObject(JSON.parse(incoming));
       addArticleDb(article).then((data) => response.end('Added article!'));      
   });
 };
