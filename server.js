@@ -10,10 +10,10 @@ const signature = '@!#$%%^&#$!@#^&***()ROBBY';
 
 //functions to talk to DB
 
-let createUserDb = (username, password, leaning, email) => 
+let createUserDb = (user) => 
     db.query(`INSERT INTO users
     (username, password, leaning, email)
-    VALUES('${username}', '${password}', '${leaning}', '${email}');`);
+    VALUES('${user.username}', '${user.password}', '${user.leaning}', '${user.email}');`);
 
 let getUserDb = (id) => db.query(`SELECT * from users where userid = ${id}`);
 
@@ -43,6 +43,16 @@ let addArticleDb = (url, author, description, publishedAt, source, urlToImage, t
 //helper functions
 
 let getSuffix = (fullUrl, prefix) => fullUrl.slice(prefix.length);
+
+let readIncoming = (request, callback) => {
+  let incoming = '';
+  request.on('data', function(chunk) {
+      incoming += chunk.toString();
+  });
+  request.on('end', function() {
+      callback(incoming);
+  });
+};
 
 //handlers
 
@@ -88,11 +98,17 @@ let deleteRating = (request, response) => {
   deleteRatingDb(id).then((data) => response.end(JSON.stringify('Rating Deleted')));
 }
 
+let postUser = function(request, response, contacts) {
+  readIncoming(request, function(incoming) {
+      let user = JSON.parse(incoming);
+      createUserDb(user).then((data) => response.end(data + 'Created contact!'));      
+  });
+};
+
 //functions to generate token for login
-let validateCredentials = (username, password) => {
-  return db.query(`SELECT username, password, userid from users where
+let validateCredentials = (username, password) => 
+    db.query(`SELECT username, password, userid from users where
     username = '${username}' and password = '${password}';`);
-}
 
 let createToken = user => {
   console.log(user.userid);
@@ -101,12 +117,9 @@ let createToken = user => {
   }, signature, { expiresIn: '7d' });
 }
 
+
 let signIn = (request, response) => {
-  let body = '';
-  request.on('data', (chunk) => {
-    body += chunk.toString();
-  });
-  request.on('end', () => {
+    readIncoming(request, (incoming) => {
     let credentials = JSON.parse(body);
     let {username, password} = credentials;
     var credentialsPromise = validateCredentials(username, password);
@@ -155,7 +168,7 @@ let routes = [
   { method: 'GET', path: /^\/users\/([0-9]+)$/, handler: getUser },
   // { method: 'PUT', path: /^\/users\/([0-9]+)$/, handler: putUser },
   { method: 'GET', path: /^\/users\/?$/, handler: getUsers },
-  // { method: 'POST', path: /^\/users\/?$/, handler: postUser },
+  { method: 'POST', path: /^\/users\/?$/, handler: postUser },
   { method: 'DELETE', path: /^\/articles\/([0-9]+)$/, handler: deleteArticle },
   { method: 'POST', path: /^\/signin\/?$/, handler: signIn },
   { method: 'GET', path: /^\/articles\/([0-9]+)$/, handler: getArticle },
