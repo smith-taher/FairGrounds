@@ -31,6 +31,10 @@ We are using a Postgres database that have three tables set up as follow:
     
 <h2>Restful API format</h2>
 <h3>GET</h3>
+<h4>Full tables</h4>
+<p>To retrieve JSON of entire database tables, make GET request localhost:3000/{insert_table}.  Optional tables are <em>users</em>, <em>articles</em>, and <em>ratings</em>.</p>
+<h4>Individual entries</h4>
+<p>For individual entries in each table, got to localhost:3000/{insert_table}/{insert_id#}.  For example localhost:3000/users/6 will return the entire column of the user with the serial id 6.  Same for articles and ratings.
 <h3>POST</h3>
 <h3>PUT</h3>
 <h3>DELETE</h3>
