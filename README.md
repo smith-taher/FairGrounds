@@ -33,8 +33,13 @@ We are using a Postgres database that have three tables set up as follow:
 <h3>GET</h3>
 <h4>Full tables</h4>
 <p>To retrieve JSON of entire database tables, make GET request localhost:3000/{insert_table}.  Optional tables are <em>users</em>, <em>articles</em>, and <em>ratings</em>.</p>
+<p>An example return of GET request to localhost:3000/users :</p>
+<p>[{"username":"rfpoulos","password":"newTestPassword","userid":6,"leaning":80,"email":"rfpoulos@outlook.com"},{"username":"rfpoulos2","password":"test","userid":7,"leaning":75,"email":"rfpoulos2@outlook.com"}]</p>
 <h4>Individual entries</h4>
 <p>For individual entries in each table, got to localhost:3000/{insert_table}/{insert_id#}.  For example localhost:3000/users/6 will return the entire column of the user with the serial id 6.  Same for articles and ratings.
+<p>An example return of GET request to localhost:3000/users/6 :</p>
+<p>[{"username":"rfpoulos","password":"newTestPassword","userid":6,"leaning":80,"email":"rfpoulos@outlook.com"}]</p>
 <h3>POST</h3>
+<p>{"username":"rfpoulos2","password":"test", "leaning":75,"email":"rfpoulos2@outlook.com"}</p>
 <h3>PUT</h3>
 <h3>DELETE</h3>
