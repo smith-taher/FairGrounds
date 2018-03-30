@@ -98,7 +98,7 @@ let deleteRating = (request, response) => {
   deleteRatingDb(id).then((data) => response.end(JSON.stringify('Rating Deleted')));
 }
 
-let postUser = function(request, response, contacts) {
+let postUser = function(request, response) {
   readIncoming(request, function(incoming) {
       let user = JSON.parse(incoming);
       createUserDb(user).then((data) => response.end(data + 'Created contact!'));      
