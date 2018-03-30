@@ -73,10 +73,10 @@ let getSuffix = (fullUrl, prefix) => fullUrl.slice(prefix.length);
 
 let readIncoming = (request, callback) => {
   let incoming = '';
-  request.on('data', function(chunk) {
+  request.on('data', (chunk) => {
       incoming += chunk.toString();
   });
-  request.on('end', function() {
+  request.on('end', () => {
       callback(incoming);
   });
 };
@@ -237,7 +237,7 @@ let createToken = user => {
 
 let signIn = (request, response) => {
     readIncoming(request, (incoming) => {
-    let credentials = JSON.parse(body);
+    let credentials = JSON.parse(incoming);
     let {username, password} = credentials;
     var credentialsPromise = validateCredentials(username, password);
     credentialsPromise.then( queryOutcome => {
