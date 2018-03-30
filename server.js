@@ -103,65 +103,89 @@ let insertsValuesObject = (object) => {
 
 let getUser = (request, response) => {
   let id = getSuffix(request.url, '/users/');
-  getUserDb(id).then((data) => response.end(JSON.stringify(data)));
+  getUserDb(id)
+    .then((data) => response.end(JSON.stringify(data)))
+    .catch(error => {console.log(error)});;
 }
 
 let getUsers = (request, response) => {
-  getUsersDb().then((data) => response.end(JSON.stringify(data)));
+  getUsersDb()
+    .then((data) => response.end(JSON.stringify(data)))
+    .catch(error => {console.log(error)});;
 }
 
 let getArticle = (request, response) => {
   let id = getSuffix(request.url, '/articles/');
-  getArticleDb(id).then((data) => response.end(JSON.stringify(data)));
+  getArticleDb(id)
+    .then((data) => response.end(JSON.stringify(data)))
+    .catch(error => {console.log(error)});;
 }
 
 let getArticles = (request, response) => {
-  getArticlesDb().then((data) => response.end(JSON.stringify(data)));
+  getArticlesDb()
+    .then((data) => response.end(JSON.stringify(data)))
+    .catch(error => {console.log(error)});;
 }
 
 let getRating = (request, response) => {
   let id = getSuffix(request.url, '/articles/');
-  getRatingDb(id).then((data) => response.end(JSON.stringify(data)));
+  getRatingDb(id)
+    .then((data) => response.end(JSON.stringify(data)))
+    .catch(error => {console.log(error)});;
 }
 
 let getRatings = (request, response) => {
-  getRatingsDb().then((data) => response.end(JSON.stringify(data)));
+  getRatingsDb()
+    .then((data) => response.end(JSON.stringify(data)))
+    .catch(error => {console.log(error)});;
 }
 
 let deleteUser = (request, response) => {
   let id = getSuffix(request.url, '/users/');
-  deleteUserDb(id).then((data) => response.end(JSON.stringify('User Deleted')));
+  deleteUserDb(id)
+    .then((data) => response.end(JSON.stringify('User Deleted')))
+    .catch(error => {console.log(error)});;
 }
 
 let deleteArticle = (request, response) => {
   let id = getSuffix(request.url, '/articles/');
-  deleteArticleDb(id).then((data) => response.end(JSON.stringify('Article Deleted')));
+  deleteArticleDb(id)
+    .then((data) => response.end(JSON.stringify('Article Deleted')))
+    .catch(error => {console.log(error)});;
 }
 
 let deleteRating = (request, response) => {
   let id = getSuffix(request.url, '/rating/');
-  deleteRatingDb(id).then((data) => response.end(JSON.stringify('Rating Deleted')));
+  deleteRatingDb(id)
+    .then((data) => response.end(JSON.stringify('Rating Deleted')))
+    .catch(error => {console.log(error)});;
 }
 
 let postUser = (request, response) => {
   readIncoming(request, (incoming) => {
       let user = insertsValuesObject(JSON.parse(incoming));
       console.log(user);
-      createUserDb(user).then((data) => response.end('Created user!'));      
+      createUserDb(user)
+        .then((data) => response.end('Created user!'))
+        .catch(error => {console.log(error)});;      
   });
 };
 
 let postRating = (request, response) => {
   readIncoming(request, (incoming) => {
       let rating = insertsValuesObject(JSON.parse(incoming));
-      rateArticleDb(rating).then((data) => response.end('Added rating!'));      
+      rateArticleDb(rating)
+        .then((data) => response.end('Added rating!'))
+        .catch(error => {console.log(error)});;      
   });
 };
 
 let postArticle = (request, response) => {
   readIncoming(request, (incoming) => {
       let article = insertValuesObject(JSON.parse(incoming));
-      addArticleDb(article).then((data) => response.end('Added article!'));      
+      addArticleDb(article)
+        .then((data) => response.end('Added article!'))
+        .catch(error => {console.log(error)});;      
   });
 };
 
@@ -170,7 +194,9 @@ let editUser = (request, response) => {
     let id = getSuffix(request.url, '/users/');
     let update = JSON.parse(incoming);
     let setInfo = updateString(update);
-    editUserDb(id, setInfo).then((data) => response.end('Updated user!'));
+    editUserDb(id, setInfo)
+      .then((data) => response.end('Updated user!'))
+      .catch(error => {console.log(error)});
   })
 }
 
@@ -179,7 +205,9 @@ let editArticle = (request, response) => {
     let id = getSuffix(request.url, '/articles/');
     let update = JSON.parse(incoming);
     let setInfo = updateString(update);
-    editArticleDb(id, setInfo).then((data) => response.end('Updated article!'));
+    editArticleDb(id, setInfo)
+      .then((data) => response.end('Updated article!'))
+      .catch(error => {console.log(error)});;
   })
 }
 
@@ -188,7 +216,9 @@ let editRating = (request, response) => {
     let id = getSuffix(request.url, '/ratings/');
     let update = JSON.parse(incoming);
     let setInfo = updateString(update);
-    editRatingDb(id, setInfo).then((data) => response.end('Updated rating!'));
+    editRatingDb(id, setInfo)
+      .then((data) => response.end('Updated rating!'))
+      .catch(error => {console.log(error)});;
   })
 }
 
