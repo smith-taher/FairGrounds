@@ -61,6 +61,16 @@ let editUserDb = (id, updateString) =>
   SET ${updateString}
   WHERE userid = ${id};`);
 
+let editArticleDb = (id, updateString) =>
+  db.query(`UPDATE articles
+  SET ${updateString}
+  WHERE articleid = ${id};`);
+
+let editRatingDb = (id, updateString) =>
+  db.query(`UPDATE ratings
+  SET ${updateString}
+  WHERE ratingid = ${id};`);
+
 //helper functions
 
 let getSuffix = (fullUrl, prefix) => fullUrl.slice(prefix.length);
@@ -157,6 +167,24 @@ let editUser = (request, response) => {
   })
 }
 
+let editArticle = (request, response) => {
+  readIncoming(request, (incoming) => {
+    let id = getSuffix(request.url, '/articles/');
+    let update = JSON.parse(incoming);
+    let setInfo = updateString(update);
+    editArticleDb(id, setInfo).then((data) => response.end('Updated article!'));
+  })
+}
+
+let editRating = (request, response) => {
+  readIncoming(request, (incoming) => {
+    let id = getSuffix(request.url, '/ratings/');
+    let update = JSON.parse(incoming);
+    let setInfo = updateString(update);
+    editRatingDb(id, setInfo).then((data) => response.end('Updated rating!'));
+  })
+}
+
 //functions to generate token for login
 let validateCredentials = (username, password) => 
     db.query(`SELECT username, password, userid from users where
@@ -222,12 +250,12 @@ let routes = [
   { method: 'DELETE', path: /^\/articles\/([0-9]+)$/, handler: deleteArticle },
   { method: 'POST', path: /^\/signin\/?$/, handler: signIn },
   { method: 'GET', path: /^\/articles\/([0-9]+)$/, handler: getArticle },
-  // { method: 'PUT', path: /^\/articles\/([0-9]+)$/, handler: putArticle },
+  { method: 'PUT', path: /^\/articles\/([0-9]+)$/, handler: editArticle },
   { method: 'GET', path: /^\/articles\/?$/, handler: getArticles },
   { method: 'POST', path: /^\/articles\/?$/, handler: postArticle },
   { method: 'DELETE', path: /^\/ratings\/([0-9]+)$/, handler: deleteRating},
   { method: 'GET', path: /^\/ratings\/([0-9]+)$/, handler: getRating },
-  // { method: 'PUT', path: /^\/ratings\/([0-9]+)$/, handler: putRating },
+  { method: 'PUT', path: /^\/ratings\/([0-9]+)$/, handler: editRating },
   { method: 'GET', path: /^\/ratings\/?$/, handler: getRatings },
   { method: 'POST', path: /^\/ratings\/?$/, handler: postRating },
   { method: 'GET', path: /.*/, handler: renderFile}
