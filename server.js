@@ -191,7 +191,7 @@ let routes = [
   { method: 'GET', path: /^\/ratings\/([0-9]+)$/, handler: getRating },
   // { method: 'PUT', path: /^\/ratings\/([0-9]+)$/, handler: putRating },
   { method: 'GET', path: /^\/ratings\/?$/, handler: getRatings },
-  { method: 'POST', path: /^\/ratings\/?$/, handler: postRating }
+  { method: 'POST', path: /^\/ratings\/?$/, handler: postRating },
   { method: 'GET', path: /.*/, handler: renderFile}
 ];
 
