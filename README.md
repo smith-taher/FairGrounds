@@ -52,7 +52,7 @@ We are using a Postgres database that have three tables set up as follow:
 <p><strong>OR</strong> {"username":"rfpoulos2","password":"test", "email":"rfpoulos2@outlook.com"} because the "leaning" attribute is not required by the PSQL database.</p>
 <h3>PUT</h3>
 <p>A PUT request for any of the tables can be done to the following address:</p>
-<h6>localhost:3000/{insert_table}/{insert_id#}</6>
+<h6>localhost:3000/{insert_table}/{insert_id#}</h6>
 <p>The JSON package with it only needs the values that need to be updated.  For example, lets say you want to update the following user object:</p>
 <h6>{"username":"rfpoulos","password":"newTestPassword","userid":6,"leaning":80,"email":"rfpoulos@outlook.com"}</h6>
 <p>You would send a PUT request to localhost:3000/users/6 with a JSON object that just contained the values you wanted to change.  Lets say just the e-mail and password.  You would send the following object:</p>
@@ -60,3 +60,5 @@ We are using a Postgres database that have three tables set up as follow:
 <p>Now a GET request to localhost:3000/users/6 would reflect the following:</p>
 <h6>{"username":"rfpoulos","password":<strong>"betterPassword"</strong>,"userid":6,"leaning":80,"email":<strong>"rfpoulos@outlook.com"}</strong></h6>
 <h3>DELETE</h3>
+<p>To delete a column in any database, send a DELETE request to the following location:</p>
+<h6>localhost:3000/{insert_table}/{insert_id#}</h6>
