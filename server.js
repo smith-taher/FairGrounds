@@ -69,7 +69,8 @@ let editRatingDb = (id, updateString) =>
 
 //helper functions
 
-let getSuffix = (fullUrl, prefix) => fullUrl.slice(prefix.length);
+let getSuffix = (fullUrl, prefix) =>
+    fullUrl.slice(prefix.length);
 
 let readIncoming = (request, callback) => {
   let incoming = '';
@@ -96,7 +97,8 @@ let insertsValuesObject = (object) => {
     newInserts += key + ', ';
     newValues += "'" + object[key] + "'" + ', ';
  });
- return {inserts: newInserts.slice(0, newInserts.length - 2), values: newValues.slice(0, newValues.length - 2)};
+ return {inserts: newInserts.slice(0, newInserts.length - 2), 
+          values: newValues.slice(0, newValues.length - 2)};
 }
 
 //handlers
