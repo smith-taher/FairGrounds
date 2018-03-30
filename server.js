@@ -167,10 +167,8 @@ let renderFile = (request, response) => {
 
 //Routes and server
 
-let matches = (request, method, path) => {
-  return request.method === method &&
-         path.exec(request.url);
-};
+let matches = (request, method, path) => 
+  request.method === method && path.exec(request.url);
 
 let notFound = (request, response) => {
   response.statusCode = 404;
