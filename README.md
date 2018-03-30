@@ -32,21 +32,23 @@ We are using a Postgres database that have three tables set up as follow:
 <h2>Restful API format</h2>
 <h3>GET</h3>
 <h4>Full tables</h4>
-<p>To retrieve JSON of entire database tables, make GET request</p>
+<p>To retrieve JSON of entire database tables, make GET request at location:</p>
 <h6>localhost:3000/{insert_table}</h6>
-<p>Optional tables are <em>users</em>, <em>articles</em>, and <em>ratings</em>.</p>
+<p>Optional tables are <em>users</em>, <em>articles</em>, and <em>ratings</em> (listed in the database section)</p>
 <h5>An example return of GET request to localhost:3000/users :</h5>
 <p>[{"username":"rfpoulos","password":"newTestPassword","userid":6,"leaning":80,"email":"rfpoulos@outlook.com"},{"username":"rfpoulos2","password":"test","userid":7,"leaning":75,"email":"rfpoulos2@outlook.com"}]</p>
 <h4>Individual entries</h4>
-<p>For individual entries in each table, got to localhost:3000/{insert_table}/{insert_id#}.  For example localhost:3000/users/6 will return the entire column of the user with the serial id 6.  Same for articles and ratings.
+<p>For individual entries in each table, send GET request to:</p>
+<h6>localhost:3000/{insert_table}/{insert_id#}</h6>
+<p>For example localhost:3000/users/6 will return the entire column of the user with the serial id 6.  Same for articles and ratings.
 <h5>An example return of GET request to localhost:3000/users/6 :</h5>
 <p>[{"username":"rfpoulos","password":"newTestPassword","userid":6,"leaning":80,"email":"rfpoulos@outlook.com"}]</p>
 <h3>POST</h3>
 <p>POST requests can be done to each of out three tables in the following format</p>
 <h6>localhost:3000/{insert_table}</h6>
 <p>The sent object <strong><em>must</em></strong> have all of the NOT NULL values as listed in the datatables section.  Otherwise, the value is optional.</p>
-<h5>Example acceptable POST user object</h5>
+<h5>Examples of acceptable POST user objects</h5>
 <p>{"username":"rfpoulos2","password":"test", "leaning":75,"email":"rfpoulos2@outlook.com"}</p>
-<p><strong>OR</strong> {"username":"rfpoulos2","password":"test", "email":"rfpoulos2@outlook.com"} because the leaning attribute is not required by the PSQL database/</p>
+<p><strong>OR</strong> {"username":"rfpoulos2","password":"test", "email":"rfpoulos2@outlook.com"} because the "leaning" attribute is not required by the PSQL database.</p>
 <h3>PUT</h3>
 <h3>DELETE</h3>
