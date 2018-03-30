@@ -33,8 +33,8 @@ let deleteArticleDb = (id) => db.query(`DELETE FROM articles WHERE articleid = $
 
 let deleteRatingDb = (id) => db.query(`DELETE FROM ratings WHERE ratingid = ${id}`);
 
-let rateArticleDb = (userid, articleid, rating) => 
-  db.query(`INSERT INTO ratings(userid, articleid, ${rating}) VALUES('${userid}', '${articleid}', 1);`);
+let rateArticleDb = (rating) => 
+  db.query(`INSERT INTO ratings(userid, articleid, ${rating.rating}) VALUES('${rating.userid}', '${rating.articleid}', 1);`);
 
 let addArticleDb = (url, author, description, publishedAt, source, urlToImage, topic) => 
   db.query(`INSERT INTO articles(topic, url, author, description, publishedAt, source, urlToImage)
@@ -101,7 +101,14 @@ let deleteRating = (request, response) => {
 let postUser = function(request, response) {
   readIncoming(request, function(incoming) {
       let user = JSON.parse(incoming);
-      createUserDb(user).then((data) => response.end(data + 'Created contact!'));      
+      createUserDb(user).then((data) => response.end(data + 'Created user!'));      
+  });
+};
+
+let postRating = function(request, response) {
+  readIncoming(request, function(incoming) {
+      let rating = JSON.parse(incoming);
+      rateArticleDb(rating).then((data) => response.end(data + 'Added rating!'));      
   });
 };
 
@@ -179,7 +186,7 @@ let routes = [
   { method: 'GET', path: /^\/ratings\/([0-9]+)$/, handler: getRating },
   // { method: 'PUT', path: /^\/ratings\/([0-9]+)$/, handler: putRating },
   { method: 'GET', path: /^\/ratings\/?$/, handler: getRatings },
-  // { method: 'POST', path: /^\/ratings\/?$/, handler: postRating }
+  { method: 'POST', path: /^\/ratings\/?$/, handler: postRating }
   { method: 'GET', path: /.*/, handler: renderFile}
 ];
 
