@@ -44,7 +44,7 @@ We are using a Postgres database that have three tables set up as follow:
 <h5>An example return of GET request to localhost:3000/users/6 :</h5>
 <p>[{"username":"rfpoulos","password":"newTestPassword","userid":6,"leaning":80,"email":"rfpoulos@outlook.com"}]</p>
 <h3>POST</h3>
-<p>POST requests can be done to each of out three tables in the following format</p>
+<p>POST requests can be done to each of the three tables in the following format</p>
 <h6>localhost:3000/{insert_table}</h6>
 <p>The sent object <strong><em>must</em></strong> have all of the NOT NULL values as listed in the datatables section.  Otherwise, the value is optional.</p>
 <h5>Examples of acceptable POST user objects</h5>
