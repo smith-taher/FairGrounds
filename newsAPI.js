@@ -53,31 +53,44 @@ $(document).ready(()=>{
 		console.log(res)
 		//Shuffle all the news items
 		shuffleArray(res);		
-		let output = "";
-		for(let i = 0; i < res.length; i++)
-		{
-
-			let link =  res[i].url;
-			let resultDiv = `
-				<div class="col-sm-4 col-md-4">
-					<div class="thumbnail">
-						<img src="${res[i].urlToImage}" alt="${res[i].title}" class="img-responsive">
-						<div class="caption">
-							<h2> ${res[i].title} </h2>
-							<h4> ${res[i].description} </h4>
-							<p><a href="${link}" target="_blank" class="btn btn-primary" role="button">View Article</a> </p>
-							<p>
-								<a href="${link}" target="_blank" class="btn btn-primary" role="button">Fair</a>
-								<a href="${link}" target="_blank" class="btn btn-primary" role="button">Unfair</a>  
-								<a href="${link}" target="_blank" class="btn btn-primary" role="button">Newsworthy</a> 
-								<a href="${link}" target="_blank" class="btn btn-primary" role="button">Not Newsworthy</a> 
-							</p>
-						</div>
-					</div>
-				</div>	`
-			output += resultDiv;
+		let $printArticlesDiv = $('.printResults');
+		for(let i = 0; i < res.length; i++) {
+			printArticles(res[i], $printArticlesDiv);
 		}
-		$('.printResults').html(output);
+	}
+	let printArticles = (source, divToAppend) => {
+		let $thumbnailDiv = $('<div></div>').addClass('thumbnail');
+		$(divToAppend).append($thumbnailDiv);
+		
+		let $thumbnailImgContainer = $('<div></div>').addClass('image-container');
+		$thumbnailDiv.append($thumbnailImgContainer);
+		
+		let $thumbnailImg = $('<img></img>').attr('src', source.urlToImage);
+		$thumbnailImg.attr('alt', source.title);
+		$thumbnailImg.addClass('news-image');
+		$thumbnailImgContainer.append($thumbnailImg);
+	
+		let $captionDiv = $('<div></div>').addClass('caption');
+		$thumbnailDiv.append($captionDiv);
+	
+		let $titleH2 = $('<h2></h2>').addClass('title');
+		$titleH2.text(source.title);
+		$captionDiv.append($titleH2);
+	
+		let $descriptionH4 = $('<h4></h4>').addClass('description');
+		$descriptionH4.text(source.description);
+		$captionDiv.append($descriptionH4);
+	
+		let $viewArticleButtonDiv = $('<div></div>').addClass('view-article-div');
+		$captionDiv.append($viewArticleButtonDiv);
+	
+		let $viewArticleButton = $('<button></button>').addClass('view-article-button');
+		$viewArticleButton.attr('type', 'button');
+		$viewArticleButton.text('View Article');
+		$viewArticleButton.click(() => {
+			window.open(source.url);
+		});
+		$viewArticleButtonDiv.append($viewArticleButton);
 	}	
 
 	function shuffleArray(array) {
@@ -89,4 +102,3 @@ $(document).ready(()=>{
 	    }
 	}
 });
-module.exports = getNews();
