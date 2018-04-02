@@ -131,9 +131,7 @@ let getUsers = (request, response) => {
 let getArticle = (request, response) => {
   let id = getSuffix(request.url, '/articles/');
   getArticleDb(id)
-    .then((data) => {
-      data[Access-Control-Allow-Origin] = 'http://localhost:8000';
-      response.end(JSON.stringify(data))})
+    .then((data) => response.end(JSON.stringify(data)))
     .catch(error => {console.log(error)});;
 }
 
