@@ -1,6 +1,6 @@
 const http = require('http');
 const pg = require('pg-promise')();
-const db = pg('postgres://rachelpoulos@localhost:5432/fairgrounds');
+const db = pg('postgres://joelsmith@localhost:5432/fairgrounds');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const NewsAPI = require('newsapi');

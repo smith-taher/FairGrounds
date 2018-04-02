@@ -39,12 +39,13 @@ SET default_with_oids = false;
 
 CREATE TABLE articles (
     articleid serial PRIMARY KEY,
-    topic character varying(500) NOT NULL,
+    title character varying(500) NOT NULL,
     url character varying(500) NOT NULL,
     author character varying(500),
     description character varying(500),
     publishedat character varying(500),
-    urltoimage character varying(500)
+    urltoimage character varying(500),
+    topic character varying(500)
 );
 
 
@@ -144,7 +145,7 @@ ALTER TABLE ONLY public.users ALTER COLUMN userid SET DEFAULT nextval('public.us
 -- Data for Name: articles; Type: TABLE DATA; Schema: public; Owner: robby
 --
 
-COPY public.articles (articleid, topic, url, author, description, publishedat, source, urltoimage) FROM stdin;
+COPY public.articles (articleid, title, url, author, description, publishedat, source, urltoimage, topic) FROM stdin;
 \.
 
 
