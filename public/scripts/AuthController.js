@@ -19,7 +19,7 @@ let generatePassInput = () => {
   let passInput = document.createElement('input');
   passInput.setAttribute('placeholder', 'password');
   return passInput
-}
+};
 
 let generateSlider = () => {
   var leaningSlider = document.createElement('input');
@@ -29,18 +29,37 @@ let generateSlider = () => {
   leaningSlider.setAttribute('value', '50');
   leaningSlider.setAttribute('class', 'slider');
   return leaningSlider;
-}
+};
 
 let generateEmailInput = () => {
   var emailInput = document.createElement('input');
   emailInput.setAttribute('placeholder', 'email address');
   return emailInput;
-}
+};
 
 let generateCreateAccountButton = () => {
   var createButton = document.createElement('button');
   createButton.textContent = 'Create Account';
+  createButton.addEventListener('click', event => {
+    sendCreationCredentials(event)
+    .then(response => response.text())
+    .then(token => {
+      localStorage.setItem('token', token);})
+    .then(response => {
+        window.location.href="http://localhost:3000/index.html"
+    });
+  })
   return createButton;
+};
+
+let sendCreationCredentials = (event) => {
+  let credentials = {
+    'username': document.querySelector('#sign-in-page > div > div > input:nth-child(3)').value,
+    'password': document.querySelector('#sign-in-page > div > div > input:nth-child(4)').value,
+    'email': document.querySelector('#sign-in-page > div > div > input:nth-child(5)').value,
+    'leaning': document.querySelector('#sign-in-page > div > div > input.slider').value
+  };
+  return fetch('http://localhost:3000/users', {method: 'POST', body: JSON.stringify(credentials)});
 }
 
 let removeLoginForm = () => {
@@ -65,8 +84,6 @@ let generateCreateUserForm = () => {
   signInDiv.appendChild(emailInput);
   signInDiv.appendChild(leaningSlider);
   signInDiv.appendChild(createButton);
-
-
 }
 
 loginButton.addEventListener('click', (event) => {

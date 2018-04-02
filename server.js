@@ -178,9 +178,13 @@ let postUser = (request, response) => {
   readIncoming(request, (incoming) => {
       let user = insertsValuesObject(JSON.parse(incoming));
       console.log(user);
+      // let token = createToken(user);
       createUserDb(user)
-        .then((data) => response.end('Created user!'))
-        .catch(error => {console.log(error)});;
+        .then((data) => db.query(`SELECT username, password, userid from users where
+        username = '${user.userid}' and password = '${user.password}';`))
+        .then((returnedUser) => createToken(returnedUser))
+        .then(token => response.end(token))
+        .catch(error => {console.log(error)});
   });
 };
 
