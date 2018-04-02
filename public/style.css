@@ -112,7 +112,7 @@ html, body {
     padding: 0 1em 0 1em;
     flex-grow: 1;
 }
-.printResults {
+.printResults, .printArticleForRating {
     width: 100%;
     display: flex;
     flex-flow: row wrap;

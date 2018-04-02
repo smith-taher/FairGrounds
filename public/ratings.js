@@ -1,0 +1,48 @@
+const ratingsDbUrl = 'http://localhost:3000/ratings';
+const $printArticleForRating = $('.printArticleForRating');
+$.get(articlesDbUrl, data => {
+	let articles = JSON.parse(data);
+	console.log(articles);
+	articles.forEach(element => {
+		printArticleForRating(element, $printArticleForRating);
+	});
+})
+
+let printArticleForRating = (source, divToAppend) => {
+	let $thumbnailDiv = $('<div></div>').addClass('thumbnail');
+	$(divToAppend).append($thumbnailDiv);
+	
+	let $thumbnailImgContainer = $('<div></div>').addClass('image-container');
+	$thumbnailDiv.append($thumbnailImgContainer);
+	
+	let $thumbnailImg = $('<img></img>').attr('src', source.urltoimage);
+	$thumbnailImg.attr('alt', 'Story Image');
+	$thumbnailImg.addClass('news-image');
+	$thumbnailImgContainer.append($thumbnailImg);
+
+	let $captionDiv = $('<div></div>').addClass('caption');
+	$thumbnailDiv.append($captionDiv);
+
+	let $titleH2 = $('<h2></h2>').addClass('title');
+	$titleH2.text(source.title);
+	$captionDiv.append($titleH2);
+	
+	let $authorSourceDate = $('<h6></h6>').addClass('author-source-date');
+	$authorSourceDate.text(`By ${source.author} from ${source.source} on ${source.publishedat}`);
+	$captionDiv.append($authorSourceDate);
+
+	let $descriptionH4 = $('<p></p>').addClass('description');
+	$descriptionH4.text(source.description);
+	$captionDiv.append($descriptionH4);
+
+	let $viewArticleButtonDiv = $('<div></div>').addClass('view-articles-div');
+	$thumbnailDiv.append($viewArticleButtonDiv);
+
+	let $skipArticleButton = $('<button></button>').addClass('skip-article-button');
+	$skipArticleButton.attr('type', 'button');
+	$skipArticleButton.text('Skip Article');
+	$skipArticleButton.click(() => {
+		window.open(source.url);
+	});
+	$viewArticleButtonDiv.append($skipArticleButton);
+}
