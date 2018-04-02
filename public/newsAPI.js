@@ -2,7 +2,7 @@ const articlesDbUrl = 'http://localhost:3000/articles';
 const $printResult = $('.printResults');
 $.get(articlesDbUrl, data => {
 	let articles = JSON.parse(data);
-	console.log(articles);
+	articles.slice(0, 25);
 	articles.forEach(element => {
 		printArticles(element, $printResult);
 	});
