@@ -1,6 +1,6 @@
 const http = require('http');
 const pg = require('pg-promise')();
-const db = pg('postgres://rachelpoulos@localhost:5432/fairgrounds');
+const db = pg('postgres://robby@localhost:5432/fairgrounds');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const NewsAPI = require('newsapi');
@@ -15,53 +15,53 @@ newsapi.v2.topHeadlines({
     let article = response.articles[0];
     article.source = article.source.name;
     articleSqlFormat = insertsValuesObject(article);
-    console.log(articleSqlFormat);
+    // console.log(articleSqlFormat);
     addArticleDb(article)
       .then(data => console.log('Article added!'))
       .catch(error => console.log(error));
 }).catch(error => console.log(error));
 //functions to talk to DB
 
-let createUserDb = (user) => 
+let createUserDb = (user) =>
     db.query(`INSERT INTO users
     (${user.inserts})
     VALUES(${user.values});`);
 
-let rateArticleDb = (rating) => 
+let rateArticleDb = (rating) =>
   db.query(`INSERT INTO ratings
-  (${rating.inserts}) 
+  (${rating.inserts})
   VALUES(${rating.value}, 1);`);
 
-let addArticleDb = (article) => 
+let addArticleDb = (article) =>
   db.query(`INSERT INTO articles
   (${article.inserts})
   VALUES(${article.values});`);
 
-let getUserDb = (id) => 
+let getUserDb = (id) =>
   db.query(`SELECT * from users where userid = ${id};`);
 
-let getArticleDb = (id) => 
+let getArticleDb = (id) =>
   db.query(`SELECT * from articles where articleid = ${id};`);
 
-let getRatingDb = (id) => 
+let getRatingDb = (id) =>
   db.query(`SELECT * from ratings where ratingid = ${id};`);
 
-let getUsersDb = () => 
+let getUsersDb = () =>
   db.query(`SELECT * from users;`);
 
-let getArticlesDb = () => 
+let getArticlesDb = () =>
   db.query(`SELECT * from articles;`);
 
-let getRatingsDb = () => 
+let getRatingsDb = () =>
   db.query(`SELECT * from ratings;`);
 
-let deleteUserDb = (id) => 
+let deleteUserDb = (id) =>
   db.query(`DELETE FROM users WHERE userid = ${id};`);
 
-let deleteArticleDb = (id) => 
+let deleteArticleDb = (id) =>
   db.query(`DELETE FROM articles WHERE articleid = ${id};`);
 
-let deleteRatingDb = (id) => 
+let deleteRatingDb = (id) =>
   db.query(`DELETE FROM ratings WHERE ratingid = ${id};`);
 
 let editUserDb = (id, updateString) =>
@@ -109,7 +109,7 @@ let insertsValuesObject = (object) => {
     newInserts += key + ', ';
     newValues += "'" + object[key] + "'" + ', ';
  });
- return {inserts: newInserts.slice(0, newInserts.length - 2), 
+ return {inserts: newInserts.slice(0, newInserts.length - 2),
           values: newValues.slice(0, newValues.length - 2)};
 }
 
@@ -181,7 +181,7 @@ let postUser = (request, response) => {
       console.log(user);
       createUserDb(user)
         .then((data) => response.end('Created user!'))
-        .catch(error => {console.log(error)});;      
+        .catch(error => {console.log(error)});;
   });
 };
 
@@ -190,7 +190,7 @@ let postRating = (request, response) => {
       let rating = insertsValuesObject(JSON.parse(incoming));
       rateArticleDb(rating)
         .then((data) => response.end('Added rating!'))
-        .catch(error => {console.log(error)});;      
+        .catch(error => {console.log(error)});;
   });
 };
 
@@ -200,7 +200,7 @@ let postArticle = (request, response) => {
       console.log(article);
       addArticleDb(article)
         .then((data) => response.end('Added article!'))
-        .catch(error => {console.log(error)});;      
+        .catch(error => {console.log(error)});;
   });
 };
 
@@ -238,7 +238,7 @@ let editRating = (request, response) => {
 }
 
 //functions to generate token for login
-let validateCredentials = (username, password) => 
+let validateCredentials = (username, password) =>
     db.query(`SELECT username, password, userid from users where
     username = '${username}' and password = '${password}';`);
 
@@ -272,20 +272,31 @@ let signIn = (request, response) => {
 };
 
 let renderFile = (request, response) => {
-  var fileName = request.url.slice(1);
+  var fileName = 'public/' + request.url.slice(1);
+  console.log(fileName);
   // console.log(fileName);
-  fs.readFile(fileName, 'utf-8', (err, data) => {
-    if (err) {
+  if (fileName.endsWith('.png')) {
+    fs.readFile(fileName, (err, data) => {
+      if (err) {
         data = err;
         data = JSON.stringify(data);
-    }
-    response.end(data);
-  })
+      }
+      response.end(data);
+    })
+  } else {
+    fs.readFile(fileName, 'utf-8', (err, data) => {
+        if (err) {
+          data = err;
+          data = JSON.stringify(data);
+        }
+        response.end(data);
+    })
+  }
 }
 
 //Routes and server
 
-let matches = (request, method, path) => 
+let matches = (request, method, path) =>
   request.method === method && path.exec(request.url);
 
 let notFound = (request, response) => {
