@@ -4,12 +4,11 @@ $(document).ready(()=>{
 
 	function getNews()
 	{
-		let endPoint = "https://newsapi.org/v1/articles";
+		let endPoint = "https://newsapi.org/v2/top-headlines";
 		let apiKey = "0873dd38116a4b1d9db9c7f2d99754a7";
 		//sources can be added from the included links.txt
 		let urls = [
-			`${endPoint}?source=engadget&sortBy=latest&apiKey=${apiKey} `,
-			`${endPoint}?source=fortune&sortBy=latest&apiKey=${apiKey} `
+			`${endPoint}?country=us&category=general&pageSize=20&sortBy=latest&apiKey=${apiKey} `,
 		];
 
 		let allResults = [];
@@ -53,31 +52,48 @@ $(document).ready(()=>{
 		console.log(res)
 		//Shuffle all the news items
 		shuffleArray(res);		
-		let output = "";
-		for(let i = 0; i < res.length; i++)
-		{
-
-			let link =  res[i].url;
-			let resultDiv = `
-				<div class="col-sm-4 col-md-4">
-					<div class="thumbnail">
-						<img src="${res[i].urlToImage}" alt="${res[i].title}" class="img-responsive">
-						<div class="caption">
-							<h2> ${res[i].title} </h2>
-							<h4> ${res[i].description} </h4>
-							<p><a href="${link}" target="_blank" class="btn btn-primary" role="button">View Article</a> </p>
-							<p>
-								<a href="${link}" target="_blank" class="btn btn-primary" role="button">Fair</a>
-								<a href="${link}" target="_blank" class="btn btn-primary" role="button">Unfair</a>  
-								<a href="${link}" target="_blank" class="btn btn-primary" role="button">Newsworthy</a> 
-								<a href="${link}" target="_blank" class="btn btn-primary" role="button">Not Newsworthy</a> 
-							</p>
-						</div>
-					</div>
-				</div>	`
-			output += resultDiv;
+		let $printArticlesDiv = $('.printResults');
+		for(let i = 0; i < res.length; i++) {
+			printArticles(res[i], $printArticlesDiv);
 		}
-		$('.printResults').html(output);
+	}
+	let printArticles = (source, divToAppend) => {
+		let $thumbnailDiv = $('<div></div>').addClass('thumbnail');
+		$(divToAppend).append($thumbnailDiv);
+		
+		let $thumbnailImgContainer = $('<div></div>').addClass('image-container');
+		$thumbnailDiv.append($thumbnailImgContainer);
+		
+		let $thumbnailImg = $('<img></img>').attr('src', source.urlToImage);
+		$thumbnailImg.attr('alt', source.title);
+		$thumbnailImg.addClass('news-image');
+		$thumbnailImgContainer.append($thumbnailImg);
+	
+		let $captionDiv = $('<div></div>').addClass('caption');
+		$thumbnailDiv.append($captionDiv);
+	
+		let $titleH2 = $('<h2></h2>').addClass('title');
+		$titleH2.text(source.title);
+		$captionDiv.append($titleH2);
+		
+		let $authorSourceDate = $('<h6></h6>').addClass('author-source-date');
+		$authorSourceDate.text(`By ${source.author} from ${source.source.name} on ${source.publishedAt}`);
+		$captionDiv.append($authorSourceDate);
+
+		let $descriptionH4 = $('<p></p>').addClass('description');
+		$descriptionH4.text(source.description);
+		$captionDiv.append($descriptionH4);
+	
+		let $viewArticleButtonDiv = $('<div></div>').addClass('view-article-div');
+		$thumbnailDiv.append($viewArticleButtonDiv);
+	
+		let $viewArticleButton = $('<button></button>').addClass('view-article-button');
+		$viewArticleButton.attr('type', 'button');
+		$viewArticleButton.text('View Article');
+		$viewArticleButton.click(() => {
+			window.open(source.url);
+		});
+		$viewArticleButtonDiv.append($viewArticleButton);
 	}	
 
 	function shuffleArray(array) {
@@ -89,4 +105,3 @@ $(document).ready(()=>{
 	    }
 	}
 });
-module.exports = getNews();

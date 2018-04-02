@@ -1,8 +1,9 @@
-const signIn = document.getElementById('sign-in');
+const signIn = document.getElementById('sign-in-page');
 const rateArticles = document.getElementById('rate-articles');
 const viewArticles = document.getElementById('view-articles');
 const viewButton = document.getElementById('view');
 const rateButton = document.getElementById('rate');
+const signInButton = document.getElementById('sign-in');
 
 
 
@@ -15,8 +16,9 @@ let showPageButton = function(buttonDom, newViewableDom) {
 };
 
 let renderButtons = function() {
-    let userViewArticles = showPageButton(viewButton, viewArticles);
-    let userRateArticles = showPageButton(rateButton, rateArticles);
+    showPageButton(viewButton, viewArticles);
+    showPageButton(rateButton, rateArticles);
+    showPageButton(signInButton, signIn);
 }
 
 renderButtons();
