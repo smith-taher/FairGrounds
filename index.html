@@ -10,18 +10,35 @@
 <body>
     <div id="container">
         <header>
-            <p>some stuff</p>
+            <div class="header-container">
+                <div class="logo-container">
+                    <img class="logo" src="./images/logo.png">
+                </div>
+                <ul class="navigation-top">
+                    <li class="nav-button" id="sign-in">Sign In</li>
+                </ul>
+            </div>
         </header>
-        <div class="viewable-on" id="sign-in">
+        <div class="viewable-off" id="sign-in-page">
+            <div class="bg">
+                <div class="sign-in-buttons">
+                    <img class="login-logo" src="./images/logo.png">
+                    <input placeholder="username">
+                    <input placeholder="password">
+                    <br>
+                    <button>create account</button>
+                    <button id="login">login</button>
+                </div>
+            </div>
         </div>
         <div class="viewable-off" id="rate-articles">
         </div>
-        <div class="viewable-off" id="view-articles">
+        <div class="viewable-on" id="view-articles">
             <div class="printResults">
             </div>			
         </div>
         <footer>
-            <ul class="navigation">
+            <ul class="navigation-bottom">
                 <li class="nav-button" id="view">View Articles</li>
                 <li class="nav-button" id="rate">Rate Articles</li>
             </ul>
@@ -30,5 +47,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="./newsAPI.js"></script>
     <script src="./frontend.js"></script>
+    <script src="scripts/AuthController.js"></script>
 </body>
 </html>
