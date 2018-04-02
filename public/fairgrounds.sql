@@ -75,10 +75,100 @@ ALTER SEQUENCE public.articles_articleid_seq OWNED BY public.articles.articleid;
 
 
 --
+-- Name: ratings; Type: TABLE; Schema: public; Owner: rachelpoulos
+--
+
+CREATE TABLE public.ratings (
+    ratingid integer NOT NULL,
+    userid integer,
+    articleid integer,
+    fair integer,
+    unfair integer,
+    newsworthy integer,
+    not_newsworthy integer
+);
+
+
+ALTER TABLE public.ratings OWNER TO rachelpoulos;
+
+--
+-- Name: ratings_ratingid_seq; Type: SEQUENCE; Schema: public; Owner: rachelpoulos
+--
+
+CREATE SEQUENCE public.ratings_ratingid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.ratings_ratingid_seq OWNER TO rachelpoulos;
+
+--
+-- Name: ratings_ratingid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rachelpoulos
+--
+
+ALTER SEQUENCE public.ratings_ratingid_seq OWNED BY public.ratings.ratingid;
+
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: rachelpoulos
+--
+
+CREATE TABLE public.users (
+    username character varying(200) NOT NULL,
+    password character varying(200) NOT NULL,
+    userid integer NOT NULL,
+    leaning integer,
+    email character varying(200)
+);
+
+
+ALTER TABLE public.users OWNER TO rachelpoulos;
+
+--
+-- Name: users_userid_seq; Type: SEQUENCE; Schema: public; Owner: rachelpoulos
+--
+
+CREATE SEQUENCE public.users_userid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_userid_seq OWNER TO rachelpoulos;
+
+--
+-- Name: users_userid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: rachelpoulos
+--
+
+ALTER SEQUENCE public.users_userid_seq OWNED BY public.users.userid;
+
+
+--
 -- Name: articles articleid; Type: DEFAULT; Schema: public; Owner: rachelpoulos
 --
 
 ALTER TABLE ONLY public.articles ALTER COLUMN articleid SET DEFAULT nextval('public.articles_articleid_seq'::regclass);
+
+
+--
+-- Name: ratings ratingid; Type: DEFAULT; Schema: public; Owner: rachelpoulos
+--
+
+ALTER TABLE ONLY public.ratings ALTER COLUMN ratingid SET DEFAULT nextval('public.ratings_ratingid_seq'::regclass);
+
+
+--
+-- Name: users userid; Type: DEFAULT; Schema: public; Owner: rachelpoulos
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN userid SET DEFAULT nextval('public.users_userid_seq'::regclass);
 
 
 --
@@ -181,10 +271,40 @@ COPY public.articles (articleid, topic, url, author, description, publishedat, u
 
 
 --
+-- Data for Name: ratings; Type: TABLE DATA; Schema: public; Owner: rachelpoulos
+--
+
+COPY public.ratings (ratingid, userid, articleid, fair, unfair, newsworthy, not_newsworthy) FROM stdin;
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: rachelpoulos
+--
+
+COPY public.users (username, password, userid, leaning, email) FROM stdin;
+\.
+
+
+--
 -- Name: articles_articleid_seq; Type: SEQUENCE SET; Schema: public; Owner: rachelpoulos
 --
 
 SELECT pg_catalog.setval('public.articles_articleid_seq', 1099, true);
+
+
+--
+-- Name: ratings_ratingid_seq; Type: SEQUENCE SET; Schema: public; Owner: rachelpoulos
+--
+
+SELECT pg_catalog.setval('public.ratings_ratingid_seq', 1, false);
+
+
+--
+-- Name: users_userid_seq; Type: SEQUENCE SET; Schema: public; Owner: rachelpoulos
+--
+
+SELECT pg_catalog.setval('public.users_userid_seq', 1, false);
 
 
 --
@@ -193,6 +313,30 @@ SELECT pg_catalog.setval('public.articles_articleid_seq', 1099, true);
 
 ALTER TABLE ONLY public.articles
     ADD CONSTRAINT articles_url_key UNIQUE (url);
+
+
+--
+-- Name: ratings ratings_pkey; Type: CONSTRAINT; Schema: public; Owner: rachelpoulos
+--
+
+ALTER TABLE ONLY public.ratings
+    ADD CONSTRAINT ratings_pkey PRIMARY KEY (ratingid);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: rachelpoulos
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (userid);
+
+
+--
+-- Name: users users_username_key; Type: CONSTRAINT; Schema: public; Owner: rachelpoulos
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_username_key UNIQUE (username);
 
 
 --
