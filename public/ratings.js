@@ -35,8 +35,8 @@ let printArticleForRating = (source, divToAppend) => {
 	$descriptionH4.text(source.description);
 	$captionDiv.append($descriptionH4);
 
-	let $viewArticleButtonDiv = $('<div></div>').addClass('view-articles-div');
-	$thumbnailDiv.append($viewArticleButtonDiv);
+	let $skipArticleButtonDiv = $('<div></div>').addClass('view-article-div');
+	$thumbnailDiv.append($skipArticleButtonDiv);
 
 	let $skipArticleButton = $('<button></button>').addClass('skip-article-button');
 	$skipArticleButton.attr('type', 'button');
@@ -44,5 +44,27 @@ let printArticleForRating = (source, divToAppend) => {
 	$skipArticleButton.click(() => {
 		window.open(source.url);
 	});
-	$viewArticleButtonDiv.append($skipArticleButton);
+	$skipArticleButtonDiv.append($skipArticleButton);
+
+	let $fairArticleButtonDiv = $('<div></div>').addClass('view-article-div');
+	$thumbnailDiv.append($fairArticleButtonDiv);
+
+	let $fairArticleButton = $('<button></button>').addClass('fair-article-button');
+	$fairArticleButton.attr('type', 'button');
+	$fairArticleButton.text('Fair');
+	$fairArticleButton.click(() => {
+		window.open(source.url);
+	});
+	$fairArticleButtonDiv.append($fairArticleButton);
+
+	let $unfairArticleButtonDiv = $('<div></div>').addClass('view-article-div');
+	$thumbnailDiv.append($unfairArticleButtonDiv);
+
+	let $unfairArticleButton = $('<button></button>').addClass('unfair-article-button');
+	$unfairArticleButton.attr('type', 'button');
+	$unfairArticleButton.text('Unfair');
+	$unfairArticleButton.click(() => {
+		window.open(source.url);
+	});
+	$unfairArticleButtonDiv.append($unfairArticleButton);
 }

@@ -98,7 +98,7 @@ html, body {
     margin-top: 0;
 }
 
-.view-article-button {
+.view-article-button, .skip-article-button, .fair-article-button, .unfair-article-button {
     height: 2em;
 }
 
