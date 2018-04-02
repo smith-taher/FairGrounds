@@ -60,7 +60,6 @@ html, body {
 }
 
 .image-container {
-    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -128,15 +127,16 @@ html, body {
 }
 
 header {
-    height: 15%;
+    height: 10%;
     display: block;
     justify-content: space-between;
-    padding: 1em;
+    padding: 0 1em 0 1em;
 }
 
 footer {
     height: 10%;
     display: flex;
+    padding: 0 1em 0 1em;
 }
 
 .nav-button {
