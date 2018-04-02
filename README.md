@@ -13,13 +13,13 @@ We are using a Postgres database that have three tables set up as follow:
     email character varying(200) UNIQUE NOT NULL</p>
 <h3>Articles:</h3>
     <p>articleid serial PRIMARY KEY,<br>
-    topic character varying(200) NOT NULL,<br>
-    url character varying(200) NOT NULL,<br>
-    author character varying(200),<br>
-    description character varying(300),<br>
-    publishedat character varying(200),<br>
-    source character varying(200),<br>
-    urltoimage character varying(300)</p>
+    title character varying(500) NOT NULL,<br>
+    url character varying(500) NOT NULL,<br>
+    author character varying(500),<br>
+    description character varying(500),<br>
+    publishedat character varying(500),<br>
+    source character varying(500),<br>
+    urltoimage character varying(500)</p>
 <h3>Ratings:</h3>
     <p>ratingid serial PRIMARY KEY,<br>
     userid integer,<br>
