@@ -12,12 +12,14 @@ let login = (username, password) => {
 let generateUserInput = () => {
   let userInput = document.createElement('input');
   userInput.setAttribute('placeholder', 'username');
+  userInput.setAttribute('id', 'newUser');
   return userInput
 }
 
 let generatePassInput = () => {
   let passInput = document.createElement('input');
   passInput.setAttribute('placeholder', 'password');
+  passInput.setAttribute('id', 'newPass');
   return passInput
 };
 
@@ -28,12 +30,14 @@ let generateSlider = () => {
   leaningSlider.setAttribute('max', '100');
   leaningSlider.setAttribute('value', '50');
   leaningSlider.setAttribute('class', 'slider');
+  leaningSlider.setAttribute('id', 'newLeaning');
   return leaningSlider;
 };
 
 let generateEmailInput = () => {
   var emailInput = document.createElement('input');
   emailInput.setAttribute('placeholder', 'email address');
+  emailInput.setAttribute('id', 'newEmail');
   return emailInput;
 };
 
@@ -54,17 +58,17 @@ let generateCreateAccountButton = () => {
 
 let sendCreationCredentials = (event) => {
   let credentials = {
-    'username': document.querySelector('#sign-in-page > div > div > input:nth-child(3)').value,
-    'password': document.querySelector('#sign-in-page > div > div > input:nth-child(4)').value,
-    'email': document.querySelector('#sign-in-page > div > div > input:nth-child(5)').value,
-    'leaning': document.querySelector('#sign-in-page > div > div > input.slider').value
+    'username': document.getElementById('newUser').value,
+    'password': document.getElementById('newPass').value,
+    'email': document.getElementById('newEmail').value,
+    'leaning': document.getElementById('newLeaning').value
   };
   return fetch('http://localhost:3000/users', {method: 'POST', body: JSON.stringify(credentials)});
 }
 
 let removeLoginForm = () => {
-  let username = document.querySelector('#sign-in-page > div > div > input:nth-child(2)')
-  let password = document.querySelector('#sign-in-page > div > div > input:nth-child(3)')
+  let username = document.getElementById('user');
+  let password = document.getElementById('pass');
   username.remove();
   password.remove();
   loginButton.remove();
@@ -87,8 +91,8 @@ let generateCreateUserForm = () => {
 }
 
 loginButton.addEventListener('click', (event) => {
-  let username = document.querySelector('#sign-in-page > div > div > input:nth-child(2)').value;
-  let password = document.querySelector('#sign-in-page > div > div > input:nth-child(3)').value;
+  let username = document.getElementbyId('user');
+  let password = document.getElementbyId('pass');
   login(username, password)
   .then(response => response.text())
   .then(token => {

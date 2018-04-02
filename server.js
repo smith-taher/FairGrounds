@@ -113,7 +113,10 @@ let insertsValuesObject = (object) => {
 }
 
 //handlers
-
+let getUserbyUserAndPass = (user) => {
+  return db.query(`SELECT username, password, userid from users where
+  username = '${user.userid}' and password = '${user.password}';`)
+}
 let getUser = (request, response) => {
   let id = getSuffix(request.url, '/users/');
   getUserDb(id)
@@ -180,8 +183,7 @@ let postUser = (request, response) => {
       console.log(user);
       // let token = createToken(user);
       createUserDb(user)
-        .then((data) => db.query(`SELECT username, password, userid from users where
-        username = '${user.userid}' and password = '${user.password}';`))
+        .then((data) => getUserbyUserAndPass(user))
         .then((returnedUser) => createToken(returnedUser))
         .then(token => response.end(token))
         .catch(error => {console.log(error)});
