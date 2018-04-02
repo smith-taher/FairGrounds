@@ -91,8 +91,8 @@ let generateCreateUserForm = () => {
 }
 
 loginButton.addEventListener('click', (event) => {
-  let username = document.getElementbyId('user');
-  let password = document.getElementbyId('pass');
+  let username = document.getElementById('user');
+  let password = document.getElementById('pass');
   login(username, password)
   .then(response => response.text())
   .then(token => {
