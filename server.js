@@ -12,11 +12,12 @@ newsapi.v2.topHeadlines({
   language: 'en',
   pagesize: 1
 }).then(response => {
-  let article = response.articles[0];
-  article.source = article.source.name;
-  articleSqlFormat = insertsValuesObject(article);
-  addArticleDb(article).then(data => console.log('Article added!'))
-    .catch(error => console.log(error));
+    let article = response.articles[0];
+    article.source = article.source.name;
+    articleSqlFormat = insertsValuesObject(article);
+    addArticleDb(article)
+      .then(data => console.log('Article added!'))
+      .catch(error => console.log(error));
 }).catch(error => console.log(error));
 //functions to talk to DB
 
