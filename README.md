@@ -13,8 +13,9 @@ We are using a Postgres database that have three tables set up as follow:
     email character varying(200) UNIQUE NOT NULL</p>
 <h3>Articles:</h3>
     <p>articleid serial PRIMARY KEY,<br>
+    topic character varying(500),<br>
     title character varying(500) NOT NULL,<br>
-    url character varying(500) NOT NULL,<br>
+    url character varying(500) UNIQUE NOT NULL,<br>
     author character varying(500),<br>
     description character varying(500),<br>
     publishedat character varying(500),<br>
