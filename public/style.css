@@ -43,6 +43,7 @@ html, body {
     justify-content: space-around;
     width: 100%;
     list-style-type: none;
+    color: white
 }
 
 .navigation-top {
@@ -138,6 +139,7 @@ footer {
     height: 10%;
     display: flex;
     padding: 0 1em 0 1em;
+    background: #0155a4;
 }
 
 .nav-button {
@@ -177,7 +179,26 @@ input {
   border: 0;
   padding: 5px;
   margin-bottom: 10px;
+  margin-right: 10px;
 }
 input::placeholder {
 
+}
+
+#creation {
+  color: #0155a4;
+  background: none;
+  border: none;
+}
+
+.slider {
+    -webkit-appearance: none;  /* Override default CSS styles */
+    appearance: none;
+    width: 30%;
+    height: 25px; /* Specified height */
+    background: #d3d3d3; /* Grey background */
+    outline: none; /* Remove outline */
+    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    transition: opacity .2s;
 }

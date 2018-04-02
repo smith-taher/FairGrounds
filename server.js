@@ -113,7 +113,10 @@ let insertsValuesObject = (object) => {
 }
 
 //handlers
-
+let getUserbyUserAndPass = (user) => {
+  return db.query(`SELECT username, password, userid from users where
+  username = '${user.userid}' and password = '${user.password}';`)
+}
 let getUser = (request, response) => {
   let id = getSuffix(request.url, '/users/');
   getUserDb(id)
@@ -178,9 +181,12 @@ let postUser = (request, response) => {
   readIncoming(request, (incoming) => {
       let user = insertsValuesObject(JSON.parse(incoming));
       console.log(user);
+      // let token = createToken(user);
       createUserDb(user)
-        .then((data) => response.end('Created user!'))
-        .catch(error => {console.log(error)});;
+        .then((data) => getUserbyUserAndPass(user))
+        .then((returnedUser) => createToken(returnedUser))
+        .then(token => response.end(token))
+        .catch(error => {console.log(error)});
   });
 };
 
@@ -325,7 +331,7 @@ let routes = [
 
 let server = http.createServer(function(request, response) {
   response.writeHead(200, {
-    'Content-Type': 'text/plain',
+    // 'Content-Type': 'text/plain',
     'Access-Control-Allow-Origin' : '*',
     'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE'
 });
