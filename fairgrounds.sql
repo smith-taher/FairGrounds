@@ -37,15 +37,14 @@ SET default_with_oids = false;
 -- Name: articles; Type: TABLE; Schema: public; Owner: robby
 --
 
-CREATE TABLE public.articles (
+CREATE TABLE articles (
     articleid serial PRIMARY KEY,
-    topic character varying(200) NOT NULL,
-    url character varying(200) NOT NULL,
-    author character varying(200),
-    description character varying(300),
-    publishedat character varying(200),
-    source character varying(200),
-    urltoimage character varying(300)
+    topic character varying(500) NOT NULL,
+    url character varying(500) NOT NULL,
+    author character varying(500),
+    description character varying(500),
+    publishedat character varying(500),
+    urltoimage character varying(500)
 );
 
 
