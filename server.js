@@ -4,10 +4,19 @@ const db = pg('postgres://rachelpoulos@localhost:5432/fairgrounds');
 // const getNews = require('./newsAPI');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
+const NewsAPI = require('newsapi');
+const newsapi = new NewsAPI('0873dd38116a4b1d9db9c7f2d99754a7');
 
 const signature = '@!#$%%^&#$!@#^&***()ROBBY';
 
-
+//newsapi functions
+newsapi.v2.topHeadlines({
+  language: 'en',
+  pagesize: 1
+}).then(response => {
+  let articles = response.articles;
+  console.log(articles);
+});
 //functions to talk to DB
 
 let createUserDb = (user) => 
@@ -184,7 +193,8 @@ let postRating = (request, response) => {
 
 let postArticle = (request, response) => {
   readIncoming(request, (incoming) => {
-      let article = insertValuesObject(JSON.parse(incoming));
+      let article = insertsValuesObject(JSON.parse(incoming));
+      console.log(article);
       addArticleDb(article)
         .then((data) => response.end('Added article!'))
         .catch(error => {console.log(error)});;      
