@@ -4,12 +4,11 @@ $(document).ready(()=>{
 
 	function getNews()
 	{
-		let endPoint = "https://newsapi.org/v1/articles";
+		let endPoint = "https://newsapi.org/v2/top-headlines";
 		let apiKey = "0873dd38116a4b1d9db9c7f2d99754a7";
 		//sources can be added from the included links.txt
 		let urls = [
-			`${endPoint}?source=engadget&sortBy=latest&apiKey=${apiKey} `,
-			`${endPoint}?source=fortune&sortBy=latest&apiKey=${apiKey} `
+			`${endPoint}?country=us&category=general&pageSize=20&sortBy=latest&apiKey=${apiKey} `,
 		];
 
 		let allResults = [];
@@ -77,9 +76,9 @@ $(document).ready(()=>{
 		$titleH2.text(source.title);
 		$captionDiv.append($titleH2);
 		
-		let $authorDate = $('<h6></h6>').addClass('author-title-date');
-		$authorDate.text(`By ${source.author} on ${source.publishedAt}`);
-		$captionDiv.append($authorDate);
+		let $authorSourceDate = $('<h6></h6>').addClass('author-source-date');
+		$authorSourceDate.text(`By ${source.author} from ${source.source.name} on ${source.publishedAt}`);
+		$captionDiv.append($authorSourceDate);
 
 		let $descriptionH4 = $('<p></p>').addClass('description');
 		$descriptionH4.text(source.description);
