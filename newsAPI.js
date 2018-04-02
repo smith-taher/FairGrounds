@@ -85,7 +85,7 @@ $(document).ready(()=>{
 		$captionDiv.append($descriptionH4);
 	
 		let $viewArticleButtonDiv = $('<div></div>').addClass('view-article-div');
-		$captionDiv.append($viewArticleButtonDiv);
+		$thumbnailDiv.append($viewArticleButtonDiv);
 	
 		let $viewArticleButton = $('<button></button>').addClass('view-article-button');
 		$viewArticleButton.attr('type', 'button');

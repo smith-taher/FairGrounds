@@ -85,8 +85,32 @@ html, body {
     justify-content: flex-start;
 }
 
+.view-article-div {
+    display: flex;
+    justify-content: center;
+    margin: 1em;
+}
+.title {
+    margin-bottom: 0;
+}
+
+.description {
+    margin-top: 0;
+}
+
+.view-article-button {
+    height: 2em;
+}
+
+.author-source-date {
+    margin: 1em;
+}
+
 .caption {
-    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    padding: 0 1em 0 1em;
+    flex-grow: 1;
 }
 .printResults {
     width: 100%;
