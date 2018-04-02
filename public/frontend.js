@@ -7,7 +7,7 @@ const signInButton = document.getElementById('sign-in');
 
 
 
-let showPageButton = function(buttonDom, newViewableDom) {
+let showPageButton = (buttonDom, newViewableDom) => {
     buttonDom.addEventListener('click', function(){
         let visiblePage = document.getElementsByClassName('viewable-on')[0];
         visiblePage.className = 'viewable-off';
@@ -15,7 +15,7 @@ let showPageButton = function(buttonDom, newViewableDom) {
     });
 };
 
-let renderButtons = function() {
+let renderButtons = () => {
     showPageButton(viewButton, viewArticles);
     showPageButton(rateButton, rateArticles);
     showPageButton(signInButton, signIn);
