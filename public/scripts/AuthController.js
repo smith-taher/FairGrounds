@@ -15,4 +15,7 @@ loginButton.addEventListener('click', (event) => {
   .then(response => response.text())
   .then(token => {
   localStorage.setItem('token', token);})
+  .then(response => {
+    window.location.href="http://localhost:3000/index.html"
+  });
 });
