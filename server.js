@@ -14,8 +14,9 @@ newsapi.v2.topHeadlines({
   language: 'en',
   pagesize: 1
 }).then(response => {
-  let articles = response.articles;
-  console.log(articles);
+  let article = insertsValuesObject(response.articles[0]);
+  addArticleDb(article).then(data => console.log('Article added!'))
+    .catch(error => console.log(error));
 });
 //functions to talk to DB
 
