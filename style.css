@@ -42,10 +42,12 @@ html, body {
     display: flex;
     justify-content: space-around;
     width: 100%;
+    list-style-type: none;
 }
 
 .navigation-top {
     display: flex;
+    list-style-type: none;
 }
 
 .thumbnail {

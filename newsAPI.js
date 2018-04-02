@@ -76,8 +76,12 @@ $(document).ready(()=>{
 		let $titleH2 = $('<h2></h2>').addClass('title');
 		$titleH2.text(source.title);
 		$captionDiv.append($titleH2);
-	
-		let $descriptionH4 = $('<h4></h4>').addClass('description');
+		
+		let $authorDate = $('<h6></h6>').addClass('author-title-date');
+		$authorDate.text(`By ${source.author} on ${source.publishedAt}`);
+		$captionDiv.append($authorDate);
+
+		let $descriptionH4 = $('<p></p>').addClass('description');
 		$descriptionH4.text(source.description);
 		$captionDiv.append($descriptionH4);
 	
