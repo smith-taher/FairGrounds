@@ -9,8 +9,8 @@ let login = (username, password) => {
 };
 
 loginButton.addEventListener('click', (event) => {
-  let username = document.querySelector('body > div > input:nth-child(2)').value;
-  let password = document.querySelector('body > div > input:nth-child(3)').value;
+  let username = document.querySelector('#sign-in-page > div > div > input:nth-child(2)').value;
+  let password = document.querySelector('#sign-in-page > div > div > input:nth-child(3)').value;
   login(username, password)
   .then(response => response.text())
   .then(token => {

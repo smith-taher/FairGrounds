@@ -43,6 +43,7 @@ html, body {
     justify-content: space-around;
     width: 100%;
     list-style-type: none;
+    color: white
 }
 
 .navigation-top {
@@ -138,6 +139,7 @@ footer {
     height: 10%;
     display: flex;
     padding: 0 1em 0 1em;
+    background: #0155a4;
 }
 
 .nav-button {

@@ -325,7 +325,7 @@ let routes = [
 
 let server = http.createServer(function(request, response) {
   response.writeHead(200, {
-    'Content-Type': 'text/plain',
+    // 'Content-Type': 'text/plain',
     'Access-Control-Allow-Origin' : '*',
     'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE'
 });
