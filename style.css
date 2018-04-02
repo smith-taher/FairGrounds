@@ -84,6 +84,10 @@ html, body {
     align-items: flex-start;
     justify-content: flex-start;
 }
+
+.caption {
+    padding: 1em;
+}
 .printResults {
     width: 100%;
     display: flex;
