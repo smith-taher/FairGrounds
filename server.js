@@ -16,7 +16,7 @@ newsapi.v2.topHeadlines({
     article.source = article.source.name;
     articleSqlFormat = insertsValuesObject(article);
     console.log(articleSqlFormat);
-    addArticleDb(article)
+    addArticleDb(articleSqlFormat)
       .then(data => console.log('Article added!'))
       .catch(error => console.log(error));
 }).catch(error => console.log(error));
