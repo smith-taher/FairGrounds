@@ -131,7 +131,9 @@ let getUsers = (request, response) => {
 let getArticle = (request, response) => {
   let id = getSuffix(request.url, '/articles/');
   getArticleDb(id)
-    .then((data) => response.end(JSON.stringify(data)))
+    .then((data) => {
+      data[Access-Control-Allow-Origin] = 'http://localhost:8000';
+      response.end(JSON.stringify(data))})
     .catch(error => {console.log(error)});;
 }
 
@@ -314,6 +316,11 @@ let routes = [
 ];
 
 let server = http.createServer(function(request, response) {
+  response.writeHead(200, {
+    'Content-Type': 'text/plain',
+    'Access-Control-Allow-Origin' : '*',
+    'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE'
+});
       let route = routes.find(route => matches(request, route.method, route.path));
 
       (route ? route.handler : notFound)(request, response);
