@@ -1,6 +1,5 @@
 const $printArticleForRating = $('.printArticleForRating');
 const $RateArticleButton = $('#rate');
-let theArticle = null;
 
 function getDBArticleForRating() {
 	$.get(articlesDbUrl, data => {
@@ -8,7 +7,7 @@ function getDBArticleForRating() {
 		function getRandomInt(max) {
 			return Math.floor(Math.random() * Math.floor(max));
 		}
-		theArticle = articles[getRandomInt(articles.length)];
+		let theArticle = articles[getRandomInt(articles.length)];
 		// console.log(getRandomInt(articles.length));
 		printArticleForRating(articles[getRandomInt(articles.length)], $printArticleForRating);
 	})
