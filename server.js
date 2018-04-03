@@ -1,6 +1,7 @@
+require('dotenv').config()
 const http = require('http');
 const pg = require('pg-promise')();
-const db = pg('postgres://robby@localhost:5432/fairgrounds');
+const db = pg(process.env.DB_PATH);
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const NewsAPI = require('newsapi');
@@ -8,17 +9,30 @@ const newsapi = new NewsAPI('0873dd38116a4b1d9db9c7f2d99754a7');
 const signature = '@!#$%%^&#$!@#^&***()ROBBY';
 
 //newsapi functions
-newsapi.v2.topHeadlines({
-  language: 'en',
-  pagesize: 1
-}).then(response => {
-    let article = response.articles[0];
+let getArticlesFromApi = () => {
+  newsapi.v2.topHeadlines({
+    language: 'en',
+    pagesize: 100
+  }).then(response => {
+      let sqlArticles = makeSqlArray(response.articles);
+      sqlArticles.forEach(article =>
+        addArticleDb(article)
+        .then(data => console.log('Article added!'))
+        .catch(error => {
+          console.log('article already exists');
+        })
+      )
+  }).catch(error => console.log(error));
+}
+let makeSqlArray = articlesArray => {
+  let articlesSqlArray = [];
+  articlesArray.forEach(article => {
     article.source = article.source.name;
-    articleSqlFormat = insertsValuesObject(article);
-    addArticleDb(articleSqlFormat)
-      .then(data => console.log('Article added!'))
-      .catch(error => console.log(error));
-}).catch(error => console.log(error));
+    let articleSql = insertsValuesObject(article);
+    articlesSqlArray.push(articleSql);
+  })
+  return articlesSqlArray;
+}
 //functions to talk to DB
 
 let createUserDb = (user) =>
@@ -113,10 +127,7 @@ let insertsValuesObject = (object) => {
 }
 
 //handlers
-let getUserbyUserAndPass = (user) => {
-  return db.query(`SELECT username, password, userid from users where
-  username = '${user.userid}' and password = '${user.password}';`)
-}
+
 let getUser = (request, response) => {
   let id = getSuffix(request.url, '/users/');
   getUserDb(id)
@@ -181,12 +192,9 @@ let postUser = (request, response) => {
   readIncoming(request, (incoming) => {
       let user = insertsValuesObject(JSON.parse(incoming));
       console.log(user);
-      // let token = createToken(user);
       createUserDb(user)
-        .then((data) => getUserbyUserAndPass(user))
-        .then((returnedUser) => createToken(returnedUser))
-        .then(token => response.end(token))
-        .catch(error => {console.log(error)});
+        .then((data) => response.end('Created user!'))
+        .catch(error => {console.log(error)});;
   });
 };
 
@@ -350,11 +358,6 @@ let routes = [
 ];
 
 let server = http.createServer(function(request, response) {
-//   response.writeHeader(200, {
-//     // 'Content-Type': 'text/plain',
-//     'Access-Control-Allow-Origin' : '*',
-//     'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE'
-// });
       let route = routes.find(route => matches(request, route.method, route.path));
 
       (route ? route.handler : notFound)(request, response);

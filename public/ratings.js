@@ -1,22 +1,25 @@
-const ratingsDbUrl = 'http://localhost:3000/ratings';
 const $printArticleForRating = $('.printArticleForRating');
-var articles = {};
+const $RateArticleButton = $('#rate');
 
-$.get(articlesDbUrl, data => {
-	let articles = JSON.parse(data);
-	console.log(articles[0]);
-	// articles.forEach(element => {
-	printArticleForRating(articles[0], $printArticleForRating);
-	// articles.append(data);
-	// });
-	// function getRandomInt(max) {
-	// 	return Math.floor(Math.random() * Math.floor(articles.length - 1));
-	// 	console.log(getRandomInt);
-	// }
+function getDBArticleForRating() {
+	$.get(articlesDbUrl, data => {
+		let articles = JSON.parse(data);
+		function getRandomInt(max) {
+			return Math.floor(Math.random() * Math.floor(max));
+		}
+		let theArticle = articles[getRandomInt(articles.length)];
+		// console.log(getRandomInt(articles.length));
+		printArticleForRating(articles[getRandomInt(articles.length)], $printArticleForRating);
+	})
+}
+getDBArticleForRating();
 
-})
+$RateArticleButton.click(function() {
+	getDBArticleForRating();
+});
 
 let printArticleForRating = (source, divToAppend) => {
+	$printArticleForRating.empty();
 	let $thumbnailDiv = $('<div></div>').addClass('thumbnail');
 	$(divToAppend).append($thumbnailDiv);
 	
@@ -50,11 +53,7 @@ let printArticleForRating = (source, divToAppend) => {
 	$skipArticleButton.attr('type', 'button');
 	$skipArticleButton.text('Skip Article');
 	$skipArticleButton.click(() => {
-		// for (i = 0; i < articles.length; i++) {
-		// 	articles[i] +=
-		// 	printArticleForRating(articles[i], $printArticleForRating);
-		// };
-		// window.open(source.url);
+		getDBArticleForRating();
 	});
 	$skipArticleButtonDiv.append($skipArticleButton);
 
@@ -65,7 +64,7 @@ let printArticleForRating = (source, divToAppend) => {
 	$fairArticleButton.attr('type', 'button');
 	$fairArticleButton.text('Fair');
 	$fairArticleButton.click(() => {
-		window.open(source.url);
+		getDBArticleForRating();
 	});
 	$fairArticleButtonDiv.append($fairArticleButton);
 
@@ -76,7 +75,7 @@ let printArticleForRating = (source, divToAppend) => {
 	$unfairArticleButton.attr('type', 'button');
 	$unfairArticleButton.text('Unfair');
 	$unfairArticleButton.click(() => {
-		window.open(source.url);
+		getDBArticleForRating();
 	});
 	$unfairArticleButtonDiv.append($unfairArticleButton);
 }
