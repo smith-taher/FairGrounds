@@ -79,7 +79,7 @@ ALTER SEQUENCE public.articles_articleid_seq OWNED BY public.articles.articleid;
 --
 
 CREATE TABLE public.ratings (
-    ratingid integer NOT NULL,
+    ratingid serial,
     userid integer NOT NULL,
     articleid integer NOT NULL,
     written_fairly bit(1) NOT NULL
