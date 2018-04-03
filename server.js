@@ -277,7 +277,7 @@ let signIn = (request, response) => {
 };
 
 let renderFile = (request, response) => {
-  let token = request.getHeader('authorization');
+  // let token = request.getHeader('authorization');
   var fileName = 'public/' + request.url.slice(1);
   console.log(fileName);
   // console.log(fileName);
