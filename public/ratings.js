@@ -1,8 +1,8 @@
 const $printArticleForRating = $('.printArticleForRating');
 const $RateArticleButton = $('#rate');
 
-function getDBArticleForRating() {
-	$.get(articlesDbUrl, data => {
+let getDBArticleForRating = () => {
+	$.get('http://localhost:3000/articlestorate', data => {
 		let articles = JSON.parse(data);
 		function getRandomInt(max) {
 			return Math.floor(Math.random() * Math.floor(max));
