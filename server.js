@@ -1,6 +1,6 @@
 const http = require('http');
 const pg = require('pg-promise')();
-const db = pg('postgres://joelsmith@localhost:5432/fairgrounds');
+const db = pg('postgres://robby@localhost:5432/fairgrounds');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const NewsAPI = require('newsapi');
@@ -256,30 +256,36 @@ let createToken = user => {
 
 
 let signIn = (request, response) => {
-    readIncoming(request, (incoming) => {
-    let credentials = JSON.parse(incoming);
+  let body = '';
+  request.on('data', (chunk) => {
+    body += chunk.toString();
+  });
+  request.on('end', () => {
+    let credentials = JSON.parse(body);
+    console.log(credentials);
     let {username, password} = credentials;
+    console.log(username, password);
     validateCredentials(username, password)
     .then( queryOutcome => {
-
       if (queryOutcome.length > 0) {
         let token = createToken(queryOutcome[0]);
         console.log(token);
         // response.setHeader('jwt', token);
+        response.statusCode = 200;
         response.end(token);
       } else {
+        response.statusCode = 404;
         response.end('Username not found');
       }
     }).catch( results => {
       console.log(results);
     });
-  });
+  })
 };
 
 let renderFile = (request, response) => {
   // let token = request.getHeader('authorization');
   var fileName = 'public/' + request.url.slice(1);
-  console.log(fileName);
   // console.log(fileName);
   if (fileName.endsWith('.png')) {
     fs.readFile(fileName, (err, data) => {
@@ -297,6 +303,23 @@ let renderFile = (request, response) => {
         }
         response.end(data);
     })
+  }
+}
+
+let tokenValidator = (request, response) => {
+  let { authorization: token } = request.headers;
+  let payload;
+  try {
+    payload = jwt.verify(token, signature);
+  } catch(err) {
+    console.log('There was an error');
+  }
+  if (payload) {
+    let { userId } = payload;
+    response.end('You are signed in');
+  } else {
+    response.statusCode = 404;
+    response.end('You do not have a valid token');
   }
 }
 
@@ -327,15 +350,16 @@ let routes = [
   { method: 'PUT', path: /^\/ratings\/([0-9]+)$/, handler: editRating },
   { method: 'GET', path: /^\/ratings\/?$/, handler: getRatings },
   { method: 'POST', path: /^\/ratings\/?$/, handler: postRating },
+  { method: 'GET', path: /^\/token\/?$/, handler: tokenValidator },
   { method: 'GET', path: /.*/, handler: renderFile}
 ];
 
 let server = http.createServer(function(request, response) {
-  response.writeHead(200, {
-    // 'Content-Type': 'text/plain',
-    'Access-Control-Allow-Origin' : '*',
-    'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE'
-});
+//   response.writeHeader(200, {
+//     // 'Content-Type': 'text/plain',
+//     'Access-Control-Allow-Origin' : '*',
+//     'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE'
+// });
       let route = routes.find(route => matches(request, route.method, route.path));
 
       (route ? route.handler : notFound)(request, response);

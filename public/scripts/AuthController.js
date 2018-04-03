@@ -6,6 +6,7 @@ let login = (username, password) => {
     'username': username,
     'password': password
   };
+  console.log(credentials);
   return fetch('http://localhost:3000/signin', {method: 'POST', body: JSON.stringify(credentials)})
 };
 
@@ -91,14 +92,20 @@ let generateCreateUserForm = () => {
 }
 
 loginButton.addEventListener('click', (event) => {
-  let username = document.getElementById('user');
-  let password = document.getElementById('pass');
+  let username = document.getElementById('user').value;
+  let password = document.getElementById('pass').value;
   login(username, password)
-  .then(response => response.text())
-  .then(token => {
-  localStorage.setItem('token', token);})
   .then(response => {
-    window.location.href="http://localhost:3000/index.html"
+    if (response.status != 404) {
+      return response.text()
+    }
+  })
+  .then(token => {
+    console.log(token);
+    localStorage.setItem('token', token);
+  })
+  .then(response => {
+    window.location.href="http://localhost:3000/index.html";
   });
 });
 
