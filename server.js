@@ -12,7 +12,7 @@ const signature = '@!#$%%^&#$!@#^&***()ROBBY';
 let getArticlesFromApi = () => {
   newsapi.v2.topHeadlines({
     language: 'en',
-    pagesize: 100
+    pagesize: 10
   }).then(response => {
       let sqlArticles = makeSqlArray(response.articles);
       sqlArticles.forEach(article =>
