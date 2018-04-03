@@ -63,7 +63,8 @@ db.query(`SELECT articles.articleid
 FROM articles
 LEFT JOIN ratings ON articles.articleid = ratings.articleid
 GROUP BY articles.articleid
-HAVING COUNT(ratings.ratingid) < 3;
+HAVING COUNT(ratings.ratingid) <= 3
+ORDER BY COUNT(ratings.ratingid) DESC;
 `);
 
 

@@ -1,24 +1,23 @@
 const $printArticleForRating = $('.printArticleForRating');
 const $RateArticleButton = $('#rate');
 
-let getDBArticleForRating = () => {
+let getDBArticleForRating = (articleToGet) => {
 	$.get('http://localhost:3000/articlestorate', data => {
 		let articles = JSON.parse(data);
-		function getRandomInt(max) {
-			return Math.floor(Math.random() * Math.floor(max));
-		}
-		let theArticle = articles[getRandomInt(articles.length)];
+		let theArticle = articles[articleToGet];
 		// console.log(getRandomInt(articles.length));
-		printArticleForRating(articles[getRandomInt(articles.length)], $printArticleForRating);
+		printArticleForRating(theArticle, $printArticleForRating);
 	})
 }
-getDBArticleForRating();
+getDBArticleForRating(0);
 
 $RateArticleButton.click(function() {
 	getDBArticleForRating();
 });
 
 let printArticleForRating = (source, divToAppend) => {
+	let currentArticle = source.articleid;
+	
 	divToAppend.empty();
 		let $thumbnailDiv = $('<div></div>').addClass('thumbnail');
 	$(divToAppend).append($thumbnailDiv);
@@ -61,7 +60,7 @@ let printArticleForRating = (source, divToAppend) => {
 	$skipArticleButton.attr('type', 'button');
 	$skipArticleButton.text('Skip Article');
 	$skipArticleButton.click(() => {
-		getDBArticleForRating();
+		getDBArticleForRating(currentArticle + 1);
 	});
 	$buttonDiv.append($skipArticleButton);
 
