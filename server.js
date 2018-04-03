@@ -193,7 +193,9 @@ let postUser = (request, response) => {
       let user = insertsValuesObject(JSON.parse(incoming));
       console.log(user);
       createUserDb(user)
-        .then((data) => response.end('Created user!'))
+        .then(response => validateCredentials(user.username, user.password))
+        .then(user => createToken(user))
+        .then(token => {response.end(token)})
         .catch(error => {console.log(error)});;
   });
 };
