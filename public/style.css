@@ -136,14 +136,21 @@ header {
 }
 
 footer {
-    height: 10%;
     display: flex;
     padding: 0 1em 0 1em;
     background: #0155a4;
 }
 
+footer .nav-button {
+  background: white;
+  color: #0155a4;
+  padding: 10px;
+  border: 1px solid #efefef;
+}
+
 .nav-button {
     align-self: center;
+    cursor: pointer;
 }
 
 html, body {
