@@ -15,6 +15,12 @@ let showPageButton = (buttonDom, newViewableDom) => {
     });
 };
 
+let getToken = () => localStorage.getItem('token');
+
+let setTokenToHeader = (token, request) => {
+  request.setHeader('authorization', token);
+}
+
 let renderButtons = () => {
     showPageButton(viewButton, viewArticles);
     showPageButton(rateButton, rateArticles);
