@@ -6,29 +6,29 @@ News Rating App
 We are using a Postgres database that have three tables set up as follow:
 
 <h3>Users:</h3>
-    <p class="indent">username character varying(200) UNIQUE NOT NULL,<br>
-    password character varying(200) UNIQUE NOT NULL,<br>
-    userid serial PRIMARY KEY,<br>
-    leaning integer,<br>
-    email character varying(200) UNIQUE NOT NULL</p>
+    <p>userid integer NOT NULL,
+    username character varying(20) NOT NULL,
+    password character varying(20) NOT NULL,
+    leaning integer NOT NULL</p>
 <h3>Articles:</h3>
-    <p>articleid serial PRIMARY KEY,<br>
-    topic character varying(500),<br>
-    title character varying(500) NOT NULL,<br>
-    url character varying(500) UNIQUE NOT NULL,<br>
-    author character varying(500),<br>
-    description character varying(500),<br>
-    publishedat character varying(500),<br>
-    source character varying(500),<br>
-    urltoimage character varying(500)</p>
+    CREATE TABLE public.articles (
+    articleid integer NOT NULL,
+    topic character varying(1000),
+    title character varying(1000) NOT NULL,
+    url character varying(1000) NOT NULL,
+    author character varying(1000),
+    description character varying(1000),
+    publishedat character varying(1000),
+    source character varying(1000),
+    urltoimage character varying(1000)
+);
 <h3>Ratings:</h3>
-    <p>ratingid serial PRIMARY KEY,<br>
-    userid integer,<br>
-    articleid integer,<br>
-    fair integer,<br>
-    unfair integer,<br>
-    newsworthy integer,<br>
-    not_newsworthy integer</p>
+    <p>
+    ratingid serial,
+    userid integer NOT NULL,
+    articleid integer NOT NULL,
+    written_fairly bit(1) NOT NULL
+</p>
     
 <h2>Restful API format</h2>
 <h3>GET</h3>
