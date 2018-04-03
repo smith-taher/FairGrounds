@@ -19,8 +19,8 @@ $RateArticleButton.click(function() {
 });
 
 let printArticleForRating = (source, divToAppend) => {
-	$printArticleForRating.empty();
-	let $thumbnailDiv = $('<div></div>').addClass('thumbnail');
+	divToAppend.empty();
+		let $thumbnailDiv = $('<div></div>').addClass('thumbnail');
 	$(divToAppend).append($thumbnailDiv);
 	
 	let $thumbnailImgContainer = $('<div></div>').addClass('image-container');
@@ -46,8 +46,16 @@ let printArticleForRating = (source, divToAppend) => {
 	$descriptionH4.text(source.description);
 	$captionDiv.append($descriptionH4);
 
-	let $skipArticleButtonDiv = $('<div></div>').addClass('view-article-div');
-	$thumbnailDiv.append($skipArticleButtonDiv);
+	let $buttonDiv = $('<div></div>').addClass('view-article-div');
+	$thumbnailDiv.append($buttonDiv);
+
+	let $viewArticleButton = $('<button></button>').addClass('view-article-button');
+	$viewArticleButton.attr('type', 'button');
+	$viewArticleButton.text('View Article');
+	$viewArticleButton.click(() => {
+		window.open(source.url);
+	});
+	$buttonDiv.append($viewArticleButton);
 
 	let $skipArticleButton = $('<button></button>').addClass('skip-article-button');
 	$skipArticleButton.attr('type', 'button');
@@ -55,10 +63,7 @@ let printArticleForRating = (source, divToAppend) => {
 	$skipArticleButton.click(() => {
 		getDBArticleForRating();
 	});
-	$skipArticleButtonDiv.append($skipArticleButton);
-
-	let $fairArticleButtonDiv = $('<div></div>').addClass('view-article-div');
-	$thumbnailDiv.append($fairArticleButtonDiv);
+	$buttonDiv.append($skipArticleButton);
 
 	let $fairArticleButton = $('<button></button>').addClass('fair-article-button');
 	$fairArticleButton.attr('type', 'button');
@@ -66,10 +71,7 @@ let printArticleForRating = (source, divToAppend) => {
 	$fairArticleButton.click(() => {
 		getDBArticleForRating();
 	});
-	$fairArticleButtonDiv.append($fairArticleButton);
-
-	let $unfairArticleButtonDiv = $('<div></div>').addClass('view-article-div');
-	$thumbnailDiv.append($unfairArticleButtonDiv);
+	$buttonDiv.append($fairArticleButton);
 
 	let $unfairArticleButton = $('<button></button>').addClass('unfair-article-button');
 	$unfairArticleButton.attr('type', 'button');
@@ -77,5 +79,5 @@ let printArticleForRating = (source, divToAppend) => {
 	$unfairArticleButton.click(() => {
 		getDBArticleForRating();
 	});
-	$unfairArticleButtonDiv.append($unfairArticleButton);
+	$buttonDiv.append($unfairArticleButton);
 }
