@@ -39,14 +39,14 @@ SET default_with_oids = false;
 
 CREATE TABLE public.articles (
     articleid integer NOT NULL,
-    topic character varying(500),
-    url character varying(500) NOT NULL,
-    author character varying(500),
-    description character varying(500),
-    publishedat character varying(500),
-    urltoimage character varying(500),
-    source character varying(500),
-    title character varying(500)
+    topic character varying(1000),
+    title character varying(1000) NOT NULL,
+    url character varying(1000) NOT NULL,
+    author character varying(1000),
+    description character varying(1000),
+    publishedat character varying(1000),
+    source character varying(1000),
+    urltoimage character varying(1000)
 );
 
 
@@ -79,13 +79,10 @@ ALTER SEQUENCE public.articles_articleid_seq OWNED BY public.articles.articleid;
 --
 
 CREATE TABLE public.ratings (
-    ratingid integer NOT NULL,
-    userid integer,
-    articleid integer,
-    fair integer,
-    unfair integer,
-    newsworthy integer,
-    not_newsworthy integer
+    ratingid serial,
+    userid integer NOT NULL,
+    articleid integer NOT NULL,
+    written_fairly bit(1) NOT NULL
 );
 
 
@@ -118,11 +115,10 @@ ALTER SEQUENCE public.ratings_ratingid_seq OWNED BY public.ratings.ratingid;
 --
 
 CREATE TABLE public.users (
-    username character varying(200) NOT NULL,
-    password character varying(200) NOT NULL,
     userid integer NOT NULL,
-    leaning integer,
-    email character varying(200) NOT NULL
+    username character varying(20) NOT NULL,
+    password character varying(20) NOT NULL,
+    leaning integer NOT NULL
 );
 
 
@@ -175,36 +171,7 @@ ALTER TABLE ONLY public.users ALTER COLUMN userid SET DEFAULT nextval('public.us
 -- Data for Name: articles; Type: TABLE DATA; Schema: public; Owner: rachelpoulos
 --
 
-COPY public.articles (articleid, topic, url, author, description, publishedat, urltoimage, source, title) FROM stdin;
-1	\N	https://www.ccn.com/april-fools-vitalik-buterin-pranks-ethereum-trolls-tron-with-meta-eip/	null	Ethereum creator Vitalik Buterin has formally proposed implementing a currency cap into the cryptocurrency network’s next hard fork that alters block reward distributions -- well, sort of.	2018-04-02T14:24:14Z	https://www.ccn.com/wp-content/uploads/2018/04/Vitalik-Buterin-e1522675308283.jpg	Crypto Coins News	April Fool’s: Vitalik Buterin Pranks Ethereum, Trolls Tron with ‘Meta’ EIP
-2	\N	https://www.ccn.com/april-fools-vitalik-buterin-pranks-ethereum-trolls-tron-with-meta-eip/	null	Ethereum creator Vitalik Buterin has formally proposed implementing a currency cap into the cryptocurrency network’s next hard fork that alters block reward distributions -- well, sort of.	2018-04-02T14:24:14Z	https://www.ccn.com/wp-content/uploads/2018/04/Vitalik-Buterin-e1522675308283.jpg	Crypto Coins News	April Fool’s: Vitalik Buterin Pranks Ethereum, Trolls Tron with ‘Meta’ EIP
-3	\N	https://www.ccn.com/april-fools-vitalik-buterin-pranks-ethereum-trolls-tron-with-meta-eip/	null	Ethereum creator Vitalik Buterin has formally proposed implementing a currency cap into the cryptocurrency network’s next hard fork that alters block reward distributions -- well, sort of.	2018-04-02T14:24:14Z	https://www.ccn.com/wp-content/uploads/2018/04/Vitalik-Buterin-e1522675308283.jpg	Crypto Coins News	April Fool’s: Vitalik Buterin Pranks Ethereum, Trolls Tron with ‘Meta’ EIP
-4	\N	https://www.ccn.com/april-fools-vitalik-buterin-pranks-ethereum-trolls-tron-with-meta-eip/	null	Ethereum creator Vitalik Buterin has formally proposed implementing a currency cap into the cryptocurrency network’s next hard fork that alters block reward distributions -- well, sort of.	2018-04-02T14:24:14Z	https://www.ccn.com/wp-content/uploads/2018/04/Vitalik-Buterin-e1522675308283.jpg	Crypto Coins News	April Fool’s: Vitalik Buterin Pranks Ethereum, Trolls Tron with ‘Meta’ EIP
-5	\N	https://www.ccn.com/april-fools-vitalik-buterin-pranks-ethereum-trolls-tron-with-meta-eip/	null	Ethereum creator Vitalik Buterin has formally proposed implementing a currency cap into the cryptocurrency network’s next hard fork that alters block reward distributions -- well, sort of.	2018-04-02T14:24:14Z	https://www.ccn.com/wp-content/uploads/2018/04/Vitalik-Buterin-e1522675308283.jpg	Crypto Coins News	April Fool’s: Vitalik Buterin Pranks Ethereum, Trolls Tron with ‘Meta’ EIP
-6	\N	https://www.ccn.com/april-fools-vitalik-buterin-pranks-ethereum-trolls-tron-with-meta-eip/	null	Ethereum creator Vitalik Buterin has formally proposed implementing a currency cap into the cryptocurrency network’s next hard fork that alters block reward distributions -- well, sort of.	2018-04-02T14:24:14Z	https://www.ccn.com/wp-content/uploads/2018/04/Vitalik-Buterin-e1522675308283.jpg	Crypto Coins News	April Fool’s: Vitalik Buterin Pranks Ethereum, Trolls Tron with ‘Meta’ EIP
-7	\N	https://www.ccn.com/april-fools-vitalik-buterin-pranks-ethereum-trolls-tron-with-meta-eip/	null	Ethereum creator Vitalik Buterin has formally proposed implementing a currency cap into the cryptocurrency network’s next hard fork that alters block reward distributions -- well, sort of.	2018-04-02T14:24:14Z	https://www.ccn.com/wp-content/uploads/2018/04/Vitalik-Buterin-e1522675308283.jpg	Crypto Coins News	April Fool’s: Vitalik Buterin Pranks Ethereum, Trolls Tron with ‘Meta’ EIP
-8	\N	https://www.ccn.com/april-fools-vitalik-buterin-pranks-ethereum-trolls-tron-with-meta-eip/	null	Ethereum creator Vitalik Buterin has formally proposed implementing a currency cap into the cryptocurrency network’s next hard fork that alters block reward distributions -- well, sort of.	2018-04-02T14:24:14Z	https://www.ccn.com/wp-content/uploads/2018/04/Vitalik-Buterin-e1522675308283.jpg	Crypto Coins News	April Fool’s: Vitalik Buterin Pranks Ethereum, Trolls Tron with ‘Meta’ EIP
-9	\N	https://www.ccn.com/april-fools-vitalik-buterin-pranks-ethereum-trolls-tron-with-meta-eip/	null	Ethereum creator Vitalik Buterin has formally proposed implementing a currency cap into the cryptocurrency network’s next hard fork that alters block reward distributions -- well, sort of.	2018-04-02T14:24:14Z	https://www.ccn.com/wp-content/uploads/2018/04/Vitalik-Buterin-e1522675308283.jpg	Crypto Coins News	April Fool’s: Vitalik Buterin Pranks Ethereum, Trolls Tron with ‘Meta’ EIP
-10	\N	https://www.ccn.com/april-fools-vitalik-buterin-pranks-ethereum-trolls-tron-with-meta-eip/	null	Ethereum creator Vitalik Buterin has formally proposed implementing a currency cap into the cryptocurrency network’s next hard fork that alters block reward distributions -- well, sort of.	2018-04-02T14:24:14Z	https://www.ccn.com/wp-content/uploads/2018/04/Vitalik-Buterin-e1522675308283.jpg	Crypto Coins News	April Fool’s: Vitalik Buterin Pranks Ethereum, Trolls Tron with ‘Meta’ EIP
-11	\N	https://www.ccn.com/april-fools-vitalik-buterin-pranks-ethereum-trolls-tron-with-meta-eip/	null	Ethereum creator Vitalik Buterin has formally proposed implementing a currency cap into the cryptocurrency network’s next hard fork that alters block reward distributions -- well, sort of.	2018-04-02T14:24:14Z	https://www.ccn.com/wp-content/uploads/2018/04/Vitalik-Buterin-e1522675308283.jpg	Crypto Coins News	April Fool’s: Vitalik Buterin Pranks Ethereum, Trolls Tron with ‘Meta’ EIP
-12	\N	https://www.ccn.com/april-fools-vitalik-buterin-pranks-ethereum-trolls-tron-with-meta-eip/	null	Ethereum creator Vitalik Buterin has formally proposed implementing a currency cap into the cryptocurrency network’s next hard fork that alters block reward distributions -- well, sort of.	2018-04-02T14:24:14Z	https://www.ccn.com/wp-content/uploads/2018/04/Vitalik-Buterin-e1522675308283.jpg	Crypto Coins News	April Fool’s: Vitalik Buterin Pranks Ethereum, Trolls Tron with ‘Meta’ EIP
-13	\N	http://www.telegraph.co.uk/news/2018/04/02/anti-apartheid-campaigner-winnie-mandela-dies/	Our Foreign Staff	Winnie Mandela, the South African anti-apartheid campaigner and former wife of Nelson Mandela, has died aged 81, according to her assistant.	2018-04-02T15:03:34Z	https://www.telegraph.co.uk/content/dam/news/2018/04/02/5926821_AP_South-Africa-Nelson-Mandela-Release-xlarge_trans_NvBQzQNjv4BqTw4-AaCxUhcMgOYbK39rJVF2ZHR0HBTdDSG7qZU5Rbw.jpg	The Telegraph	Anti-apartheid campaigner Winnie Mandela dies
-14	\N	http://www.telegraph.co.uk/news/2018/04/02/anti-apartheid-campaigner-winnie-mandela-dies/	Our Foreign Staff	Winnie Mandela, the South African anti-apartheid campaigner and former wife of Nelson Mandela, has died aged 81, according to her assistant.	2018-04-02T15:03:34Z	https://www.telegraph.co.uk/content/dam/news/2018/04/02/5926821_AP_South-Africa-Nelson-Mandela-Release-xlarge_trans_NvBQzQNjv4BqTw4-AaCxUhcMgOYbK39rJVF2ZHR0HBTdDSG7qZU5Rbw.jpg	The Telegraph	Anti-apartheid campaigner Winnie Mandela dies
-15	\N	http://www.telegraph.co.uk/news/2018/04/02/anti-apartheid-campaigner-winnie-mandela-dies/	Our Foreign Staff	Winnie Mandela, the South African anti-apartheid campaigner and former wife of Nelson Mandela, has died aged 81, according to her assistant.	2018-04-02T15:03:34Z	https://www.telegraph.co.uk/content/dam/news/2018/04/02/5926821_AP_South-Africa-Nelson-Mandela-Release-xlarge_trans_NvBQzQNjv4BqTw4-AaCxUhcMgOYbK39rJVF2ZHR0HBTdDSG7qZU5Rbw.jpg	The Telegraph	Anti-apartheid campaigner Winnie Mandela dies
-16	\N	http://www.telegraph.co.uk/news/2018/04/02/anti-apartheid-campaigner-winnie-mandela-dies/	Our Foreign Staff	Winnie Mandela, the South African anti-apartheid campaigner and former wife of Nelson Mandela, has died aged 81, according to her assistant.	2018-04-02T15:03:34Z	https://www.telegraph.co.uk/content/dam/news/2018/04/02/5926821_AP_South-Africa-Nelson-Mandela-Release-xlarge_trans_NvBQzQNjv4BqTw4-AaCxUhcMgOYbK39rJVF2ZHR0HBTdDSG7qZU5Rbw.jpg	The Telegraph	Anti-apartheid campaigner Winnie Mandela dies
-17	\N	http://www.telegraph.co.uk/news/2018/04/02/anti-apartheid-campaigner-winnie-mandela-dies/	Our Foreign Staff	Winnie Mandela, the South African anti-apartheid campaigner and former wife of Nelson Mandela, has died aged 81, according to her assistant.	2018-04-02T15:03:34Z	https://www.telegraph.co.uk/content/dam/news/2018/04/02/5926821_AP_South-Africa-Nelson-Mandela-Release-xlarge_trans_NvBQzQNjv4BqTw4-AaCxUhcMgOYbK39rJVF2ZHR0HBTdDSG7qZU5Rbw.jpg	The Telegraph	Anti-apartheid campaigner Winnie Mandela dies
-18	\N	http://www.telegraph.co.uk/news/2018/04/02/anti-apartheid-campaigner-winnie-mandela-dies/	Our Foreign Staff	Winnie Mandela, the South African anti-apartheid campaigner and former wife of Nelson Mandela, has died aged 81, according to her assistant.	2018-04-02T15:03:34Z	https://www.telegraph.co.uk/content/dam/news/2018/04/02/5926821_AP_South-Africa-Nelson-Mandela-Release-xlarge_trans_NvBQzQNjv4BqTw4-AaCxUhcMgOYbK39rJVF2ZHR0HBTdDSG7qZU5Rbw.jpg	The Telegraph	Anti-apartheid campaigner Winnie Mandela dies
-19	\N	http://www.telegraph.co.uk/news/2018/04/02/anti-apartheid-campaigner-winnie-mandela-dies/	Our Foreign Staff	Winnie Mandela, the South African anti-apartheid campaigner and former wife of Nelson Mandela, has died aged 81, according to her assistant.	2018-04-02T15:03:34Z	https://www.telegraph.co.uk/content/dam/news/2018/04/02/5926821_AP_South-Africa-Nelson-Mandela-Release-xlarge_trans_NvBQzQNjv4BqTw4-AaCxUhcMgOYbK39rJVF2ZHR0HBTdDSG7qZU5Rbw.jpg	The Telegraph	Anti-apartheid campaigner Winnie Mandela dies
-20	\N	http://www.telegraph.co.uk/news/2018/04/02/anti-apartheid-campaigner-winnie-mandela-dies/	Our Foreign Staff	Winnie Mandela, the South African anti-apartheid campaigner and former wife of Nelson Mandela, has died aged 81, according to her assistant.	2018-04-02T15:03:34Z	https://www.telegraph.co.uk/content/dam/news/2018/04/02/5926821_AP_South-Africa-Nelson-Mandela-Release-xlarge_trans_NvBQzQNjv4BqTw4-AaCxUhcMgOYbK39rJVF2ZHR0HBTdDSG7qZU5Rbw.jpg	The Telegraph	Anti-apartheid campaigner Winnie Mandela dies
-21	\N	http://www.telegraph.co.uk/news/2018/04/02/anti-apartheid-campaigner-winnie-mandela-dies/	Our Foreign Staff	Winnie Mandela, the South African anti-apartheid campaigner and former wife of Nelson Mandela, has died aged 81, according to her assistant.	2018-04-02T15:03:34Z	https://www.telegraph.co.uk/content/dam/news/2018/04/02/5926821_AP_South-Africa-Nelson-Mandela-Release-xlarge_trans_NvBQzQNjv4BqTw4-AaCxUhcMgOYbK39rJVF2ZHR0HBTdDSG7qZU5Rbw.jpg	The Telegraph	Anti-apartheid campaigner Winnie Mandela dies
-22	\N	http://www.telegraph.co.uk/news/2018/04/02/anti-apartheid-campaigner-winnie-mandela-dies/	Our Foreign Staff	Winnie Mandela, the South African anti-apartheid campaigner and former wife of Nelson Mandela, has died aged 81, according to her assistant.	2018-04-02T15:03:34Z	https://www.telegraph.co.uk/content/dam/news/2018/04/02/5926821_AP_South-Africa-Nelson-Mandela-Release-xlarge_trans_NvBQzQNjv4BqTw4-AaCxUhcMgOYbK39rJVF2ZHR0HBTdDSG7qZU5Rbw.jpg	The Telegraph	Anti-apartheid campaigner Winnie Mandela dies
-23	\N	http://www.telegraph.co.uk/news/2018/04/02/anti-apartheid-campaigner-winnie-mandela-dies/	Our Foreign Staff	Winnie Mandela, the South African anti-apartheid campaigner and former wife of Nelson Mandela, has died aged 81, according to her assistant.	2018-04-02T15:03:34Z	https://www.telegraph.co.uk/content/dam/news/2018/04/02/5926821_AP_South-Africa-Nelson-Mandela-Release-xlarge_trans_NvBQzQNjv4BqTw4-AaCxUhcMgOYbK39rJVF2ZHR0HBTdDSG7qZU5Rbw.jpg	The Telegraph	Anti-apartheid campaigner Winnie Mandela dies
-24	\N	http://www.telegraph.co.uk/news/2018/04/02/anti-apartheid-campaigner-winnie-mandela-dies/	Our Foreign Staff	Winnie Mandela, the South African anti-apartheid campaigner and former wife of Nelson Mandela, has died aged 81, according to her assistant.	2018-04-02T15:03:34Z	https://www.telegraph.co.uk/content/dam/news/2018/04/02/5926821_AP_South-Africa-Nelson-Mandela-Release-xlarge_trans_NvBQzQNjv4BqTw4-AaCxUhcMgOYbK39rJVF2ZHR0HBTdDSG7qZU5Rbw.jpg	The Telegraph	Anti-apartheid campaigner Winnie Mandela dies
-25	\N	https://www.ccn.com/investor-banks-like-goldman-sachs-entering-crypto-will-lead-to-bitcoin-price-surge/	null	Jon Matonis, a co-founder of Bitcoin Foundation and executive at VISA, stated that the entrance of major banks and financial institutions like Goldman Sachs will lead to an increase in the liquidity of bitcoin, and ultimately, the bitcoin price.	2018-04-02T15:23:07Z	https://www.ccn.com/wp-content/uploads/2017/11/Bitcoin-chart-bg.jpg	Crypto Coins News	Goldman Sachs Entering Crypto Will Lead to Bitcoin Price Surge: Matonis
-26	\N	https://www.ccn.com/investor-banks-like-goldman-sachs-entering-crypto-will-lead-to-bitcoin-price-surge/	null	Jon Matonis, a co-founder of Bitcoin Foundation and executive at VISA, stated that the entrance of major banks and financial institutions like Goldman Sachs will lead to an increase in the liquidity of bitcoin, and ultimately, the bitcoin price.	2018-04-02T15:23:07Z	https://www.ccn.com/wp-content/uploads/2017/11/Bitcoin-chart-bg.jpg	Crypto Coins News	Goldman Sachs Entering Crypto Will Lead to Bitcoin Price Surge: Matonis
-27	\N	https://www.ccn.com/investor-banks-like-goldman-sachs-entering-crypto-will-lead-to-bitcoin-price-surge/	null	Jon Matonis, a co-founder of Bitcoin Foundation and executive at VISA, stated that the entrance of major banks and financial institutions like Goldman Sachs will lead to an increase in the liquidity of bitcoin, and ultimately, the bitcoin price.	2018-04-02T15:23:07Z	https://www.ccn.com/wp-content/uploads/2017/11/Bitcoin-chart-bg.jpg	Crypto Coins News	Goldman Sachs Entering Crypto Will Lead to Bitcoin Price Surge: Matonis
-28	\N	https://www.washingtonpost.com/local/obituaries/winnie-madikizela-mandela-south-africas-mother-of-the-nation-dies-at-81/2018/04/02/095c5360-3680-11e8-acd5-35eac230e514_story.html	Stephanie Hanes, Stephanie Hanes	She was the former wife of Nelson Mandela and one of the country’s most polarizing figures.	2018-04-02T15:34:00Z	https://www.washingtonpost.com/rf/image_1484w/2010-2019/WashingtonPost/2018/04/02/Obituaries/Images/AFP_13L45D.jpg?t=20170517	The Washington Post	Winnie Madikizela-Mandela, South Africa’s ‘Mother of the Nation,’ dies at 81
-29	\N	https://www.washingtonpost.com/local/obituaries/winnie-madikizela-mandela-south-africas-mother-of-the-nation-dies-at-81/2018/04/02/095c5360-3680-11e8-acd5-35eac230e514_story.html	Stephanie Hanes, Stephanie Hanes	She was the former wife of Nelson Mandela and one of the country’s most polarizing figures.	2018-04-02T15:34:00Z	https://www.washingtonpost.com/rf/image_1484w/2010-2019/WashingtonPost/2018/04/02/Obituaries/Images/AFP_13L45D.jpg?t=20170517	The Washington Post	Winnie Madikizela-Mandela, South Africa’s ‘Mother of the Nation,’ dies at 81
+COPY public.articles (articleid, topic, title, url, author, description, publishedat, source, urltoimage) FROM stdin;
 \.
 
 
@@ -212,7 +179,7 @@ COPY public.articles (articleid, topic, url, author, description, publishedat, u
 -- Data for Name: ratings; Type: TABLE DATA; Schema: public; Owner: rachelpoulos
 --
 
-COPY public.ratings (ratingid, userid, articleid, fair, unfair, newsworthy, not_newsworthy) FROM stdin;
+COPY public.ratings (ratingid, userid, articleid, written_fairly) FROM stdin;
 \.
 
 
@@ -220,7 +187,7 @@ COPY public.ratings (ratingid, userid, articleid, fair, unfair, newsworthy, not_
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: rachelpoulos
 --
 
-COPY public.users (username, password, userid, leaning, email) FROM stdin;
+COPY public.users (userid, username, password, leaning) FROM stdin;
 \.
 
 
@@ -228,7 +195,7 @@ COPY public.users (username, password, userid, leaning, email) FROM stdin;
 -- Name: articles_articleid_seq; Type: SEQUENCE SET; Schema: public; Owner: rachelpoulos
 --
 
-SELECT pg_catalog.setval('public.articles_articleid_seq', 29, true);
+SELECT pg_catalog.setval('public.articles_articleid_seq', 1, false);
 
 
 --
@@ -246,43 +213,11 @@ SELECT pg_catalog.setval('public.users_userid_seq', 1, false);
 
 
 --
--- Name: articles articles_pkey; Type: CONSTRAINT; Schema: public; Owner: rachelpoulos
+-- Name: articles articles_url_key; Type: CONSTRAINT; Schema: public; Owner: rachelpoulos
 --
 
 ALTER TABLE ONLY public.articles
-    ADD CONSTRAINT articles_pkey PRIMARY KEY (articleid);
-
-
---
--- Name: ratings ratings_pkey; Type: CONSTRAINT; Schema: public; Owner: rachelpoulos
---
-
-ALTER TABLE ONLY public.ratings
-    ADD CONSTRAINT ratings_pkey PRIMARY KEY (ratingid);
-
-
---
--- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: rachelpoulos
---
-
-ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_email_key UNIQUE (email);
-
-
---
--- Name: users users_password_key; Type: CONSTRAINT; Schema: public; Owner: rachelpoulos
---
-
-ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_password_key UNIQUE (password);
-
-
---
--- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: rachelpoulos
---
-
-ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_pkey PRIMARY KEY (userid);
+    ADD CONSTRAINT articles_url_key UNIQUE (url);
 
 
 --
