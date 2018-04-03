@@ -33,7 +33,39 @@ let makeSqlArray = articlesArray => {
   })
   return articlesSqlArray;
 }
+
+let checkArticlesStable = () => {
+  checkNeedsRatings().then(data => {
+    if (data.length <= 3) {
+      getArticlesFromApi();
+    }
+  })
+}
+
 //functions to talk to DB
+let checkNeedsRatings = () =>
+  db.query(`SELECT COUNT(ratings.ratingid) as rating_count
+  FROM articles
+  LEFT JOIN ratings ON articles.articleid = ratings.articleid
+  GROUP BY articles.articleid
+  HAVING COUNT(ratings.ratingid) < 3;`);
+    
+let articlesReadyForDisplay = () =>
+db.query(`SELECT articles.articleid
+FROM articles
+LEFT JOIN ratings ON articles.articleid = ratings.articleid
+GROUP BY articles.articleid
+HAVING COUNT(ratings.ratingid) > 3;
+`);
+
+let articlesToRate = () =>
+db.query(`SELECT articles.articleid
+FROM articles
+LEFT JOIN ratings ON articles.articleid = ratings.articleid
+GROUP BY articles.articleid
+HAVING COUNT(ratings.ratingid) < 3;
+`);
+
 
 let createUserDb = (user) =>
     db.query(`INSERT INTO users
@@ -51,13 +83,13 @@ let addArticleDb = (article) =>
   VALUES(${article.values});`);
 
 let getUserDb = (id) =>
-  db.query(`SELECT * from users where userid = ${id};`);
+  db.query(`SELECT * from users where userid IN (${id});`);
 
 let getArticleDb = (id) =>
-  db.query(`SELECT * from articles where articleid = ${id};`);
+  db.query(`SELECT * from articles where articleid IN (${id});`);
 
 let getRatingDb = (id) =>
-  db.query(`SELECT * from ratings where ratingid = ${id};`);
+  db.query(`SELECT * from ratings where ratingid IN (${id});`);
 
 let getUsersDb = () =>
   db.query(`SELECT * from users;`);
@@ -132,33 +164,47 @@ let getUser = (request, response) => {
   let id = getSuffix(request.url, '/users/');
   getUserDb(id)
     .then((data) => response.end(JSON.stringify(data)))
-    .catch(error => {console.log(error)});;
+    .catch(error => {console.log(error)});
 }
 
 let getUsers = (request, response) => {
   getUsersDb()
     .then((data) => response.end(JSON.stringify(data)))
-    .catch(error => {console.log(error)});;
+    .catch(error => {console.log(error)});
 }
 
 let getArticle = (request, response) => {
   let id = getSuffix(request.url, '/articles/');
   getArticleDb(id)
     .then((data) => response.end(JSON.stringify(data)))
-    .catch(error => {console.log(error)});;
+    .catch(error => {console.log(error)});
 }
 
-let getArticles = (request, response) => {
-  getArticlesDb()
+let getArticlesToView = (request, response) => {
+  articlesReadyForDisplay().then(data => {
+    let sqlIdString = data.map(element => element.articleid);
+    getArticleDb(sqlIdString)
     .then((data) => response.end(JSON.stringify(data)))
-    .catch(error => {console.log(error)});;
+    .catch(error => {console.log(error)});
+  })
+}
+
+let getArticlesToRate = (request, response) => {
+  checkArticlesStable();
+  console.log(request);
+  articlesToRate().then(data => {
+    let sqlIdString = data.map(element => element.articleid);
+    getArticleDb(sqlIdString)
+    .then((data) => response.end(JSON.stringify(data)))
+    .catch(error => {console.log(error)});
+  })
 }
 
 let getRating = (request, response) => {
   let id = getSuffix(request.url, '/articles/');
   getRatingDb(id)
     .then((data) => response.end(JSON.stringify(data)))
-    .catch(error => {console.log(error)});;
+    .catch(error => {console.log(error)});
 }
 
 let getRatings = (request, response) => {
@@ -348,7 +394,8 @@ let routes = [
   { method: 'POST', path: /^\/signin\/?$/, handler: signIn },
   { method: 'GET', path: /^\/articles\/([0-9]+)$/, handler: getArticle },
   { method: 'PUT', path: /^\/articles\/([0-9]+)$/, handler: editArticle },
-  { method: 'GET', path: /^\/articles\/?$/, handler: getArticles },
+  { method: 'GET', path: /^\/articles\/?$/, handler: getArticlesToView },
+  { method: 'GET', path: /^\/articlestorate\/?$/, handler: getArticlesToRate },
   { method: 'POST', path: /^\/articles\/?$/, handler: postArticle },
   { method: 'DELETE', path: /^\/ratings\/([0-9]+)$/, handler: deleteRating},
   { method: 'GET', path: /^\/ratings\/([0-9]+)$/, handler: getRating },
