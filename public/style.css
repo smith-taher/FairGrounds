@@ -99,7 +99,7 @@ html, body {
     margin-top: 0;
 }
 
-.view-article-button {
+.view-article-button, .skip-article-button, .fair-article-button, .unfair-article-button {
     height: 2em;
 }
 
@@ -113,7 +113,7 @@ html, body {
     padding: 0 1em 0 1em;
     flex-grow: 1;
 }
-.printResults {
+.printResults, .printArticleForRating {
     width: 100%;
     display: flex;
     flex-flow: row wrap;
