@@ -256,13 +256,8 @@ let createToken = user => {
 
 
 let signIn = (request, response) => {
-  let body = '';
-  request.on('data', (chunk) => {
-    body += chunk.toString();
-  });
-  request.on('end', () => {
-    let credentials = JSON.parse(body);
-    console.log(credentials);
+    readIncoming(request, (incoming) => {
+    let credentials = JSON.parse(incoming);
     let {username, password} = credentials;
     console.log(username, password);
     validateCredentials(username, password)
@@ -280,7 +275,7 @@ let signIn = (request, response) => {
     }).catch( results => {
       console.log(results);
     });
-  })
+  });
 };
 
 let renderFile = (request, response) => {
@@ -312,7 +307,7 @@ let tokenValidator = (request, response) => {
   try {
     payload = jwt.verify(token, signature);
   } catch(err) {
-    console.log('There was an error');
+    console.log('No Token');
   }
   if (payload) {
     let { userId } = payload;
