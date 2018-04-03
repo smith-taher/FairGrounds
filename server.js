@@ -51,21 +51,21 @@ let checkNeedsRatings = () =>
   HAVING COUNT(ratings.ratingid) < 3;`);
     
 let articlesReadyForDisplay = () =>
-db.query(`SELECT articles.articleid
-FROM articles
-LEFT JOIN ratings ON articles.articleid = ratings.articleid
-GROUP BY articles.articleid
-HAVING COUNT(ratings.ratingid) > 3;
-`);
+  db.query(`SELECT articles.articleid
+  FROM articles
+  LEFT JOIN ratings ON articles.articleid = ratings.articleid
+  GROUP BY articles.articleid
+  HAVING COUNT(ratings.ratingid) > 3;
+  `);
 
 let articlesToRate = () =>
-db.query(`SELECT articles.articleid
-FROM articles
-LEFT JOIN ratings ON articles.articleid = ratings.articleid
-GROUP BY articles.articleid
-HAVING COUNT(ratings.ratingid) <= 3
-ORDER BY COUNT(ratings.ratingid) DESC;
-`);
+  db.query(`SELECT articles.articleid
+  FROM articles
+  LEFT JOIN ratings ON articles.articleid = ratings.articleid
+  GROUP BY articles.articleid
+  HAVING COUNT(ratings.ratingid) <= 3
+  ORDER BY COUNT(ratings.ratingid) DESC;
+  `);
 
 
 let createUserDb = (user) =>
@@ -94,9 +94,6 @@ let getRatingDb = (id) =>
 
 let getUsersDb = () =>
   db.query(`SELECT * from users;`);
-
-let getArticlesDb = () =>
-  db.query(`SELECT * from articles;`);
 
 let getRatingsDb = () =>
   db.query(`SELECT * from ratings;`);
