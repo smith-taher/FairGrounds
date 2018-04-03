@@ -311,14 +311,19 @@ let renderFile = (request, response) => {
   }
 }
 
-let tokenValidator = (request, response) => {
-  let { authorization: token } = request.headers;
+let getIdFromToken = (token) => {
   let payload;
   try {
     payload = jwt.verify(token, signature);
   } catch(err) {
     console.log('No Token');
   }
+  return payload;
+
+}
+let tokenValidator = (request, response) => {
+  let { authorization: token } = request.headers;
+  let payload = getIdFromToken(token);
   if (payload) {
     let { userId } = payload;
     response.end('You are signed in');
