@@ -1,11 +1,19 @@
 const ratingsDbUrl = 'http://localhost:3000/ratings';
 const $printArticleForRating = $('.printArticleForRating');
+var articles = {};
+
 $.get(articlesDbUrl, data => {
 	let articles = JSON.parse(data);
-	console.log(articles);
-	articles.forEach(element => {
-		printArticleForRating(element, $printArticleForRating);
-	});
+	console.log(articles[0]);
+	// articles.forEach(element => {
+	printArticleForRating(articles[0], $printArticleForRating);
+	// articles.append(data);
+	// });
+	// function getRandomInt(max) {
+	// 	return Math.floor(Math.random() * Math.floor(articles.length - 1));
+	// 	console.log(getRandomInt);
+	// }
+
 })
 
 let printArticleForRating = (source, divToAppend) => {
@@ -42,7 +50,11 @@ let printArticleForRating = (source, divToAppend) => {
 	$skipArticleButton.attr('type', 'button');
 	$skipArticleButton.text('Skip Article');
 	$skipArticleButton.click(() => {
-		window.open(source.url);
+		// for (i = 0; i < articles.length; i++) {
+		// 	articles[i] +=
+		// 	printArticleForRating(articles[i], $printArticleForRating);
+		// };
+		// window.open(source.url);
 	});
 	$skipArticleButtonDiv.append($skipArticleButton);
 
