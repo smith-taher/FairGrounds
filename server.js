@@ -82,7 +82,7 @@ let moderateRating = (articleid) =>
   JOIN articles ON ratings.articleid = articles.articleid
   JOIN users ON ratings.userid = users.userid
   WHERE ratings.articleid = ${articleid}
-  AND users.leaning BETWEEN 33 AND 66;`
+  AND users.leaning BETWEEN 34 AND 66;`
   );
 
 let liberalRating = (articleid) =>
@@ -91,7 +91,7 @@ let liberalRating = (articleid) =>
   JOIN articles ON ratings.articleid = articles.articleid
   JOIN users ON ratings.userid = users.userid
   WHERE ratings.articleid = ${articleid}
-  AND users.leaning >= 66;`
+  AND users.leaning > 66;`
   );
 
 let totalRating = (articleid) =>
