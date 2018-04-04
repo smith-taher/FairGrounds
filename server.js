@@ -292,7 +292,7 @@ let postRating = (request, response) => {
       rating.userid = payload.userId;
       rateArticleDb(rating)
         .then((data) => response.end('Added rating!'))
-        .catch(error => {console.log(error)});
+        .catch(error => {response.end(error)});
       })
 };
 
