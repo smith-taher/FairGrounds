@@ -143,7 +143,7 @@ let createSignOutButton = () => {
     fetch('http://localhost:3000/token', {method: 'GET', headers: tokenHeader})
     .then(response => {
       if (response.status != 404) {
-        signInButton.remove();
+        $signInButton.remove();
         let signOutButton = createSignOutButton();
         let buttonParent = document.querySelector('.navigation-top');
         buttonParent.appendChild(signOutButton);
