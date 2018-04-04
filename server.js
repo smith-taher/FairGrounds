@@ -236,7 +236,8 @@ let getArticlesToRate = (request, response) => {
   readIncoming(request, body => {
     let parseid = JSON.parse(body);
     let userid = jwt.verify(parseid.userid, signature);
-    articlesToRate(parseInt(userid.userId))
+    console.log(userid.userId);
+    articlesToRate(userid.userId)
       .then(data => {
         let sqlArticleIds = data.map(element => element.articleid);
         getArticleToRateDb(sqlArticleIds)

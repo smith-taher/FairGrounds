@@ -154,7 +154,7 @@ let printArticlesForRating = (source, divToAppend, currentArticle) => {
         ratingsObject.userid = getToken();
         ratingsObject.articleid = source.articleid;
         postRating(ratingsObject);
-        getDBArticleForRating(currentArticle + 1);
+        getDBArticleForRating(currentArticle + 1, getToken());
     })
     $rateForm.append($submitButton);
 
@@ -163,7 +163,7 @@ let printArticlesForRating = (source, divToAppend, currentArticle) => {
 	$skipArticleButton.attr('type', 'button');
 	$skipArticleButton.text('Skip Article');
 	$skipArticleButton.click(() => {
-		getDBArticleForRating(currentArticle + 1);
+		getDBArticleForRating(currentArticle + 1, getToken());
 	});
 	$buttonDiv.append($skipArticleButton);
 }
@@ -232,7 +232,8 @@ let getDBArticlesView  = () => {
 let postRating = (object) => {
     fetch('http://localhost:3000/ratings', 
         {method: 'POST', body: JSON.stringify(object)})
-        .then(response => console.log(response));
+        .then(response => response.json())
+        .then(data => console.log(data));
 }
 
 //button functions
