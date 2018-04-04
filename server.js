@@ -287,16 +287,6 @@ let postRating = (request, response) => {
   });
 };
 
-let postArticle = (request, response) => {
-  readIncoming(request, (incoming) => {
-      let article = insertsValuesObject(JSON.parse(incoming));
-      console.log(article);
-      addArticleDb(article)
-        .then((data) => response.end('Added article!'))
-        .catch(error => {console.log(error)});;
-  });
-};
-
 let editUser = (request, response) => {
   readIncoming(request, (incoming) => {
     let id = getSuffix(request.url, '/users/');
@@ -305,17 +295,6 @@ let editUser = (request, response) => {
     editUserDb(id, setInfo)
       .then((data) => response.end('Updated user!'))
       .catch(error => {console.log(error)});
-  })
-}
-
-let editArticle = (request, response) => {
-  readIncoming(request, (incoming) => {
-    let id = getSuffix(request.url, '/articles/');
-    let update = JSON.parse(incoming);
-    let setInfo = updateString(update);
-    editArticleDb(id, setInfo)
-      .then((data) => response.end('Updated article!'))
-      .catch(error => {console.log(error)});;
   })
 }
 
@@ -425,10 +404,8 @@ let routes = [
   { method: 'DELETE', path: /^\/articles\/([0-9]+)$/, handler: deleteArticle },
   { method: 'POST', path: /^\/signin\/?$/, handler: signIn },
   { method: 'GET', path: /^\/articles\/([0-9]+)$/, handler: getArticle },
-  { method: 'PUT', path: /^\/articles\/([0-9]+)$/, handler: editArticle },
   { method: 'GET', path: /^\/articles\/?$/, handler: getArticlesToView },
   { method: 'GET', path: /^\/articlestorate\/?$/, handler: getArticlesToRate },
-  { method: 'POST', path: /^\/articles\/?$/, handler: postArticle },
   { method: 'DELETE', path: /^\/ratings\/([0-9]+)$/, handler: deleteRating},
   { method: 'GET', path: /^\/ratings\/([0-9]+)$/, handler: getRating },
   { method: 'PUT', path: /^\/ratings\/([0-9]+)$/, handler: editRating },
