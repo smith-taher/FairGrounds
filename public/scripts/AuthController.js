@@ -7,7 +7,7 @@ let login = (username, password) => {
     'password': password
   };
   console.log(credentials);
-  return fetch('http://localhost:3000/signin', {method: 'POST', body: JSON.stringify(credentials)})
+  return fetch('/signin', {method: 'POST', body: JSON.stringify(credentials)})
 };
 
 let generateUserInput = () => {
@@ -51,7 +51,7 @@ let generateCreateAccountButton = () => {
     .then(token => {
       localStorage.setItem('token', token);})
     .then(response => {
-        window.location.href="http://localhost:3000/index.html"
+        window.location.href="/index.html"
     });
   })
   return createButton;
@@ -64,7 +64,7 @@ let sendCreationCredentials = (event) => {
     'email': document.getElementById('newEmail').value,
     'leaning': document.getElementById('newLeaning').value
   };
-  return fetch('http://localhost:3000/users', {method: 'POST', body: JSON.stringify(credentials)});
+  return fetch('/users', {method: 'POST', body: JSON.stringify(credentials)});
 }
 
 let removeLoginForm = () => {
@@ -105,7 +105,7 @@ loginButton.addEventListener('click', (event) => {
     localStorage.setItem('token', token);
   })
   .then(response => {
-    window.location.href="http://localhost:3000/index.html";
+    window.location.href="/index.html";
   });
 });
 
