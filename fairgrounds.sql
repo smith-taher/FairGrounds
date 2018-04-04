@@ -82,7 +82,8 @@ CREATE TABLE public.ratings (
     ratingid serial,
     userid integer NOT NULL,
     articleid integer NOT NULL,
-    written_fairly integer NOT NULL
+    written_fairly integer NOT NULL,
+    topic character varying(20)
 );
 
 
