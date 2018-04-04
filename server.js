@@ -377,17 +377,6 @@ let renderFile = (request, response) => {
   }
 }
 
-let getIdFromToken = (token) => {
-  let payload;
-  try {
-    jwt.verify(token, signature)
-    .then(data => data);
-  } catch(err) {
-    console.log('No Token');
-  }
-  return payload;
-}
-
 let tokenValidator = (request, response) => {
   let { authorization: token } = request.headers;
   let payload;
