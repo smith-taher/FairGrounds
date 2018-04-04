@@ -1,7 +1,14 @@
 require('dotenv').config()
 const http = require('http');
 const pg = require('pg-promise')();
-const db = pg(process.env.DB_PATH);
+const cn = {
+  host: 'localhost',
+  port: 5432,
+  database: 'fairgrounds',
+  user: 'ubuntu',
+  password: 'password'
+}
+const db = pg(cn);
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const NewsAPI = require('newsapi');
