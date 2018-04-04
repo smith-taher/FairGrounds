@@ -227,7 +227,7 @@ input::placeholder {
 .rate-form {
     display: flex;
     flex-flow: row wrap;
-    width: 30%;
+    width: 50%;
     align-self: center;
     justify-content: center;
 }

@@ -115,10 +115,9 @@ let printArticlesForRating = (source, divToAppend, currentArticle) => {
     $fairArticle.attr('type', 'radio');
     $fairArticle.attr('name', 'written_fairly');
     $fairArticle.attr('value', '1');
-	$fairArticle.text('Fair');
     $rateForm.append($fairArticle);
     let $fairText = $('<div></div>');
-    $fairText.text('Fair');
+    $fairText.text('Written Fairly');
     $rateForm.append($fairText);
 
 	let $unfairArticle = $('<input>').addClass('unfair-article-button');
@@ -127,7 +126,7 @@ let printArticlesForRating = (source, divToAppend, currentArticle) => {
     $unfairArticle.attr('value', '0');
     $rateForm.append($unfairArticle);
     let $unfairText = $('<div></div>');
-    $unfairText.text('Unfair');
+    $unfairText.text('Written Unfairly');
     $rateForm.append($unfairText);
 
     let $topicInput = $('<select></select>').addClass('topic-input').attr('name', 'topic');
