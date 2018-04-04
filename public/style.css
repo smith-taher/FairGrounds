@@ -95,11 +95,13 @@ html, body {
 
 .view-article-div {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     margin: 1em;
-    width: 30%;
+    width: 50%;
     align-self: center;
+    justify-content: space-between;
 }
+
 .title {
     margin-bottom: 0;
 }
@@ -108,8 +110,54 @@ html, body {
     margin-top: 0;
 }
 
-.view-article-button, .skip-article-button, .fair-article-button, .unfair-article-button {
-    height: 2em;
+.view-article-button {
+    background-color: #008CBA;
+    border: none;
+    color: white;
+    padding: 15px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 2.5px;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 9px #999
+}
+
+.view-article-button:hover {
+    background-color: blue;
+}
+
+.view-article-button:active {
+    background-color: blue;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
+
+.skip-article-button {
+    background-color: #f44336;
+    border: none;
+    color: white;
+    padding: 15px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 2.5px;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 9px #999;
+}
+
+.skip-article-button:hover {
+    background-color: rgb(197, 18, 18);
+}
+
+.skip-article-button:active {
+    background-color: rgb(197, 18, 18);
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
 }
 
 .author-source-date {
@@ -227,11 +275,46 @@ input::placeholder {
 .rate-form {
     display: flex;
     flex-flow: row wrap;
-    width: 50%;
+    width: 100%;
     align-self: center;
     justify-content: center;
+    font-family: Impact, Charcoal, sans-serif;
+}
+
+.fair-article-button, .unfair-article-button {
+    align-self: center;
+    font-family: Georgia;
+    margin: 0 5px 0 5px;
 }
 
 .topic-input {
-    width: 100%;
+    display: inline-flex;
+    width: 50%;
+    margin: 5px;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+.topic-input-button {
+    background-color: rgb(117, 182, 19);
+    border: none;
+    color: white;
+    padding: 5px 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-bottom: 5px;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 9px #999
+}
+
+.topic-input-button:hover {
+    background-color: green;
+}
+
+.topic-input-button:active {
+    background-color: green;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
 }

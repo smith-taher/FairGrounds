@@ -140,7 +140,7 @@ let printArticlesForRating = (source, divToAppend, currentArticle) => {
     $topicInput.append($foreignPolicy);
     $rateForm.append($topicInput);
 
-    let $submitButton = $('<button></button>').attr('type', 'button');
+    let $submitButton = $('<button></button>').addClass('topic-input-button').attr('type', 'button');
     $submitButton.text('Submit');
     $submitButton.click(() => {
         let form = $('.rate-form').serializeArray();
