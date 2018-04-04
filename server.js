@@ -67,40 +67,6 @@ let articlesToRate = () =>
   ORDER BY COUNT(ratings.ratingid) DESC;
   `);
 
-let conservativeRating = (articleid) =>
-  db.query(`SELECT AVG(written_fairly)
-  FROM ratings
-  JOIN articles ON ratings.articleid = articles.articleid
-  JOIN users ON ratings.userid = users.userid
-  WHERE ratings.articleid = ${articleid}
-  AND users.leaning <= 33;`
-  );
-
-let moderateRating = (articleid) =>
-  db.query(`SELECT AVG(written_fairly)
-  FROM ratings
-  JOIN articles ON ratings.articleid = articles.articleid
-  JOIN users ON ratings.userid = users.userid
-  WHERE ratings.articleid = ${articleid}
-  AND users.leaning BETWEEN 34 AND 66;`
-  );
-
-let liberalRating = (articleid) =>
-  db.query(`SELECT AVG(written_fairly)
-  FROM ratings
-  JOIN articles ON ratings.articleid = articles.articleid
-  JOIN users ON ratings.userid = users.userid
-  WHERE ratings.articleid = ${articleid}
-  AND users.leaning > 66;`
-  );
-
-let totalRating = (articleid) =>
-  db.query(`SELECT AVG(written_fairly)
-  FROM ratings
-  JOIN articles ON ratings.articleid = articles.articleid
-  JOIN users ON ratings.userid = users.userid
-  WHERE ratings.articleid = ${articleid}`
-  );
 
 let createUserDb = (user) =>
     db.query(`INSERT INTO users
@@ -121,7 +87,43 @@ let getUserDb = (id) =>
   db.query(`SELECT * from users where userid IN (${id});`);
 
 let getArticleDb = (id) =>
-  db.query(`SELECT * from articles where articleid IN (${id});`);
+  db.query(`Select *
+  from articles  
+  full join 
+   (SELECT AVG(written_fairly) as conservative_score, ratings.articleid as conserve_id
+    FROM ratings
+    JOIN articles ON ratings.articleid = articles.articleid
+    JOIN users ON ratings.userid = users.userid
+    WHERE users.leaning <= 33 AND articles.articleid IN (${id})
+    GROUP BY ratings.articleid) conservativeScore
+  on conservativeScore.conserve_id = articles.articleid
+  full join 
+   (SELECT AVG(written_fairly) as moderate_score, ratings.articleid as moderate_id
+    FROM ratings
+    JOIN articles ON ratings.articleid = articles.articleid
+    JOIN users ON ratings.userid = users.userid
+    WHERE (users.leaning BETWEEN 34 AND 66) AND articles.articleid IN (${id})
+    GROUP BY ratings.articleid) moderateScore
+  on moderateScore.moderate_id = articles.articleid
+  full join 
+   (SELECT AVG(written_fairly) as liberal_score, ratings.articleid as liberal_id
+    FROM ratings
+    JOIN articles ON ratings.articleid = articles.articleid
+    JOIN users ON ratings.userid = users.userid
+    WHERE users.leaning >= 67 AND articles.articleid IN (${id})
+    GROUP BY ratings.articleid) liberalScore
+  on liberalScore.liberal_id = articles.articleid
+  join 
+   (SELECT AVG(written_fairly) as total_score, ratings.articleid as total_id
+    FROM ratings
+    JOIN articles ON ratings.articleid = articles.articleid
+    JOIN users ON ratings.userid = users.userid
+    WHERE articles.articleid IN (${id})
+    GROUP BY ratings.articleid) totalScore
+  on totalScore.total_id = articles.articleid;
+
+
+  `);
 
 let getRatingDb = (id) =>
   db.query(`SELECT * from ratings where ratingid IN (${id});`);
@@ -213,17 +215,21 @@ let getArticle = (request, response) => {
 }
 
 let getArticlesToView = (request, response) => {
-  articlesReadyForDisplay().then(data => {
+  articlesReadyForDisplay()
+  .then(data => {
     let sqlIdString = data.map(element => element.articleid);
+    console.log(sqlIdString);
     getArticleDb(sqlIdString)
-    .then((data) => response.end(JSON.stringify(data)))
+    .then((data) => {
+      console.log(data);
+      response.end(JSON.stringify(data))})
     .catch(error => {console.log(error)});
   })
+  .catch(error => {console.log(error)});
 }
 
 let getArticlesToRate = (request, response) => {
   checkArticlesStable();
-  console.log(request);
   articlesToRate().then(data => {
     let sqlIdString = data.map(element => element.articleid);
     getArticleDb(sqlIdString)

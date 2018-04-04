@@ -10,8 +10,6 @@ const $printArticleForRating = $('.printArticleForRating');
 
 //drawing tiles functions
 let printArticles = (source, divToAppend) => {
-    divToAppend.empty();
-
 	let $thumbnailDiv = $('<div></div>').addClass('thumbnail');
 	divToAppend.append($thumbnailDiv);
 	
@@ -47,7 +45,14 @@ let printArticles = (source, divToAppend) => {
 	$viewArticleButton.click(() => {
 		window.open(source.url);
 	});
-	$viewArticleButtonDiv.append($viewArticleButton);
+    $viewArticleButtonDiv.append($viewArticleButton);
+    
+    let $ratingsDiv = $('<div></div>').addClass('ratings-container');
+    $thumbnailDiv.append($ratingsDiv);
+
+    let $conservativeRating = $('<div></div').addClass('rating');
+    $conservativeRating.text(source.conservative);
+    $ratingsDiv.append($conservativeRating);
 }
 
 let printArticlesForRating = (source, divToAppend, currentArticle) => {
@@ -156,7 +161,7 @@ let createSignOutButton = () => {
 //database requests
 let getDBArticleForRating = (articleToGet) => {
 	$.get('http://localhost:3000/articlestorate', data => {
-		let articles = JSON.parse(data);
+        let articles = JSON.parse(data);
 		let theArticle = articles[articleToGet];
 		printArticlesForRating(theArticle, $printArticleForRating, articleToGet);
 	})
@@ -166,6 +171,7 @@ let getDBArticlesView  = () => {
     $.get('http://localhost:3000/articles', data => {
         let articles = JSON.parse(data);
         articles.forEach(element => {
+            console.log(element);
             printArticles(element, $printResult);
         })
     })
@@ -182,7 +188,10 @@ let showPageButton = (buttonDom, newViewableDom) => {
 
 let renderButtons = () => {
     showPageButton($viewButton, viewArticles);
-    $viewButton.click(() => getDBArticlesView());
+    $viewButton.click(() => {
+        $printResult.empty();
+        getDBArticlesView();
+    })
     showPageButton($rateButton, rateArticles);
     $rateButton.click(() => getDBArticleForRating(0));
     showPageButton($signInButton, signIn);
