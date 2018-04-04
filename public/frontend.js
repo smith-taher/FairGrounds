@@ -207,12 +207,17 @@ let createSignOutButton = () => {
   }
 
 //database requests
-let getDBArticleForRating = (articleToGet) => {
-	$.get('http://localhost:3000/articlestorate', data => {
-        let articles = JSON.parse(data);
-		let theArticle = articles[articleToGet];
-		printArticlesForRating(theArticle, $printArticleForRating, articleToGet);
-	})
+let getDBArticleForRating = (articleToGet, userid) => {
+    let idObject = {"userid": userid}
+    fetch('http://localhost:3000/articlestorate', 
+        {method: 'POST', body: JSON.stringify(idObject)})
+        .then(response => response.json())
+            .then((articles) => {
+                console.log(articles);
+                let theArticle = articles[articleToGet];
+                printArticlesForRating(theArticle, $printArticleForRating, articleToGet);
+            }
+    )
 }
 
 let getDBArticlesView  = () => {
@@ -246,7 +251,7 @@ let renderButtons = () => {
         getDBArticlesView();
     })
     showPageButton($rateButton, rateArticles);
-    $rateButton.click(() => getDBArticleForRating(0));
+    $rateButton.click(() => getDBArticleForRating(0, getToken()));
     showPageButton($signInButton, signIn);
 }
 

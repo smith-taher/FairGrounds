@@ -59,10 +59,10 @@ let articlesReadyForDisplay = () =>
   HAVING COUNT(ratings.ratingid) > 3;
   `);
 
-let articlesToRate = () =>
+let articlesToRate = (userid) =>
   db.query(`SELECT articles.articleid
   FROM articles
-  LEFT JOIN ratings ON articles.articleid = ratings.articleid
+  LEFT JOIN ratings ON articles.articleid = ratings.articleid and ratings.userid != ${userid}
   GROUP BY articles.articleid
   HAVING COUNT(ratings.ratingid) <= 3
   ORDER BY COUNT(ratings.ratingid) DESC;
@@ -233,12 +233,18 @@ let getArticlesToView = (request, response) => {
 
 let getArticlesToRate = (request, response) => {
   checkArticlesStable();
-  articlesToRate().then(data => {
-    let sqlIdString = data.map(element => element.articleid);
-    getArticleToRateDb(sqlIdString)
-    .then((data) => response.end(JSON.stringify(data)))
-    .catch(error => {console.log(error)});
-  })
+  readIncoming(request, body => {
+    let parseid = JSON.parse(body);
+    let userid = jwt.verify(parseid.userid, signature);
+    articlesToRate(parseInt(userid.userId))
+      .then(data => {
+        let sqlArticleIds = data.map(element => element.articleid);
+        getArticleToRateDb(sqlArticleIds)
+        .then(finalData => {
+          response.end(JSON.stringify(finalData));
+        })
+      })
+    })
 }
 
 let getRating = (request, response) => {
@@ -298,7 +304,7 @@ let postRating = (request, response) => {
       rating.userid = payload.userId;
       rateArticleDb(rating)
         .then((data) => response.end('Added rating!'))
-        .catch(error => {console.log(error)});
+        .catch(error => {response.end(error)});
       })
 };
 
@@ -444,7 +450,7 @@ let routes = [
   { method: 'POST', path: /^\/signin\/?$/, handler: signIn },
   { method: 'GET', path: /^\/articles\/([0-9]+)$/, handler: getArticle },
   { method: 'GET', path: /^\/articles\/?$/, handler: getArticlesToView },
-  { method: 'GET', path: /^\/articlestorate\/?$/, handler: getArticlesToRate },
+  { method: 'POST', path: /^\/articlestorate\/?$/, handler: getArticlesToRate },
   { method: 'DELETE', path: /^\/ratings\/([0-9]+)$/, handler: deleteRating},
   { method: 'GET', path: /^\/ratings\/([0-9]+)$/, handler: getRating },
   { method: 'PUT', path: /^\/ratings\/([0-9]+)$/, handler: editRating },
