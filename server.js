@@ -218,10 +218,8 @@ let getArticlesToView = (request, response) => {
   articlesReadyForDisplay()
   .then(data => {
     let sqlIdString = data.map(element => element.articleid);
-    console.log(sqlIdString);
     getArticleDb(sqlIdString)
     .then((data) => {
-      console.log(data);
       response.end(JSON.stringify(data))})
     .catch(error => {console.log(error)});
   })

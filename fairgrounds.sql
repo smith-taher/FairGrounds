@@ -82,7 +82,7 @@ CREATE TABLE public.ratings (
     ratingid serial,
     userid integer NOT NULL,
     articleid integer NOT NULL,
-    written_fairly bit(1) NOT NULL
+    written_fairly integer NOT NULL
 );
 
 
