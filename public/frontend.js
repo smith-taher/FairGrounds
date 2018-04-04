@@ -105,31 +105,68 @@ let printArticlesForRating = (source, divToAppend, currentArticle) => {
 	$viewArticleButton.click(() => {
 		window.open(source.url);
 	});
-	$buttonDiv.append($viewArticleButton);
+    $buttonDiv.append($viewArticleButton);
+    
+    let $rateForm = $('<form></form>').addClass('rate-form');
+    $rateForm.attr('name', 'new-rating');
+    $thumbnailDiv.append($rateForm);
 
-	let $skipArticleButton = $('<button></button>').addClass('skip-article-button');
+	let $fairArticle = $('<input></input>').addClass('fair-article-button');
+    $fairArticle.attr('type', 'radio');
+    $fairArticle.attr('name', 'written_fairly');
+    $fairArticle.attr('value', '1');
+	$fairArticle.text('Fair');
+    $rateForm.append($fairArticle);
+    let $fairText = $('<div></div>');
+    $fairText.text('Fair');
+    $rateForm.append($fairText);
+
+	let $unfairArticle = $('<input>').addClass('unfair-article-button');
+    $unfairArticle.attr('type', 'radio');
+    $unfairArticle.attr('name', 'written_fairly');
+    $unfairArticle.attr('value', '0');
+    $rateForm.append($unfairArticle);
+    let $unfairText = $('<div></div>');
+    $unfairText.text('Unfair');
+    $rateForm.append($unfairText);
+
+    let $topicInput = $('<select></select>').addClass('topic-input').attr('name', 'topic');
+    $science = $('<option></option>').attr('value', 'Science').text('Science');
+    $topicInput.append($science);
+    $politics = $('<option></option>').attr('value', 'Politics').text('Politics');
+    $topicInput.append($politics);
+    $religion = $('<option></option>').attr('value', 'Religion').text('Religion');
+    $topicInput.append($religion);
+    $foreignPolicy = $('<option></option>').attr('value', 'Foreign Policy').text('Foreign Policy');
+    $topicInput.append($foreignPolicy);
+    $rateForm.append($topicInput);
+
+    let $submitButton = $('<button></button>').attr('type', 'button');
+    $submitButton.text('Submit');
+    $submitButton.click(() => {
+        let form = $('.rate-form').serializeArray();
+        let ratingsObject = {};
+        form.forEach((element) => {
+            let name = element.name;
+            let value = element.value;
+            ratingsObject[name] = value;
+        })
+        ratingsObject.written_fairly = parseInt(ratingsObject.written_fairly);
+        ratingsObject.userid = getToken();
+        ratingsObject.articleid = source.articleid;
+        postRating(ratingsObject);
+        getDBArticleForRating(currentArticle + 1);
+    })
+    $rateForm.append($submitButton);
+
+    
+    let $skipArticleButton = $('<button></button>').addClass('skip-article-button');
 	$skipArticleButton.attr('type', 'button');
 	$skipArticleButton.text('Skip Article');
 	$skipArticleButton.click(() => {
 		getDBArticleForRating(currentArticle + 1);
 	});
 	$buttonDiv.append($skipArticleButton);
-
-	let $fairArticleButton = $('<button></button>').addClass('fair-article-button');
-	$fairArticleButton.attr('type', 'button');
-	$fairArticleButton.text('Fair');
-	$fairArticleButton.click(() => {
-		getDBArticleForRating();
-	});
-	$buttonDiv.append($fairArticleButton);
-
-	let $unfairArticleButton = $('<button></button>').addClass('unfair-article-button');
-	$unfairArticleButton.attr('type', 'button');
-	$unfairArticleButton.text('Unfair');
-	$unfairArticleButton.click(() => {
-		getDBArticleForRating();
-	});
-	$buttonDiv.append($unfairArticleButton);
 }
 
 //sign-in info
@@ -186,6 +223,12 @@ let getDBArticlesView  = () => {
             printArticles(element, $printResult);
         })
     })
+}
+
+let postRating = (object) => {
+    fetch('http://localhost:3000/ratings', 
+        {method: 'POST', body: JSON.stringify(object)})
+        .then(response => console.log(response));
 }
 
 //button functions

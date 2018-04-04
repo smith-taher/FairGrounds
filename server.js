@@ -75,8 +75,8 @@ let createUserDb = (user) =>
 
 let rateArticleDb = (rating) =>
   db.query(`INSERT INTO ratings
-  (${rating.inserts})
-  VALUES(${rating.value}, 1);`);
+  (written_fairly, topic, userid, articleid)
+  VALUES(${rating.written_fairly}, '${rating.topic}', ${rating.userid}, ${rating.articleid});`);
 
 let addArticleDb = (article) =>
   db.query(`INSERT INTO articles
@@ -287,11 +287,13 @@ let postUser = (request, response) => {
 
 let postRating = (request, response) => {
   readIncoming(request, (incoming) => {
-      let rating = insertsValuesObject(JSON.parse(incoming));
+      let rating = JSON.parse(incoming);
+      payload = jwt.verify(rating.userid, signature);
+      rating.userid = payload.userId;
       rateArticleDb(rating)
         .then((data) => response.end('Added rating!'))
-        .catch(error => {console.log(error)});;
-  });
+        .catch(error => {console.log(error)});
+      })
 };
 
 let editUser = (request, response) => {
@@ -373,6 +375,17 @@ let renderFile = (request, response) => {
         response.end(data);
     })
   }
+}
+
+let getIdFromToken = (token) => {
+  let payload;
+  try {
+    jwt.verify(token, signature)
+    .then(data => data);
+  } catch(err) {
+    console.log('No Token');
+  }
+  return payload;
 }
 
 let tokenValidator = (request, response) => {
