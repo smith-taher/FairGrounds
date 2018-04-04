@@ -209,3 +209,8 @@ input::placeholder {
     -webkit-transition: .2s; /* 0.2 seconds transition on hover */
     transition: opacity .2s;
 }
+
+.ratings-container {
+    display: flex;
+    justify-content: space-around;
+}

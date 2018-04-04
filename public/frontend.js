@@ -51,8 +51,20 @@ let printArticles = (source, divToAppend) => {
     $thumbnailDiv.append($ratingsDiv);
 
     let $conservativeRating = $('<div></div').addClass('rating');
-    $conservativeRating.text(source.conservative);
+    $conservativeRating.text('C: ' + parseInt(source.conservative_score * 100));
     $ratingsDiv.append($conservativeRating);
+
+    let $moderateRating = $('<div></div').addClass('rating');
+    $moderateRating.text('M: ' +parseInt(source.moderate_score * 100));
+    $ratingsDiv.append($moderateRating);
+
+    let $liberalRating = $('<div></div').addClass('rating');
+    $liberalRating.text('L: ' + parseInt(source.liberal_score * 100));
+    $ratingsDiv.append($liberalRating);
+
+    let $totalRating = $('<div></div').addClass('rating');
+    $totalRating.text('T: ' + parseInt(source.total_score * 100));
+    $ratingsDiv.append($totalRating);
 }
 
 let printArticlesForRating = (source, divToAppend, currentArticle) => {
@@ -171,7 +183,6 @@ let getDBArticlesView  = () => {
     $.get('http://localhost:3000/articles', data => {
         let articles = JSON.parse(data);
         articles.forEach(element => {
-            console.log(element);
             printArticles(element, $printResult);
         })
     })
