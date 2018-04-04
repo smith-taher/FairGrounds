@@ -86,7 +86,7 @@ let addArticleDb = (article) =>
 let getUserDb = (id) =>
   db.query(`SELECT * from users where userid IN (${id});`);
 
-let getArticleDb = (id) =>
+let getArticlesDb = (id) =>
   db.query(`Select *
   from articles  
   full join 
@@ -124,6 +124,9 @@ let getArticleDb = (id) =>
 
 
   `);
+
+let getArticleToRateDb = (id) =>
+  db.query(`SELECT * from articles where articleid IN (${id});`);
 
 let getRatingDb = (id) =>
   db.query(`SELECT * from ratings where ratingid IN (${id});`);
@@ -218,7 +221,7 @@ let getArticlesToView = (request, response) => {
   articlesReadyForDisplay()
   .then(data => {
     let sqlIdString = data.map(element => element.articleid);
-    getArticleDb(sqlIdString)
+    getArticlesDb(sqlIdString)
     .then((data) => {
       response.end(JSON.stringify(data))})
     .catch(error => {console.log(error)});
@@ -230,7 +233,7 @@ let getArticlesToRate = (request, response) => {
   checkArticlesStable();
   articlesToRate().then(data => {
     let sqlIdString = data.map(element => element.articleid);
-    getArticleDb(sqlIdString)
+    getArticleToRateDb(sqlIdString)
     .then((data) => response.end(JSON.stringify(data)))
     .catch(error => {console.log(error)});
   })
