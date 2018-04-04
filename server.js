@@ -423,6 +423,9 @@ let routes = [
 ];
 
 let server = http.createServer(function(request, response) {
+  response.writeHead(200, {
+    'Access-Control-Allow-Origin' : '*'
+});
       let route = routes.find(route => matches(request, route.method, route.path));
 
       (route ? route.handler : notFound)(request, response);
