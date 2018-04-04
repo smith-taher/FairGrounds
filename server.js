@@ -354,7 +354,7 @@ let signIn = (request, response) => {
 
 let renderFile = (request, response) => {
   // let token = request.getHeader('authorization');
-  // var fileName = 'public/' + request.url.slice(1);
+  let fileName = 'public/' + request.url.slice(1);
   // console.log(fileName);
   if (fileName.endsWith('.png')) {
     fs.readFile(fileName, (err, data) => {
