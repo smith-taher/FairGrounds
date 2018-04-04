@@ -7,6 +7,7 @@ const fs = require('fs');
 const NewsAPI = require('newsapi');
 const newsapi = new NewsAPI('0873dd38116a4b1d9db9c7f2d99754a7');
 const signature = '@!#$%%^&#$!@#^&***()ROBBY';
+const bcrypt = require('bcrypt');
 
 //newsapi functions
 let getArticlesFromApi = () => {
@@ -49,7 +50,7 @@ let checkNeedsRatings = () =>
   LEFT JOIN ratings ON articles.articleid = ratings.articleid
   GROUP BY articles.articleid
   HAVING COUNT(ratings.ratingid) < 3;`);
-    
+
 let articlesReadyForDisplay = () =>
   db.query(`SELECT articles.articleid
   FROM articles
@@ -69,9 +70,10 @@ let articlesToRate = () =>
 
 
 let createUserDb = (user) =>
-    db.query(`INSERT INTO users
-    (${user.inserts})
-    VALUES(${user.values});`);
+  db.query(`INSERT INTO users
+  (${user.inserts})
+  VALUES(${user.values});`);
+
 
 let rateArticleDb = (rating) =>
   db.query(`INSERT INTO ratings
@@ -88,8 +90,8 @@ let getUserDb = (id) =>
 
 let getArticlesDb = (id) =>
   db.query(`Select *
-  from articles  
-  full join 
+  from articles
+  full join
    (SELECT AVG(written_fairly) as conservative_score, ratings.articleid as conserve_id
     FROM ratings
     JOIN articles ON ratings.articleid = articles.articleid
@@ -97,7 +99,7 @@ let getArticlesDb = (id) =>
     WHERE users.leaning <= 33 AND articles.articleid IN (${id})
     GROUP BY ratings.articleid) conservativeScore
   on conservativeScore.conserve_id = articles.articleid
-  full join 
+  full join
    (SELECT AVG(written_fairly) as moderate_score, ratings.articleid as moderate_id
     FROM ratings
     JOIN articles ON ratings.articleid = articles.articleid
@@ -105,7 +107,7 @@ let getArticlesDb = (id) =>
     WHERE (users.leaning BETWEEN 34 AND 66) AND articles.articleid IN (${id})
     GROUP BY ratings.articleid) moderateScore
   on moderateScore.moderate_id = articles.articleid
-  full join 
+  full join
    (SELECT AVG(written_fairly) as liberal_score, ratings.articleid as liberal_id
     FROM ratings
     JOIN articles ON ratings.articleid = articles.articleid
@@ -113,7 +115,7 @@ let getArticlesDb = (id) =>
     WHERE users.leaning >= 67 AND articles.articleid IN (${id})
     GROUP BY ratings.articleid) liberalScore
   on liberalScore.liberal_id = articles.articleid
-  join 
+  join
    (SELECT AVG(written_fairly) as total_score, ratings.articleid as total_id
     FROM ratings
     JOIN articles ON ratings.articleid = articles.articleid
@@ -275,13 +277,17 @@ let deleteRating = (request, response) => {
 
 let postUser = (request, response) => {
   readIncoming(request, (incoming) => {
-      let user = insertsValuesObject(JSON.parse(incoming));
-      console.log(user);
+    let credentials = JSON.parse(incoming);
+    bcrypt.hash(credentials.password, 10)
+    .then(hash => Object.assign({}, credentials, {password: hash}))
+    .then(hashedCreds => {
+      let user = insertsValuesObject(hashedCreds);
       createUserDb(user)
-        .then(response => validateCredentials(user.username, user.password))
-        .then(user => createToken(user))
-        .then(token => {response.end(token)})
-        .catch(error => {console.log(error)});;
+      .then(response => validateCredentials(credentials.username, credentials.password))
+      .then(users => createToken(users[0]))
+      .then(token => {response.end(token)})
+      .catch(error => {console.log(error)});
+    });
   });
 };
 
@@ -319,12 +325,30 @@ let editRating = (request, response) => {
 }
 
 //functions to generate token for login
-let validateCredentials = (username, password) =>
-    db.query(`SELECT username, password, userid from users where
-    username = '${username}' and password = '${password}';`);
-
+let validateCredentials = (username, password) => {
+    let userQuery = db.query(`SELECT username, password, userid from users where
+    username = '${username}';`)
+    .then(users => {
+      let user = users[0];
+      return bcrypt.compare(password, user.password)
+      .then(response => {
+        console.log(response);
+        if (response) {
+          // console.log(user);
+          return true;
+        } else {
+          return false;
+        }
+      })
+      .then(response => {
+        if (response) {return users}
+        else {return false}
+      })
+    })
+    return userQuery.then(response => response)
+}
 let createToken = user => {
-  console.log(user.userid);
+  console.log(user);
   return jwt.sign({
     userId: user.userid,
   }, signature, { expiresIn: '7d' });
@@ -340,7 +364,7 @@ let signIn = (request, response) => {
     .then( queryOutcome => {
       if (queryOutcome.length > 0) {
         let token = createToken(queryOutcome[0]);
-        console.log(token);
+        console.log('This should be the token');
         // response.setHeader('jwt', token);
         response.statusCode = 200;
         response.end(token);
@@ -379,6 +403,7 @@ let renderFile = (request, response) => {
 
 let getIdFromToken = (token) => {
   let payload;
+  console.log(token);
   try {
     payload = jwt.verify(token, signature);
   } catch(err) {
