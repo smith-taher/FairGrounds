@@ -60,10 +60,17 @@ html, body {
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 
+.printArticleForRating > .thumbnail {
+    width: 75%;
+    overflow: scroll;
+}
+
 .image-container {
+    height: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    align-self: center;
 }
 
 .news-image {
@@ -88,8 +95,10 @@ html, body {
 
 .view-article-div {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     margin: 1em;
+    width: 30%;
+    align-self: center;
 }
 .title {
     margin-bottom: 0;
@@ -208,4 +217,21 @@ input::placeholder {
     opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
     -webkit-transition: .2s; /* 0.2 seconds transition on hover */
     transition: opacity .2s;
+}
+
+.ratings-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+.rate-form {
+    display: flex;
+    flex-flow: row wrap;
+    width: 50%;
+    align-self: center;
+    justify-content: center;
+}
+
+.topic-input {
+    width: 100%;
 }

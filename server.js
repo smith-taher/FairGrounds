@@ -12,7 +12,7 @@ const signature = '@!#$%%^&#$!@#^&***()ROBBY';
 let getArticlesFromApi = () => {
   newsapi.v2.topHeadlines({
     language: 'en',
-    pagesize: 100
+    pagesize: 10
   }).then(response => {
       let sqlArticles = makeSqlArray(response.articles);
       sqlArticles.forEach(article =>
@@ -33,7 +33,40 @@ let makeSqlArray = articlesArray => {
   })
   return articlesSqlArray;
 }
+
+let checkArticlesStable = () => {
+  checkNeedsRatings().then(data => {
+    if (data.length <= 3) {
+      getArticlesFromApi();
+    }
+  })
+}
+
 //functions to talk to DB
+let checkNeedsRatings = () =>
+  db.query(`SELECT COUNT(ratings.ratingid) as rating_count
+  FROM articles
+  LEFT JOIN ratings ON articles.articleid = ratings.articleid
+  GROUP BY articles.articleid
+  HAVING COUNT(ratings.ratingid) < 3;`);
+    
+let articlesReadyForDisplay = () =>
+  db.query(`SELECT articles.articleid
+  FROM articles
+  LEFT JOIN ratings ON articles.articleid = ratings.articleid
+  GROUP BY articles.articleid
+  HAVING COUNT(ratings.ratingid) > 3;
+  `);
+
+let articlesToRate = () =>
+  db.query(`SELECT articles.articleid
+  FROM articles
+  LEFT JOIN ratings ON articles.articleid = ratings.articleid
+  GROUP BY articles.articleid
+  HAVING COUNT(ratings.ratingid) <= 3
+  ORDER BY COUNT(ratings.ratingid) DESC;
+  `);
+
 
 let createUserDb = (user) =>
     db.query(`INSERT INTO users
@@ -42,8 +75,8 @@ let createUserDb = (user) =>
 
 let rateArticleDb = (rating) =>
   db.query(`INSERT INTO ratings
-  (${rating.inserts})
-  VALUES(${rating.value}, 1);`);
+  (written_fairly, topic, userid, articleid)
+  VALUES(${rating.written_fairly}, '${rating.topic}', ${rating.userid}, ${rating.articleid});`);
 
 let addArticleDb = (article) =>
   db.query(`INSERT INTO articles
@@ -51,19 +84,55 @@ let addArticleDb = (article) =>
   VALUES(${article.values});`);
 
 let getUserDb = (id) =>
-  db.query(`SELECT * from users where userid = ${id};`);
+  db.query(`SELECT * from users where userid IN (${id});`);
 
-let getArticleDb = (id) =>
-  db.query(`SELECT * from articles where articleid = ${id};`);
+let getArticlesDb = (id) =>
+  db.query(`Select *
+  from articles  
+  full join 
+   (SELECT AVG(written_fairly) as conservative_score, ratings.articleid as conserve_id
+    FROM ratings
+    JOIN articles ON ratings.articleid = articles.articleid
+    JOIN users ON ratings.userid = users.userid
+    WHERE users.leaning <= 33 AND articles.articleid IN (${id})
+    GROUP BY ratings.articleid) conservativeScore
+  on conservativeScore.conserve_id = articles.articleid
+  full join 
+   (SELECT AVG(written_fairly) as moderate_score, ratings.articleid as moderate_id
+    FROM ratings
+    JOIN articles ON ratings.articleid = articles.articleid
+    JOIN users ON ratings.userid = users.userid
+    WHERE (users.leaning BETWEEN 34 AND 66) AND articles.articleid IN (${id})
+    GROUP BY ratings.articleid) moderateScore
+  on moderateScore.moderate_id = articles.articleid
+  full join 
+   (SELECT AVG(written_fairly) as liberal_score, ratings.articleid as liberal_id
+    FROM ratings
+    JOIN articles ON ratings.articleid = articles.articleid
+    JOIN users ON ratings.userid = users.userid
+    WHERE users.leaning >= 67 AND articles.articleid IN (${id})
+    GROUP BY ratings.articleid) liberalScore
+  on liberalScore.liberal_id = articles.articleid
+  join 
+   (SELECT AVG(written_fairly) as total_score, ratings.articleid as total_id
+    FROM ratings
+    JOIN articles ON ratings.articleid = articles.articleid
+    JOIN users ON ratings.userid = users.userid
+    WHERE articles.articleid IN (${id})
+    GROUP BY ratings.articleid) totalScore
+  on totalScore.total_id = articles.articleid;
+
+
+  `);
+
+let getArticleToRateDb = (id) =>
+  db.query(`SELECT * from articles where articleid IN (${id});`);
 
 let getRatingDb = (id) =>
-  db.query(`SELECT * from ratings where ratingid = ${id};`);
+  db.query(`SELECT * from ratings where ratingid IN (${id});`);
 
 let getUsersDb = () =>
   db.query(`SELECT * from users;`);
-
-let getArticlesDb = () =>
-  db.query(`SELECT * from articles;`);
 
 let getRatingsDb = () =>
   db.query(`SELECT * from ratings;`);
@@ -132,33 +201,49 @@ let getUser = (request, response) => {
   let id = getSuffix(request.url, '/users/');
   getUserDb(id)
     .then((data) => response.end(JSON.stringify(data)))
-    .catch(error => {console.log(error)});;
+    .catch(error => {console.log(error)});
 }
 
 let getUsers = (request, response) => {
   getUsersDb()
     .then((data) => response.end(JSON.stringify(data)))
-    .catch(error => {console.log(error)});;
+    .catch(error => {console.log(error)});
 }
 
 let getArticle = (request, response) => {
   let id = getSuffix(request.url, '/articles/');
   getArticleDb(id)
     .then((data) => response.end(JSON.stringify(data)))
-    .catch(error => {console.log(error)});;
+    .catch(error => {console.log(error)});
 }
 
-let getArticles = (request, response) => {
-  getArticlesDb()
+let getArticlesToView = (request, response) => {
+  articlesReadyForDisplay()
+  .then(data => {
+    let sqlIdString = data.map(element => element.articleid);
+    getArticlesDb(sqlIdString)
+    .then((data) => {
+      response.end(JSON.stringify(data))})
+    .catch(error => {console.log(error)});
+  })
+  .catch(error => {console.log(error)});
+}
+
+let getArticlesToRate = (request, response) => {
+  checkArticlesStable();
+  articlesToRate().then(data => {
+    let sqlIdString = data.map(element => element.articleid);
+    getArticleToRateDb(sqlIdString)
     .then((data) => response.end(JSON.stringify(data)))
-    .catch(error => {console.log(error)});;
+    .catch(error => {console.log(error)});
+  })
 }
 
 let getRating = (request, response) => {
   let id = getSuffix(request.url, '/articles/');
   getRatingDb(id)
     .then((data) => response.end(JSON.stringify(data)))
-    .catch(error => {console.log(error)});;
+    .catch(error => {console.log(error)});
 }
 
 let getRatings = (request, response) => {
@@ -202,21 +287,13 @@ let postUser = (request, response) => {
 
 let postRating = (request, response) => {
   readIncoming(request, (incoming) => {
-      let rating = insertsValuesObject(JSON.parse(incoming));
+      let rating = JSON.parse(incoming);
+      payload = jwt.verify(rating.userid, signature);
+      rating.userid = payload.userId;
       rateArticleDb(rating)
         .then((data) => response.end('Added rating!'))
-        .catch(error => {console.log(error)});;
-  });
-};
-
-let postArticle = (request, response) => {
-  readIncoming(request, (incoming) => {
-      let article = insertsValuesObject(JSON.parse(incoming));
-      console.log(article);
-      addArticleDb(article)
-        .then((data) => response.end('Added article!'))
-        .catch(error => {console.log(error)});;
-  });
+        .catch(error => {console.log(error)});
+      })
 };
 
 let editUser = (request, response) => {
@@ -227,17 +304,6 @@ let editUser = (request, response) => {
     editUserDb(id, setInfo)
       .then((data) => response.end('Updated user!'))
       .catch(error => {console.log(error)});
-  })
-}
-
-let editArticle = (request, response) => {
-  readIncoming(request, (incoming) => {
-    let id = getSuffix(request.url, '/articles/');
-    let update = JSON.parse(incoming);
-    let setInfo = updateString(update);
-    editArticleDb(id, setInfo)
-      .then((data) => response.end('Updated article!'))
-      .catch(error => {console.log(error)});;
   })
 }
 
@@ -290,7 +356,7 @@ let signIn = (request, response) => {
 
 let renderFile = (request, response) => {
   // let token = request.getHeader('authorization');
-  var fileName = 'public/' + request.url.slice(1);
+  let fileName = 'public/' + request.url.slice(1);
   // console.log(fileName);
   if (fileName.endsWith('.png')) {
     fs.readFile(fileName, (err, data) => {
@@ -352,9 +418,8 @@ let routes = [
   { method: 'DELETE', path: /^\/articles\/([0-9]+)$/, handler: deleteArticle },
   { method: 'POST', path: /^\/signin\/?$/, handler: signIn },
   { method: 'GET', path: /^\/articles\/([0-9]+)$/, handler: getArticle },
-  { method: 'PUT', path: /^\/articles\/([0-9]+)$/, handler: editArticle },
-  { method: 'GET', path: /^\/articles\/?$/, handler: getArticles },
-  { method: 'POST', path: /^\/articles\/?$/, handler: postArticle },
+  { method: 'GET', path: /^\/articles\/?$/, handler: getArticlesToView },
+  { method: 'GET', path: /^\/articlestorate\/?$/, handler: getArticlesToRate },
   { method: 'DELETE', path: /^\/ratings\/([0-9]+)$/, handler: deleteRating},
   { method: 'GET', path: /^\/ratings\/([0-9]+)$/, handler: getRating },
   { method: 'PUT', path: /^\/ratings\/([0-9]+)$/, handler: editRating },
