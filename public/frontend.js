@@ -185,7 +185,7 @@ let createSignOutButton = () => {
   signOutButton.textContent = 'Sign Out';
   signOutButton.addEventListener('click', (event) => {
     localStorage.clear();
-    window.location.href="http://localhost:3000/index.html";
+    window.location.href="/index.html";
   })
   return signOutButton;
 }
@@ -193,7 +193,7 @@ let createSignOutButton = () => {
   try {
     let token = getToken();
     let tokenHeader = setTokenToHeader(token);
-    fetch('http://localhost:3000/token', {method: 'GET', headers: tokenHeader})
+    fetch('/token', {method: 'GET', headers: tokenHeader})
     .then(response => {
       if (response.status != 404) {
         $signInButton.remove();
@@ -209,7 +209,7 @@ let createSignOutButton = () => {
 //database requests
 let getDBArticleForRating = (articleToGet, userid) => {
     let idObject = {"userid": userid}
-    fetch('http://localhost:3000/articlestorate', 
+    fetch('/articlestorate', 
         {method: 'POST', body: JSON.stringify(idObject)})
         .then(response => response.json())
             .then((articles) => {
@@ -221,7 +221,7 @@ let getDBArticleForRating = (articleToGet, userid) => {
 }
 
 let getDBArticlesView  = () => {
-    $.get('http://localhost:3000/articles', data => {
+    $.get('/articles', data => {
         let articles = JSON.parse(data);
         articles.forEach(element => {
             printArticles(element, $printResult);
@@ -230,7 +230,7 @@ let getDBArticlesView  = () => {
 }
 
 let postRating = (object) => {
-    fetch('http://localhost:3000/ratings', 
+    fetch('/ratings', 
         {method: 'POST', body: JSON.stringify(object)})
         .then(response => console.log(response));
 }
