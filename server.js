@@ -94,6 +94,14 @@ let liberalRating = (articleid) =>
   AND users.leaning >= 66;`
   );
 
+let totalRating = (articleid) =>
+  db.query(`SELECT AVG(written_fairly)
+  FROM ratings
+  JOIN articles ON ratings.articleid = articles.articleid
+  JOIN users ON ratings.userid = users.userid
+  WHERE ratings.articleid = ${articleid}`
+  );
+
 let createUserDb = (user) =>
     db.query(`INSERT INTO users
     (${user.inserts})
