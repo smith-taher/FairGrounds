@@ -238,10 +238,12 @@ let getArticlesToRate = (request, response) => {
     let userid = jwt.verify(parseid.userid, signature);
     articlesToRate(userid.userId)
       .then(data => {
+        console.log(data);
         let sqlArticleIds = data.map(element => element.articleid);
         console.log(sqlArticleIds);
         getArticleToRateDb(sqlArticleIds)
         .then(finalData => {
+          console.log(finalData);
           response.end(JSON.stringify(finalData));
         })
       })
