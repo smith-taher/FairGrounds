@@ -230,7 +230,8 @@ let getDBArticlesView  = () => {
 }
 
 let postRating = (object) => {
-    return fetch('/ratings', 
+    console.log(object);
+    fetch('/ratings', 
         {method: 'POST', body: JSON.stringify(object)})
         .then(response => response.json())
         .then(data => console.log(data));

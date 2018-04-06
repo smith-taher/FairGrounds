@@ -62,7 +62,7 @@ let articlesReadyForDisplay = () =>
 let articlesToRate = (userid) =>
   db.query(`SELECT articles.articleid
   FROM articles
-  LEFT JOIN ratings ON articles.articleid = ratings.articleid and ratings.userid != ${userid}
+  LEFT JOIN ratings ON articles.articleid = ratings.articleid AND ratings.userid != '${userid}'
   GROUP BY articles.articleid
   HAVING COUNT(ratings.ratingid) <= 3
   ORDER BY COUNT(ratings.ratingid) DESC;
