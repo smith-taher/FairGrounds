@@ -62,7 +62,7 @@ let articlesReadyForDisplay = () =>
 let articlesToRate = (userid) =>
   db.query(`SELECT articles.articleid
   FROM articles
-  LEFT JOIN ratings ON articles.articleid = ratings.articleid AND ratings.userid != '${userid}'
+  LEFT JOIN ratings ON articles.articleid = ratings.articleid AND ratings.userid != ${userid}
   GROUP BY articles.articleid
   HAVING COUNT(ratings.ratingid) <= 3
   ORDER BY COUNT(ratings.ratingid) DESC;
@@ -236,10 +236,10 @@ let getArticlesToRate = (request, response) => {
   readIncoming(request, body => {
     let parseid = JSON.parse(body);
     let userid = jwt.verify(parseid.userid, signature);
-    console.log(userid.userId);
     articlesToRate(userid.userId)
       .then(data => {
         let sqlArticleIds = data.map(element => element.articleid);
+        console.log(sqlArticleIds);
         getArticleToRateDb(sqlArticleIds)
         .then(finalData => {
           response.end(JSON.stringify(finalData));
