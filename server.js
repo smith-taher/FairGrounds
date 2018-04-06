@@ -240,10 +240,8 @@ let getArticlesToRate = (request, response) => {
       .then(data => {
         console.log(data);
         let sqlArticleIds = data.map(element => element.articleid);
-        console.log(sqlArticleIds);
         getArticleToRateDb(sqlArticleIds)
         .then(finalData => {
-          console.log(finalData);
           response.end(JSON.stringify(finalData));
         })
       })
