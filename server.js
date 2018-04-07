@@ -70,7 +70,7 @@ let articlesToRateDb = () =>
 let articlesUserAlreadyRatedDB = (userid) =>
   db.query(`SELECT ratings.articleid
   FROM ratings
-  WHERE ratings.userid = 1;`);
+  WHERE ratings.userid = ${userid};`);
 
 let createUserDb = (user) =>
   db.query(`INSERT INTO users
