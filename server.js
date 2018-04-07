@@ -246,10 +246,8 @@ let getArticlesToRate = (request, response) => {
       articlesToRateDb()
       .then(data => {
         let allArticles = data.map(element => element.articleid);
-        let sqlArticleIds = allArticles.filter(element => {
-          if(!(element in userArticlesArray)) {
-            return element;
-          }
+        let sqlArticleIds = userArticles.forEach(element => {
+          allArticles.remove(element);
         });
         console.log(sqlArticleIds);
         getArticleToRateDb(sqlArticleIds)
