@@ -242,6 +242,7 @@ let getArticlesToRate = (request, response) => {
     articlesUserAlreadyRatedDB(userid.userId)
     .then(userArticles => {
       let userArticlesArray = userArticles.map(element => element.articleid);
+      console.log(userArticlesArray);
       articlesToRateDb()
       .then(data => {
         let allArticles = data.map(element => element.articleid);
