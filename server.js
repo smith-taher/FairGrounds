@@ -238,6 +238,7 @@ let getArticlesToRate = (request, response) => {
     articlesToRate()
       .then(data => {
         let filteredList = data.filter(element => element.userid !== userid.userId);
+        console.log(filteredList);
         let sqlArticleIds = filteredList.map(element => element.articleid);
         getArticleToRateDb(sqlArticleIds)
         .then(finalData => {
