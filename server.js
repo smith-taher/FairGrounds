@@ -249,7 +249,7 @@ let getArticlesToRate = (request, response) => {
         let allArticles = data.map(element => element.articleid);
         console.log("allArticles: " + allArticles);
         let sqlArticleIds = userArticlesArray.forEach(element => {
-          allArticles.splice(allArticles.indexOf(element), 1);
+          allArticles = allArticles.splice(allArticles.indexOf(element), 1);
         });
         console.log("allArticles: " + allArticles);
         getArticlesToRateDb(allArticles)
