@@ -242,6 +242,7 @@ let getArticlesToRate = (request, response) => {
             return element;
           }
         })
+        console.log(filteredList);
         let sqlArticleIds = filteredList.map(element => element.articleid);
         getArticleToRateDb(sqlArticleIds)
         .then(finalData => {
