@@ -16,7 +16,6 @@ let getArticlesFromApi = () => {
     pagesize: 10
   }).then(response => {
       let sqlArticles = makeSqlArray(response.articles);
-      console.log(sqlArticles);
         addArticleDb(sqlArticles)
         .then(data => console.log('Articles added!'))
         .catch(error => {
@@ -80,8 +79,8 @@ let rateArticleDb = (rating) =>
 
 let addArticleDb = (articles) =>
   db.query(`INSERT INTO articles
-  (${article.inserts})
-  VALUES(${article.values});`);
+  (${articles.inserts})
+  VALUES(${articles.values});`);
 
 let getUserDb = (id) =>
   db.query(`SELECT * from users where userid IN (${id});`);
