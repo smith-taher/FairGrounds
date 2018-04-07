@@ -251,8 +251,8 @@ let getArticlesToRate = (request, response) => {
         let sqlArticleIds = userArticlesArray.forEach(element => {
           allArticles.splice(allArticles.indexOf(element), 1);
         });
-        console.log("allArticles.toString(): " + allArticles.toString());
-        getArticlesToRateDb(allArticles.toString())
+        console.log("allArticles: " + allArticles);
+        getArticlesToRateDb(allArticles)
         .then(finalData => {
           console.log("JSON.stringify(finalData): " + JSON.stringify(finalData));
           response.end(JSON.stringify(finalData));
