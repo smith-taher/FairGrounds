@@ -112,7 +112,7 @@ html, body {
 
 .description {
     margin: 0;
-    padding: 0em .75em 0em .75em;
+    padding: 0em .75em 1em .75em;
 }
 
 .view-article-button {
@@ -127,8 +127,7 @@ html, body {
     font-size: 1.2em;
     border-radius: 12px;
     cursor: pointer;
-    width: 100%;
-    height: 100%;
+    width: 50%;
 }
 
 .view-article-button:hover {
@@ -277,7 +276,7 @@ input::placeholder {
 .ratings-container {
     display: flex;
     justify-content: space-around;
-    padding-bottom: 1em;
+    padding: 1em;
 }
 
 .rate-form {
