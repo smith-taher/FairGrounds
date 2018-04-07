@@ -67,7 +67,7 @@ let articlesToRateDb = () =>
   HAVING COUNT(ratings.articleid) < 3;
   `);
 
-let articlesUserAlreadyRatedDB = (userid) =>
+let articlesUserAlreadyRatedDb = (userid) =>
   db.query(`SELECT ratings.articleid
   FROM ratings
   WHERE ratings.userid = ${userid};`);
@@ -239,18 +239,22 @@ let getArticlesToRate = (request, response) => {
   readIncoming(request, (incoming) => {
     let parseid = JSON.parse(incoming);
     let userid = jwt.verify(parseid.userid, signature);
-    articlesUserAlreadyRatedDB(userid.userId)
+    articlesUserAlreadyRatedDb(userid.userId)
     .then(userArticles => {
+      console.log("userArticles: " + userArticles);
       articlesToRateDb()
       .then(data => {
         let userArticlesArray = userArticles.map(element => element.articleid);
+        console.log("userArticlesArray: " + userArticlesArray);
         let allArticles = data.map(element => element.articleid);
+        console.log("allArticles: " + allArticles);
         let sqlArticleIds = userArticlesArray.forEach(element => {
           allArticles.splice(allArticles.indexOf(element), 1);
         });
-        console.log(allArticles.toString());
+        console.log("allArticles.toString(): " + allArticles.toString());
         getArticlesToRateDb(allArticles.toString())
         .then(finalData => {
+          console.log("JSON.stringify(finalData): " + JSON.stringify(finalData));
           response.end(JSON.stringify(finalData));
         })
         .catch(error => console.log(error));
