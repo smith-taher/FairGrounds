@@ -236,8 +236,8 @@ let getArticlesToView = (request, response) => {
 
 let getArticlesToRate = (request, response) => {
   checkArticlesStable()
-  readIncoming(request, body => {
-    let parseid = JSON.parse(body);
+  readIncoming(request, (incoming) => {
+    let parseid = JSON.parse(incoming);
     let userid = jwt.verify(parseid.userid, signature);
     articlesUserAlreadyRatedDB(userid.userId)
     .then(userArticles => {
