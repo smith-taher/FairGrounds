@@ -47,7 +47,8 @@ html, body {
     justify-content: space-around;
     width: 100%;
     list-style-type: none;
-    color: white
+    color: white;
+    padding: 0;
 }
 
 .navigation-top {
@@ -97,14 +98,6 @@ html, body {
     justify-content: flex-start;
 }
 
-.view-article-div {
-    display: flex;
-    flex-direction: row;
-    margin: 1em;
-    width: 50%;
-    align-self: center;
-}
-
 .title {
     margin: 0;
     padding: .5em .5em 0em .5em;
@@ -116,18 +109,19 @@ html, body {
 }
 
 .view-article-button {
-    display: flex;
-    justify-content: center;
-    align-self: center;
-    background-color: #008CBA;
-    color: white;
-    padding: 1em;
-    text-align: center;
-    text-decoration: none;
-    font-size: 1.2em;
-    border-radius: 12px;
+    box-shadow: rgb(151, 196, 254) 0px 1px 0px 0px inset;
+    background: linear-gradient(rgb(61, 148, 246) 5%, rgb(30, 98, 208) 100%) rgb(61, 148, 246);
+    border-radius: 6px;
+    border: 1px solid rgb(51, 127, 237);
+    display: inline-block;
     cursor: pointer;
-    width: 50%;
+    color: rgb(255, 255, 255);
+    font-family: Arial;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 6px 24px;
+    text-decoration: none;
+    text-shadow: rgb(21, 112, 205) 0px 1px 0px;
 }
 
 .view-article-button:hover {
