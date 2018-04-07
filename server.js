@@ -250,7 +250,7 @@ let getArticlesToRate = (request, response) => {
             return element;
           }
         });
-        console.log(filteredList);
+        console.log(sqlArticleIds);
         getArticleToRateDb(sqlArticleIds)
         .then(finalData => {
           response.end(JSON.stringify(finalData));
