@@ -241,6 +241,7 @@ let getArticlesToRate = (request, response) => {
     let userid = jwt.verify(parseid.userid, signature);
     articlesUserAlreadyRatedDB(userid.userId)
     .then(userArticles => {
+      console.log(userArticles);
       articlesToRateDb()
       .then(data => {
         let filteredList = data.filter(element => {
@@ -314,7 +315,6 @@ let postRating = (request, response) => {
       let rating = JSON.parse(incoming);
       payload = jwt.verify(rating.userid, signature);
       rating.userid = payload.userId;
-      console.log(rating);
       rateArticleDb(rating)
         .then((data) => response.end('Added rating!'))
         .catch((error) => response.end(error));
