@@ -242,10 +242,11 @@ let getArticlesToRate = (request, response) => {
     articlesUserAlreadyRatedDB(userid.userId)
     .then(userArticles => {
       let userArticlesArray = userArticles.map(element => element.articleid);
-      console.log(userArticlesArray);
       articlesToRateDb()
       .then(data => {
+        console.log(data);
         let allArticles = data.map(element => element.articleid);
+        console.log(allArticles);
         let sqlArticleIds = userArticles.forEach(element => {
           allArticles.splice(allArticles.indexOf(element), 1);
         });
