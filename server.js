@@ -248,8 +248,8 @@ let getArticlesToRate = (request, response) => {
         let sqlArticleIds = userArticlesArray.forEach(element => {
           allArticles.splice(allArticles.indexOf(element), 1);
         });
-        console.log(sqlArticleIds);
-        getArticleToRateDb(sqlArticleIds)
+        console.log(allArticles);
+        getArticleToRateDb(allArticles)
         .then(finalData => {
           response.end(JSON.stringify(finalData));
         })
