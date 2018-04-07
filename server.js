@@ -16,6 +16,7 @@ let getArticlesFromApi = () => {
     pagesize: 10
   }).then(response => {
       let sqlArticles = makeSqlArray(response.articles);
+      console.log(sqlArticles);
         addArticleDb(sqlArticles)
         .then(data => console.log('Articles added!'))
         .catch(error => {
