@@ -59,14 +59,18 @@ let articlesReadyForDisplay = () =>
   HAVING COUNT(ratings.ratingid) >= 3;
   `);
 
-let articlesToRate = () =>
-  db.query(`SELECT articles.articleid, ratings.userid
+let articlesToRateDb = () =>
+  db.query(`SELECT articles.articleid
   FROM ratings
   RIGHT JOIN articles ON ratings.articleid = articles.articleid
-  GROUP BY ratings.articleid, articles.articleid, ratings.userid
+  GROUP BY ratings.articleid, articles.articleid
   HAVING COUNT(ratings.articleid) < 3;
   `);
 
+let articlesUserAlreadyRatedDB = (userid) =>
+  db.query(`SELECT ratings.articleid
+  FROM ratings
+  WHERE ratings.userid = 1;`);
 
 let createUserDb = (user) =>
   db.query(`INSERT INTO users
@@ -126,7 +130,7 @@ let getArticlesDb = (id) =>
 
   `);
 
-let getArticleToRateDb = (id) =>
+let getArticleToRateDb = (id, userid) =>
   db.query(`SELECT * from articles where articleid IN (${id});`);
 
 let getRatingDb = (id) =>
@@ -235,9 +239,15 @@ let getArticlesToRate = (request, response) => {
   readIncoming(request, body => {
     let parseid = JSON.parse(body);
     let userid = jwt.verify(parseid.userid, signature);
-    articlesToRate()
+    articlesUserAlreadyRatedDB(userid.userId)
+    .then(userArticles => {
+      articlesToRateDb()
       .then(data => {
-        let filteredList = data.filter(element => element.userid !== userid.userId);
+        let filteredList = data.filter(element => {
+          if(!(element in userArticles)) {
+            return element;
+          }
+        });
         console.log(filteredList);
         let sqlArticleIds = filteredList.map(element => element.articleid);
         getArticleToRateDb(sqlArticleIds)
@@ -246,6 +256,7 @@ let getArticlesToRate = (request, response) => {
         })
       })
     })
+  })
 }
 
 let getRating = (request, response) => {
