@@ -241,16 +241,16 @@ let getArticlesToRate = (request, response) => {
     let userid = jwt.verify(parseid.userid, signature);
     articlesUserAlreadyRatedDB(userid.userId)
     .then(userArticles => {
-      console.log(userArticles);
+      let userArticlesArray = userArticles.map(element => element.articleid);
       articlesToRateDb()
       .then(data => {
-        let filteredList = data.filter(element => {
-          if(!(element in userArticles)) {
+        let allArticles = data.map(element => element.articleid);
+        let sqlArticleIds = allArticles.filter(element => {
+          if(!(element in userArticlesArray)) {
             return element;
           }
         });
         console.log(filteredList);
-        let sqlArticleIds = filteredList.map(element => element.articleid);
         getArticleToRateDb(sqlArticleIds)
         .then(finalData => {
           response.end(JSON.stringify(finalData));
