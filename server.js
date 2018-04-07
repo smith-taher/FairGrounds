@@ -306,7 +306,7 @@ let postRating = (request, response) => {
       let rating = JSON.parse(incoming);
       payload = jwt.verify(rating.userid, signature);
       rating.userid = payload.userId;
-      let ratingSQL = insertsValuesObject(body);
+      let ratingSQL = insertsValuesObject(rating);
       console.log(ratingSQL);
       rateArticleDb(ratingSQL)
         .then((data) => response.end('Added rating!'))
