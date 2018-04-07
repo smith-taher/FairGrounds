@@ -56,7 +56,7 @@ let articlesReadyForDisplay = () =>
   FROM articles
   LEFT JOIN ratings ON articles.articleid = ratings.articleid
   GROUP BY articles.articleid
-  HAVING COUNT(ratings.ratingid) > 3;
+  HAVING COUNT(ratings.ratingid) >= 3;
   `);
 
 let articlesToRate = () =>
@@ -64,7 +64,7 @@ let articlesToRate = () =>
   FROM ratings
   RIGHT JOIN articles ON ratings.articleid = articles.articleid
   GROUP BY ratings.articleid, articles.articleid, ratings.userid
-  HAVING COUNT(ratings.articleid) <= 3;
+  HAVING COUNT(ratings.articleid) < 3;
   `);
 
 
@@ -238,7 +238,6 @@ let getArticlesToRate = (request, response) => {
     articlesToRate()
       .then(data => {
         let filteredList = data.filter(element => element.userid !== userid.userId);
-        console.log(filteredList);
         let sqlArticleIds = filteredList.map(element => element.articleid);
         getArticleToRateDb(sqlArticleIds)
         .then(finalData => {
