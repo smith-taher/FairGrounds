@@ -76,7 +76,7 @@ let createUserDb = (user) =>
 
 let rateArticleDb = (rating) =>
   db.query(`INSERT INTO ratings
-  (written_fairly, rating.topic, rating.userid, rating.articleid)
+  (written_fairly, topic, userid, articleid)
   VALUES(${rating.written_fairly}, '${rating.topic}', ${rating.userid}, ${rating.articleid});`);
 
 let addArticleDb = (article) =>
