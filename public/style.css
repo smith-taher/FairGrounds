@@ -111,6 +111,9 @@ html, body {
 }
 
 .view-article-button {
+    display: flex;
+    justify-content: center;
+    align-self: center;
     background-color: #008CBA;
     border: none;
     color: white;
