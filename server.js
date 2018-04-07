@@ -237,12 +237,12 @@ let getArticlesToRate = (request, response) => {
     let userid = jwt.verify(parseid.userid, signature);
     articlesToRate()
       .then(data => {
-        console.log(data);
         let filteredList = data.forEach(element => {
           if (element.userid !== userid.iserId) {
             return element;
           }
         })
+        console.log(filteredList);
         let sqlArticleIds = filteredList.map(element => element.articleid);
         console.log(sqlArticleIds);
         getArticleToRateDb(sqlArticleIds)
