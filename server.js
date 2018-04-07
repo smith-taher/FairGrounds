@@ -64,7 +64,7 @@ let articlesToRate = () =>
   FROM ratings
   RIGHT JOIN articles ON ratings.articleid = articles.articleid
   GROUP BY ratings.articleid, articles.articleid, ratings.userid
-  HAVING COUNT(ratings.articleid) <= 3 OR NULL;
+  HAVING COUNT(ratings.articleid) <= 3;
   `);
 
 
