@@ -235,7 +235,7 @@ let getArticlesToView = (request, response) => {
 }
 
 let getArticlesToRate = (request, response) => {
-  checkArticlesStable();
+  checkArticlesStable()
   readIncoming(request, body => {
     let parseid = JSON.parse(body);
     let userid = jwt.verify(parseid.userid, signature);
@@ -253,6 +253,7 @@ let getArticlesToRate = (request, response) => {
         .then(finalData => {
           response.end(JSON.stringify(finalData));
         })
+        .catch(error => console.log(error));
       })
     })
   })
