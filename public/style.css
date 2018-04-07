@@ -117,12 +117,10 @@ html, body {
     padding: 15px 15px;
     text-align: center;
     text-decoration: none;
-    display: inline-block;
     font-size: 16px;
     margin: 2.5px;
     border-radius: 12px;
     cursor: pointer;
-    box-shadow: 0 9px #999
 }
 
 .view-article-button:hover {
