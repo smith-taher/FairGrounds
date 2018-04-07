@@ -59,12 +59,12 @@ let articlesReadyForDisplay = () =>
   HAVING COUNT(ratings.ratingid) > 3;
   `);
 
-let articlesToRate = (userid) =>
+let articlesToRate = () =>
   db.query(`SELECT articles.articleid, ratings.userid
   FROM ratings
   RIGHT JOIN articles ON ratings.articleid = articles.articleid
   GROUP BY ratings.articleid, articles.articleid, ratings.userid
-  HAVING COUNT(ratings.articleid) <= 3
+  HAVING COUNT(ratings.articleid) <= 3 OR NULL;
   `);
 
 
