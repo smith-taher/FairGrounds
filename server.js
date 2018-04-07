@@ -21,7 +21,6 @@ let getArticlesFromApi = () => {
         .catch(error => {
           console.log('article already exists');
         })
-      )
   }).catch(error => console.log(error));
 }
 let makeSqlArray = articlesArray => {
