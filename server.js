@@ -237,6 +237,7 @@ let getArticlesToRate = (request, response) => {
     let userid = jwt.verify(parseid.userid, signature);
     articlesToRate()
       .then(data => {
+        console.log(data);
         let filteredList = data.forEach(element => {
           if (element.userid !== userid.iserId) {
             return element;
