@@ -306,9 +306,10 @@ let postRating = (request, response) => {
       let rating = JSON.parse(incoming);
       payload = jwt.verify(rating.userid, signature);
       rating.userid = payload.userId;
+      console.log(rating);
       rateArticleDb(rating)
         .then((data) => response.end('Added rating!'))
-        .catch(error => {response.end(error)});
+        .catch((error) => response.end(error));
       })
 };
 
