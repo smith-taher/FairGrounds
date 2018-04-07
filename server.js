@@ -16,11 +16,13 @@ let getArticlesFromApi = () => {
     pagesize: 10
   }).then(response => {
       let sqlArticles = makeSqlArray(response.articles);
-        addArticleDb(sqlArticles)
+      sqlArticles.forEach(article => {
+        addArticleDb(article)
         .then(data => console.log('Articles added!'))
         .catch(error => {
           console.log('article already exists');
         })
+      })
   }).catch(error => console.log(error));
 }
 let makeSqlArray = articlesArray => {
@@ -77,10 +79,10 @@ let rateArticleDb = (rating) =>
   (written_fairly, topic, userid, articleid)
   VALUES(${rating.written_fairly}, '${rating.topic}', ${rating.userid}, ${rating.articleid});`);
 
-let addArticleDb = (articles) =>
+let addArticleDb = (article) =>
   db.query(`INSERT INTO articles
-  (${articles.inserts})
-  VALUES(${articles.values});`);
+  (${article.inserts})
+  VALUES(${article.values});`);
 
 let getUserDb = (id) =>
   db.query(`SELECT * from users where userid IN (${id});`);
