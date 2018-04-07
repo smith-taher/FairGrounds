@@ -16,9 +16,8 @@ let getArticlesFromApi = () => {
     pagesize: 10
   }).then(response => {
       let sqlArticles = makeSqlArray(response.articles);
-      sqlArticles.forEach(article =>
-        addArticleDb(article)
-        .then(data => console.log('Article added!'))
+        addArticleDb(sqlArticles)
+        .then(data => console.log('Articles added!'))
         .catch(error => {
           console.log('article already exists');
         })
@@ -79,7 +78,7 @@ let rateArticleDb = (rating) =>
   (written_fairly, topic, userid, articleid)
   VALUES(${rating.written_fairly}, '${rating.topic}', ${rating.userid}, ${rating.articleid});`);
 
-let addArticleDb = (article) =>
+let addArticleDb = (articles) =>
   db.query(`INSERT INTO articles
   (${article.inserts})
   VALUES(${article.values});`);
