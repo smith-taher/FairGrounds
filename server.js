@@ -76,8 +76,8 @@ let createUserDb = (user) =>
 
 let rateArticleDb = (rating) =>
   db.query(`INSERT INTO ratings
-  (${rating.inserts})
-  VALUES(${rating.values});`);
+  (written_fairly, rating.topic, rating.userid, rating.articleid)
+  VALUES(${rating.written_fairly}, ${rating.topic}, ${rating.userid}, ${rating.articleid});`);
 
 let addArticleDb = (article) =>
   db.query(`INSERT INTO articles
@@ -306,9 +306,7 @@ let postRating = (request, response) => {
       let rating = JSON.parse(incoming);
       payload = jwt.verify(rating.userid, signature);
       rating.userid = payload.userId;
-      let ratingSQL = insertsValuesObject(rating);
-      console.log(ratingSQL);
-      rateArticleDb(ratingSQL)
+      rateArticleDb(rating)
         .then((data) => response.end('Added rating!'))
         .catch(error => {response.end(error)});
       })
