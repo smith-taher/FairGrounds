@@ -271,6 +271,7 @@ input::placeholder {
 .ratings-container {
     display: flex;
     justify-content: space-around;
+    padding-bottom: 1em;
 }
 
 .rate-form {
