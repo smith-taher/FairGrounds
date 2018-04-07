@@ -21,9 +21,6 @@ let printArticles = (source, divToAppend) => {
 	$thumbnailImg.addClass('news-image');
 	$thumbnailImgContainer.append($thumbnailImg);
 
-	// let $captionDiv = $('<div></div>').addClass('caption');
-	// $thumbnailDiv.append($captionDiv);
-
 	let $titleH2 = $('<h2></h2>').addClass('title');
 	$titleH2.text(source.title);
 	$thumbnailDiv.append($titleH2);
@@ -36,16 +33,13 @@ let printArticles = (source, divToAppend) => {
 	$descriptionH4.text(source.description);
 	$thumbnailDiv.append($descriptionH4);
 
-	let $viewArticleButtonDiv = $('<div></div>').addClass('view-article-div');
-	$thumbnailDiv.append($viewArticleButtonDiv);
-
 	let $viewArticleButton = $('<button></button>').addClass('view-article-button');
 	$viewArticleButton.attr('type', 'button');
 	$viewArticleButton.text('View Article');
 	$viewArticleButton.click(() => {
 		window.open(source.url);
 	});
-    $viewArticleButtonDiv.append($viewArticleButton);
+    $thumbnailDiv.append($viewArticleButton);
     
     let $ratingsDiv = $('<div></div>').addClass('ratings-container');
     $thumbnailDiv.append($ratingsDiv);
