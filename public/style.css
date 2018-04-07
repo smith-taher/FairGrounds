@@ -99,7 +99,7 @@ html, body {
     margin: 1em;
     width: 50%;
     align-self: center;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .title {
