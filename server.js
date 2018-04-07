@@ -238,7 +238,7 @@ let getArticlesToRate = (request, response) => {
     articlesToRate()
       .then(data => {
         let filteredList = data.map(element => {
-          if (element.userid !== userid.iserId) {
+          if (element.userid !== userid.userId) {
             return element;
           }
         })
