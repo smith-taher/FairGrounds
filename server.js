@@ -130,7 +130,7 @@ let getArticlesDb = (id) =>
 
   `);
 
-let getArticleToRateDb = (id, userid) =>
+let getArticlesToRateDb = (id, userid) =>
   db.query(`SELECT * from articles where articleid IN (${id});`);
 
 let getRatingDb = (id) =>
@@ -241,15 +241,15 @@ let getArticlesToRate = (request, response) => {
     let userid = jwt.verify(parseid.userid, signature);
     articlesUserAlreadyRatedDB(userid.userId)
     .then(userArticles => {
-      let userArticlesArray = userArticles.map(element => element.articleid);
       articlesToRateDb()
       .then(data => {
+        let userArticlesArray = userArticles.map(element => element.articleid);
         let allArticles = data.map(element => element.articleid);
         let sqlArticleIds = userArticlesArray.forEach(element => {
           allArticles.splice(allArticles.indexOf(element), 1);
         });
-        console.log(allArticles);
-        getArticleToRateDb(allArticles)
+        console.log(allArticles.toString());
+        getArticlesToRateDb(allArticles.toString())
         .then(finalData => {
           response.end(JSON.stringify(finalData));
         })
