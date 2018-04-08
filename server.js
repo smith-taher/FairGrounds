@@ -1,14 +1,7 @@
 require('dotenv').config()
 const http = require('http');
 const pg = require('pg-promise')();
-const cn = {
-  host: 'localhost',
-  port: 5432,
-  database: 'fairgrounds',
-  user: 'ubuntu',
-  password: 'password'
-}
-const db = pg(cn);
+const db = pg(process.env.DB_PATH);
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const NewsAPI = require('newsapi');
@@ -23,13 +16,13 @@ let getArticlesFromApi = () => {
     pagesize: 10
   }).then(response => {
       let sqlArticles = makeSqlArray(response.articles);
-      sqlArticles.forEach(article =>
+      sqlArticles.forEach(article => {
         addArticleDb(article)
-        .then(data => console.log('Article added!'))
+        .then(data => console.log('Articles added!'))
         .catch(error => {
           console.log('article already exists');
         })
-      )
+      })
   }).catch(error => console.log(error));
 }
 let makeSqlArray = articlesArray => {
@@ -63,18 +56,21 @@ let articlesReadyForDisplay = () =>
   FROM articles
   LEFT JOIN ratings ON articles.articleid = ratings.articleid
   GROUP BY articles.articleid
-  HAVING COUNT(ratings.ratingid) > 3;
+  HAVING COUNT(ratings.ratingid) >= 3;
   `);
 
-let articlesToRate = (userid) =>
+let articlesToRateDb = () =>
   db.query(`SELECT articles.articleid
-  FROM articles
-  LEFT JOIN ratings ON articles.articleid = ratings.articleid and ratings.userid != ${userid}
-  GROUP BY articles.articleid
-  HAVING COUNT(ratings.ratingid) <= 3
-  ORDER BY COUNT(ratings.ratingid) DESC;
+  FROM ratings
+  RIGHT JOIN articles ON ratings.articleid = articles.articleid
+  GROUP BY ratings.articleid, articles.articleid
+  HAVING COUNT(ratings.articleid) < 3;
   `);
 
+let articlesUserAlreadyRatedDb = (userid) =>
+  db.query(`SELECT ratings.articleid
+  FROM ratings
+  WHERE ratings.userid = ${userid};`);
 
 let createUserDb = (user) =>
   db.query(`INSERT INTO users
@@ -134,7 +130,7 @@ let getArticlesDb = (id) =>
 
   `);
 
-let getArticleToRateDb = (id) =>
+let getArticlesToRateDb = (id, userid) =>
   db.query(`SELECT * from articles where articleid IN (${id});`);
 
 let getRatingDb = (id) =>
@@ -239,20 +235,32 @@ let getArticlesToView = (request, response) => {
 }
 
 let getArticlesToRate = (request, response) => {
-  checkArticlesStable();
-  readIncoming(request, body => {
-    let parseid = JSON.parse(body);
+  checkArticlesStable()
+  readIncoming(request, (incoming) => {
+    let parseid = JSON.parse(incoming);
     let userid = jwt.verify(parseid.userid, signature);
-    console.log(userid.userId);
-    articlesToRate(userid.userId)
+    articlesUserAlreadyRatedDb(userid.userId)
+    .then(userArticles => {
+      console.log("userArticles: " + userArticles);
+      articlesToRateDb()
       .then(data => {
-        let sqlArticleIds = data.map(element => element.articleid);
-        getArticleToRateDb(sqlArticleIds)
+        let userArticlesArray = userArticles.map(element => element.articleid);
+        console.log("userArticlesArray: " + userArticlesArray);
+        let allArticles = data.map(element => element.articleid);
+        console.log("allArticles: " + allArticles);
+        let sqlArticleIds = userArticlesArray.forEach(element => {
+          allArticles = allArticles.splice(allArticles.indexOf(element), 1);
+        });
+        console.log("allArticles: " + allArticles);
+        getArticlesToRateDb(allArticles)
         .then(finalData => {
+          console.log("JSON.stringify(finalData): " + JSON.stringify(finalData));
           response.end(JSON.stringify(finalData));
         })
+        .catch(error => console.log(error));
       })
     })
+  })
 }
 
 let getRating = (request, response) => {
@@ -312,7 +320,7 @@ let postRating = (request, response) => {
       rating.userid = payload.userId;
       rateArticleDb(rating)
         .then((data) => response.end('Added rating!'))
-        .catch(error => {response.end(error)});
+        .catch((error) => response.end(error));
       })
 };
 

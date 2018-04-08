@@ -21,23 +21,17 @@ let printArticles = (source, divToAppend) => {
 	$thumbnailImg.addClass('news-image');
 	$thumbnailImgContainer.append($thumbnailImg);
 
-	let $captionDiv = $('<div></div>').addClass('caption');
-	$thumbnailDiv.append($captionDiv);
-
 	let $titleH2 = $('<h2></h2>').addClass('title');
 	$titleH2.text(source.title);
-	$captionDiv.append($titleH2);
+	$thumbnailDiv.append($titleH2);
 	
 	let $authorSourceDate = $('<h6></h6>').addClass('author-source-date');
 	$authorSourceDate.text(`By ${source.author} from ${source.source} on ${source.publishedat}`);
-	$captionDiv.append($authorSourceDate);
+	$thumbnailDiv.append($authorSourceDate);
 
 	let $descriptionH4 = $('<p></p>').addClass('description');
 	$descriptionH4.text(source.description);
-	$captionDiv.append($descriptionH4);
-
-	let $viewArticleButtonDiv = $('<div></div>').addClass('view-article-div');
-	$thumbnailDiv.append($viewArticleButtonDiv);
+	$thumbnailDiv.append($descriptionH4);
 
 	let $viewArticleButton = $('<button></button>').addClass('view-article-button');
 	$viewArticleButton.attr('type', 'button');
@@ -45,7 +39,7 @@ let printArticles = (source, divToAppend) => {
 	$viewArticleButton.click(() => {
 		window.open(source.url);
 	});
-    $viewArticleButtonDiv.append($viewArticleButton);
+    $thumbnailDiv.append($viewArticleButton);
     
     let $ratingsDiv = $('<div></div>').addClass('ratings-container');
     $thumbnailDiv.append($ratingsDiv);
