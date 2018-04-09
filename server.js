@@ -253,7 +253,6 @@ let getArticlesToRate = (request, response) => {
         })
       })
     })
-        .catch(error => console.log(error))
   })
 }
 
