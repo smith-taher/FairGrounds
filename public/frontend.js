@@ -159,7 +159,7 @@ let printArticlesForRating = (articlesArray, divToAppend, currentArticle) => {
 	$skipArticleButton.attr('type', 'button');
 	$skipArticleButton.text('Skip Article');
 	$skipArticleButton.click(() => {
-		getDBArticleForRating(currentArticle + 1, getToken());
+		printArticlesForRating(articlesArray, $printArticleForRating, currentArticle + 1);
 	});
 	$buttonDiv.append($skipArticleButton);
 }
