@@ -150,7 +150,15 @@ let printArticlesForRating = (articlesArray, divToAppend, currentArticle) => {
         ratingsObject.userid = getToken();
         ratingsObject.articleid = articlesArray[currentArticle].articleid;
         postRating(ratingsObject);
-        printArticlesForRating(articlesArray, $printArticleForRating, currentArticle + 1);
+        articlesArray.splice(currentArticle, 1);
+        if (articlesArray.length === currentArticle - 1 || articlesArray.length === 0){
+            divToAppend.empty();
+            let $noMore = $('<div></div>').addClass('no-more');
+            $noMore.text('No more articles to rate.  Check back later!');
+            divToAppend.append($noMore);
+        } else {
+            printArticlesForRating(articlesArray, $printArticleForRating, currentArticle);
+        }
     })
     $rateForm.append($submitButton);
 
