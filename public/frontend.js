@@ -204,7 +204,7 @@ let createSignOutButton = () => {
         let signOutButton = createSignOutButton();
         let buttonParent = document.querySelector('.navigation-top');
         buttonParent.appendChild(signOutButton);
-        let $footer = $('footer');
+        let $footer = $('.navigation-bottom');
         let $rateButton = $('<li></li>').addClass('nav-button').attr('id', 'rate');
         $rateButton.text('Rate Articles');
         $footer.append($rateButton);
