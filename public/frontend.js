@@ -172,7 +172,7 @@ let printArticlesForRating = (articlesArray, divToAppend, currentArticle) => {
             $noMore.text('No more articles to rate.  Check back later!');
             divToAppend.append($noMore);
         } else {
-            printArticlesForRating(articlesArray, $printArticleForRating, currentArticle);
+            printArticlesForRating(articlesArray, $printArticleForRating, currentArticle + 1);
         }
 	});
 	$buttonDiv.append($skipArticleButton);
