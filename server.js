@@ -241,7 +241,7 @@ let getArticlesToRate = (request, response) => {
     let userid = jwt.verify(parseid.userid, signature);
     articlesUserAlreadyRatedDb(userid.userId)
     .then(userArticles => articlesToRateDb())
-      .then(data => {
+    .then(data => {
         let userArticlesArray = userArticles.map(element => element.articleid);
         let allArticles = data.map(element => element.articleid);
         let sqlArticleIds = allArticles.filter(element =>
@@ -254,7 +254,7 @@ let getArticlesToRate = (request, response) => {
         .catch(error => console.log(error));
       })
     })
-  }
+}
 
 let getRating = (request, response) => {
   let id = getSuffix(request.url, '/articles/');
