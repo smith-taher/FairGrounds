@@ -2,7 +2,6 @@ const signIn = document.getElementById('sign-in-page');
 const rateArticles = document.getElementById('rate-articles');
 const viewArticles = document.getElementById('view-articles');
 const $viewButton = $('#view');
-const $rateButton = $('#rate');
 const $signInButton = $('#sign-in');
 const $printResult = $('.printResults');
 const $printArticleForRating = $('.printArticleForRating');
