@@ -238,10 +238,9 @@ let getArticlesToRate = (request, response) => {
   checkArticlesStable()
   readIncoming(request, (incoming) => {
     let parseid = JSON.parse(incoming);
-    if (parseid) {
-      let userid = jwt.verify(parseid.userid, signature);
-      articlesUserAlreadyRatedDb(userid.userId)
-      .then(userArticles => {
+    let userid = jwt.verify(parseid.userid, signature);
+    articlesUserAlreadyRatedDb(userid.userId)
+    .then(userArticles => {
       articlesToRateDb()
       .then(data => {
         let userArticlesArray = userArticles.map(element => element.articleid);
@@ -253,11 +252,8 @@ let getArticlesToRate = (request, response) => {
           response.end(JSON.stringify(finalData));
         })
         .catch(error => console.log(error));
-       })
-     })
-    } else {
-      response.end('not signed in');
-    }
+      })
+    })
   })
 }
 
@@ -382,7 +378,6 @@ let signIn = (request, response) => {
     .then( queryOutcome => {
       if (queryOutcome.length > 0) {
         let token = createToken(queryOutcome[0]);
-        console.log('This should be the token');
         // response.setHeader('jwt', token);
         response.statusCode = 200;
         response.end(token);
