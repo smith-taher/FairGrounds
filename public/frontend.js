@@ -61,7 +61,7 @@ let printArticles = (source, divToAppend) => {
     $ratingsDiv.append($totalRating);
 }
 
-let printArticlesForRating = (source, divToAppend, currentArticle) => {
+let printArticlesForRating = (articlesArray, divToAppend, currentArticle) => {
 	divToAppend.empty();
 
 	let $thumbnailDiv = $('<div></div>').addClass('thumbnail');
@@ -70,7 +70,7 @@ let printArticlesForRating = (source, divToAppend, currentArticle) => {
 	let $thumbnailImgContainer = $('<div></div>').addClass('image-container');
 	$thumbnailDiv.append($thumbnailImgContainer);
 	
-	let $thumbnailImg = $('<img></img>').attr('src', source.urltoimage);
+	let $thumbnailImg = $('<img></img>').attr('src', source[currentArticle].urltoimage);
 	$thumbnailImg.attr('alt', 'Story Image');
 	$thumbnailImg.addClass('news-image');
 	$thumbnailImgContainer.append($thumbnailImg);
@@ -79,15 +79,17 @@ let printArticlesForRating = (source, divToAppend, currentArticle) => {
 	$thumbnailDiv.append($captionDiv);
 
 	let $titleH2 = $('<h2></h2>').addClass('title');
-	$titleH2.text(source.title);
+	$titleH2.text(source[currentArticle].title);
 	$captionDiv.append($titleH2);
 	
 	let $authorSourceDate = $('<h6></h6>').addClass('author-source-date');
-	$authorSourceDate.text(`By ${source.author} from ${source.source} on ${source.publishedat}`);
+    $authorSourceDate.text(`By ${source[currentArticle].author} 
+            from ${source[currentArticle].source} 
+            on ${source[currentArticle].publishedat}`);
 	$captionDiv.append($authorSourceDate);
 
 	let $descriptionH4 = $('<p></p>').addClass('description');
-	$descriptionH4.text(source.description);
+	$descriptionH4.text(source[currentArticle].description);
 	$captionDiv.append($descriptionH4);
 
 	let $buttonDiv = $('<div></div>').addClass('view-article-div');
@@ -97,7 +99,7 @@ let printArticlesForRating = (source, divToAppend, currentArticle) => {
 	$viewArticleButton.attr('type', 'button');
 	$viewArticleButton.text('View Article');
 	$viewArticleButton.click(() => {
-		window.open(source.url);
+		window.open(source[currentArticle].url);
 	});
     $buttonDiv.append($viewArticleButton);
     
@@ -146,9 +148,9 @@ let printArticlesForRating = (source, divToAppend, currentArticle) => {
         })
         ratingsObject.written_fairly = parseInt(ratingsObject.written_fairly);
         ratingsObject.userid = getToken();
-        ratingsObject.articleid = source.articleid;
+        ratingsObject.articleid = source[currentArticle].articleid;
         postRating(ratingsObject);
-        getDBArticleForRating(currentArticle + 1, getToken());
+        printArticlesForRating(articlesArray, $printArticleForRating, currentArticle + 1);
     })
     $rateForm.append($submitButton);
 
@@ -207,9 +209,7 @@ let getDBArticleForRating = (articleToGet, userid) => {
         {method: 'POST', body: JSON.stringify(idObject)})
         .then(response => response.json())
             .then((articles) => {
-                console.log(articles);
-                let theArticle = articles[articleToGet];
-                printArticlesForRating(theArticle, $printArticleForRating, articleToGet);
+                printArticlesForRating(articles, $printArticleForRating, 0);
             }
     )
 }
