@@ -166,7 +166,8 @@ let printArticlesForRating = (articlesArray, divToAppend, currentArticle) => {
 	$skipArticleButton.attr('type', 'button');
 	$skipArticleButton.text('Skip Article');
 	$skipArticleButton.click(() => {
-		if (articlesArray.length === currentArticle){
+        console.log('articlesArray.length: ' + articlesArray.length, 'current article: ' + currentArticle);
+		if (articlesArray.length === currentArticle - 4){
             divToAppend.empty();
             let $noMore = $('<div></div>').addClass('no-more');
             $noMore.text('No more articles to rate.  Check back later!');
