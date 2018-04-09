@@ -240,7 +240,7 @@ let getArticlesToRate = (request, response) => {
     let parseid = JSON.parse(incoming);
     let userid = jwt.verify(parseid.userid, signature);
     articlesUserAlreadyRatedDb(userid.userId)
-    .then((userArticles) => articlesToRateDb()
+    .then((userArticles) => {articlesToRateDb()
     .then((data) => {
         let userArticlesArray = userArticles.map(element => element.articleid);
         let allArticles = data.map(element => element.articleid);
@@ -252,8 +252,8 @@ let getArticlesToRate = (request, response) => {
           response.end(JSON.stringify(finalData));
         })
       })
-        .catch(error => console.log(error));
     })
+        .catch(error => console.log(error));
 }
 
 let getRating = (request, response) => {
