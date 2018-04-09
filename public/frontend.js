@@ -174,10 +174,7 @@ let printArticlesForRating = (articlesArray, divToAppend, currentArticle) => {
 
 //sign-in info
 
-let getToken = () => {
-    let token = localStorage.getItem('token');
-    console.log(token)
-    return token; };
+let getToken = () => localStorage.getItem('token');
 
 let setTokenToHeader = (token) => {
   let tokenHeader = new Headers();
