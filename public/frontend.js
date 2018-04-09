@@ -266,5 +266,5 @@ let renderButtons = () => {
     })
     showPageButton($signInButton, signIn);
 }
-
+getDBArticlesView();
 renderButtons();
