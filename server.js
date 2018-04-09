@@ -247,9 +247,8 @@ let getArticlesToRate = (request, response) => {
         console.log('user article: ' + userArticlesArray);
         let allArticles = data.map(element => element.articleid);
         console.log('all articles to be rated: ' + allArticles);
-        let sqlArticleIds = allArticles.filter(element => {
-          !(userArticlesArray.includes(element));
-        });
+        let sqlArticleIds = allArticles.filter(element =>
+          !userArticlesArray.includes(element));
         console.log(sqlArticleIds);
         getArticlesToRateDb(allArticles)
         .then(finalData => {
