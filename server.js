@@ -251,8 +251,8 @@ let getArticlesToRate = (request, response) => {
           console.log(finalData);
           response.end(JSON.stringify(finalData));
         })
-        .catch(error => console.log(error));
       })
+        .catch(error => console.log(error));
     })
 }
 
