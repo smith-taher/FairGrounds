@@ -230,6 +230,7 @@ let getDBArticleForRating = (articleToGet, userid) => {
         .then(response => response.json())
             .then((articles) => {
                 if (articles.length === 0){
+                    $printArticleForRating.empty();
                     let $noMore = $('<div></div>').addClass('no-more');
                     $noMore.text('No more articles to rate.  Check back later!');
                     $printArticleForRating.append($noMore);
