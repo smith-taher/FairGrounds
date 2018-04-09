@@ -166,14 +166,12 @@ let printArticlesForRating = (articlesArray, divToAppend, currentArticle) => {
 	$skipArticleButton.attr('type', 'button');
 	$skipArticleButton.text('Skip Article');
 	$skipArticleButton.click(() => {
-        console.log('articlesArray.length: ' + articlesArray.length, 'current article: ' + currentArticle);
-		if (articlesArray.length === currentArticle - 2){
+		if (articlesArray.length === currentArticle + 1){
             divToAppend.empty();
             let $noMore = $('<div></div>').addClass('no-more');
             $noMore.text('No more articles to rate.  Check back later!');
             divToAppend.append($noMore);
         } else {
-            console.log('articlesArray.length: ' + articlesArray.length, 'current article: ' + currentArticle);
             printArticlesForRating(articlesArray, $printArticleForRating, currentArticle + 1);
         }
 	});
