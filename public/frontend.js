@@ -148,7 +148,7 @@ let printArticlesForRating = (articlesArray, divToAppend, currentArticle) => {
         })
         ratingsObject.written_fairly = parseInt(ratingsObject.written_fairly);
         ratingsObject.userid = getToken();
-        console.log(ratingsObject.userid);
+        console.log('userid' + ratingsObject.userid);
         ratingsObject.articleid = articlesArray[currentArticle].articleid;
         postRating(ratingsObject);
         articlesArray.splice(currentArticle, 1);
