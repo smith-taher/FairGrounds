@@ -252,6 +252,7 @@ let getArticlesToRate = (request, response) => {
             response.end(JSON.stringify(finalData));
         })
       })
+    })
         .catch(error => console.log(error))
   })
 }
