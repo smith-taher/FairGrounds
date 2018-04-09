@@ -250,7 +250,7 @@ let getArticlesToRate = (request, response) => {
           .then(finalData => {
             console.log(finalData);
             response.end(JSON.stringify(finalData));
-        }).catch(error => response.end(JSON.stringify([]))
+        }).catch(error => response.end(JSON.stringify([])))
       })
     })
   })
