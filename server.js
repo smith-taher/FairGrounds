@@ -254,8 +254,7 @@ let getArticlesToRate = (request, response) => {
         .catch(error => console.log(error));
       })
     })
-  })
-}
+  }
 
 let getRating = (request, response) => {
   let id = getSuffix(request.url, '/articles/');
