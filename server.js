@@ -250,7 +250,7 @@ let getArticlesToRate = (request, response) => {
         let sqlArticleIds = allArticles.filter(element =>
           !userArticlesArray.includes(element));
         console.log(sqlArticleIds);
-        getArticlesToRateDb(allArticles)
+        getArticlesToRateDb(sqlArticleIds)
         .then(finalData => {
           response.end(JSON.stringify(finalData));
         })
