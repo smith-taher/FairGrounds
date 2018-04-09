@@ -150,7 +150,7 @@ let printArticlesForRating = (articlesArray, divToAppend, currentArticle) => {
         ratingsObject.articleid = articlesArray[currentArticle].articleid;
         postRating(ratingsObject);
         articlesArray.splice(currentArticle, 1);
-        if (articlesArray.length === currentArticle - 1 || articlesArray.length === 0){
+        if (articlesArray.length === currentArticle + 1 || articlesArray.length === 0){
             divToAppend.empty();
             let $noMore = $('<div></div>').addClass('no-more');
             $noMore.text('No more articles to rate.  Check back later!');
