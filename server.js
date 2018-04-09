@@ -348,9 +348,7 @@ let validateCredentials = (username, password) => {
       let user = users[0];
       return bcrypt.compare(password, user.password)
       .then(response => {
-        console.log(response);
         if (response) {
-          // console.log(user);
           return true;
         } else {
           return false;
