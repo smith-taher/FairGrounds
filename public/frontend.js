@@ -204,6 +204,8 @@ let createSignOutButton = () => {
         let signOutButton = createSignOutButton();
         let buttonParent = document.querySelector('.navigation-top');
         buttonParent.appendChild(signOutButton);
+        showPageButton($rateButton, rateArticles);
+        $rateButton.click(() => getDBArticleForRating(0, getToken()));
       };
     })
   } catch(err) {
@@ -259,10 +261,7 @@ let renderButtons = () => {
         $printResult.empty();
         getDBArticlesView();
     })
-    showPageButton($rateButton, rateArticles);
-    $rateButton.click(() => getDBArticleForRating(0, getToken()));
     showPageButton($signInButton, signIn);
 }
 
 renderButtons();
-console.log(getToken());
