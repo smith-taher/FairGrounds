@@ -70,7 +70,7 @@ let printArticlesForRating = (articlesArray, divToAppend, currentArticle) => {
 	let $thumbnailImgContainer = $('<div></div>').addClass('image-container');
 	$thumbnailDiv.append($thumbnailImgContainer);
 	
-	let $thumbnailImg = $('<img></img>').attr('src', source[currentArticle].urltoimage);
+	let $thumbnailImg = $('<img></img>').attr('src', articlesArray[currentArticle].urltoimage);
 	$thumbnailImg.attr('alt', 'Story Image');
 	$thumbnailImg.addClass('news-image');
 	$thumbnailImgContainer.append($thumbnailImg);
@@ -79,17 +79,17 @@ let printArticlesForRating = (articlesArray, divToAppend, currentArticle) => {
 	$thumbnailDiv.append($captionDiv);
 
 	let $titleH2 = $('<h2></h2>').addClass('title');
-	$titleH2.text(source[currentArticle].title);
+	$titleH2.text(articlesArray[currentArticle].title);
 	$captionDiv.append($titleH2);
 	
 	let $authorSourceDate = $('<h6></h6>').addClass('author-source-date');
-    $authorSourceDate.text(`By ${source[currentArticle].author} 
-            from ${source[currentArticle].source} 
-            on ${source[currentArticle].publishedat}`);
+    $authorSourceDate.text(`By ${articlesArray[currentArticle].author} 
+            from ${articlesArray[currentArticle].source} 
+            on ${articlesArray[currentArticle].publishedat}`);
 	$captionDiv.append($authorSourceDate);
 
 	let $descriptionH4 = $('<p></p>').addClass('description');
-	$descriptionH4.text(source[currentArticle].description);
+	$descriptionH4.text(articlesArray[currentArticle].description);
 	$captionDiv.append($descriptionH4);
 
 	let $buttonDiv = $('<div></div>').addClass('view-article-div');
@@ -99,7 +99,7 @@ let printArticlesForRating = (articlesArray, divToAppend, currentArticle) => {
 	$viewArticleButton.attr('type', 'button');
 	$viewArticleButton.text('View Article');
 	$viewArticleButton.click(() => {
-		window.open(source[currentArticle].url);
+		window.open(articlesArray[currentArticle].url);
 	});
     $buttonDiv.append($viewArticleButton);
     
@@ -148,7 +148,7 @@ let printArticlesForRating = (articlesArray, divToAppend, currentArticle) => {
         })
         ratingsObject.written_fairly = parseInt(ratingsObject.written_fairly);
         ratingsObject.userid = getToken();
-        ratingsObject.articleid = source[currentArticle].articleid;
+        ratingsObject.articleid = articlesArray[currentArticle].articleid;
         postRating(ratingsObject);
         printArticlesForRating(articlesArray, $printArticleForRating, currentArticle + 1);
     })
