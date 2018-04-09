@@ -130,7 +130,7 @@ let getArticlesDb = (id) =>
 
   `);
 
-let getArticlesToRateDb = (id, userid) =>
+let getArticlesToRateDb = (id) =>
   db.query(`SELECT * from articles where articleid IN (${id});`);
 
 let getRatingDb = (id) =>
@@ -249,6 +249,7 @@ let getArticlesToRate = (request, response) => {
           !userArticlesArray.includes(element));
         getArticlesToRateDb(sqlArticleIds)
         .then(finalData => {
+          console.log(finalData);
           response.end(JSON.stringify(finalData));
         })
         .catch(error => console.log(error));
@@ -423,8 +424,8 @@ let getIdFromToken = (token) => {
     console.log('No Token');
   }
   return payload;
-
 }
+
 let tokenValidator = (request, response) => {
   let { authorization: token } = request.headers;
   let payload = getIdFromToken(token);
