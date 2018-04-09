@@ -241,17 +241,13 @@ let getArticlesToRate = (request, response) => {
     let userid = jwt.verify(parseid.userid, signature);
     articlesUserAlreadyRatedDb(userid.userId)
     .then(userArticles => {
-      console.log("userArticles: " + userArticles);
       articlesToRateDb()
       .then(data => {
         let userArticlesArray = userArticles.map(element => element.articleid);
-        console.log("userArticlesArray: " + userArticlesArray);
         let allArticles = data.map(element => element.articleid);
-        console.log("allArticles: " + allArticles);
         let sqlArticleIds = userArticlesArray.forEach(element => {
           allArticles = allArticles.splice(allArticles.indexOf(element), 1);
         });
-        console.log("allArticles: " + allArticles);
         getArticlesToRateDb(allArticles)
         .then(finalData => {
           console.log("JSON.stringify(finalData): " + JSON.stringify(finalData));
