@@ -148,7 +148,6 @@ let printArticlesForRating = (articlesArray, divToAppend, currentArticle) => {
         })
         ratingsObject.written_fairly = parseInt(ratingsObject.written_fairly);
         ratingsObject.userid = getToken();
-        console.log('userid' + ratingsObject.userid);
         ratingsObject.articleid = articlesArray[currentArticle].articleid;
         postRating(ratingsObject);
         articlesArray.splice(currentArticle, 1);
@@ -175,7 +174,10 @@ let printArticlesForRating = (articlesArray, divToAppend, currentArticle) => {
 
 //sign-in info
 
-let getToken = () => localStorage.getItem('token');
+let getToken = () => {
+    let token = localStorage.getItem('token');
+    console.log(token)
+    return token; };
 
 let setTokenToHeader = (token) => {
   let tokenHeader = new Headers();
@@ -266,3 +268,4 @@ let renderButtons = () => {
 }
 
 renderButtons();
+console.log(getToken());
