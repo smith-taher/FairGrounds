@@ -125,14 +125,26 @@ let printArticlesForRating = (articlesArray, divToAppend, currentArticle) => {
     $rateForm.append($unfairText);
 
     let $topicInput = $('<select></select>').addClass('topic-input').attr('name', 'topic');
-    $science = $('<option></option>').attr('value', 'Science').text('Science');
-    $topicInput.append($science);
-    $politics = $('<option></option>').attr('value', 'Politics').text('Politics');
-    $topicInput.append($politics);
+    $business = $('<option></option>').attr('value', 'Business').text('Business');
+    $topicInput.append($business);
+    $education = $('<option></option>').attr('value', 'Education').text('Education');
+    $topicInput.append($education);
+    $elections = $('<option></option>').attr('value', 'Elections').text('Elections');
+    $topicInput.append($elections);
+    $environment = $('<option></option>').attr('value', 'Environment').text('Environment');
+    $topicInput.append($environment);
+    $foreignAffairs = $('<option></option>').attr('value', 'Foreign Affairs').text('Foreign Affairs');
+    $topicInput.append($foreignAffairs);
+    $healthcare = $('<option></option>').attr('value', 'Healthcare').text('Healthcare');
+    $topicInput.append($healthcare);
+    $immigration = $('<option></option>').attr('value', 'Immigration').text('Immigration');
+    $topicInput.append($immigration);
     $religion = $('<option></option>').attr('value', 'Religion').text('Religion');
     $topicInput.append($religion);
-    $foreignPolicy = $('<option></option>').attr('value', 'Foreign Policy').text('Foreign Policy');
-    $topicInput.append($foreignPolicy);
+    $science = $('<option></option>').attr('value', 'Science').text('Science');
+    $topicInput.append($science);
+    $taxes = $('<option></option>').attr('value', 'Taxes').text('Taxes');
+    $topicInput.append($taxes);
     $rateForm.append($topicInput);
 
     let $submitButton = $('<button></button>').addClass('topic-input-button').attr('type', 'button');
