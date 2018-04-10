@@ -130,7 +130,7 @@ let getArticlesDb = (id) =>
 
   `);
 
-let getArticlesToRateDb = (id, userid) =>
+let getArticlesToRateDb = (id) =>
   db.query(`SELECT * from articles where articleid IN (${id});`);
 
 let getRatingDb = (id) =>
@@ -240,24 +240,17 @@ let getArticlesToRate = (request, response) => {
     let parseid = JSON.parse(incoming);
     let userid = jwt.verify(parseid.userid, signature);
     articlesUserAlreadyRatedDb(userid.userId)
-    .then(userArticles => {
-      console.log("userArticles: " + userArticles);
-      articlesToRateDb()
-      .then(data => {
-        let userArticlesArray = userArticles.map(element => element.articleid);
-        console.log("userArticlesArray: " + userArticlesArray);
-        let allArticles = data.map(element => element.articleid);
-        console.log("allArticles: " + allArticles);
-        let sqlArticleIds = userArticlesArray.forEach(element => {
-          allArticles = allArticles.splice(allArticles.indexOf(element), 1);
-        });
-        console.log("allArticles: " + allArticles);
-        getArticlesToRateDb(allArticles)
-        .then(finalData => {
-          console.log("JSON.stringify(finalData): " + JSON.stringify(finalData));
-          response.end(JSON.stringify(finalData));
-        })
-        .catch(error => console.log(error));
+    .then((userArticles) => {
+      articlesToRateDb().then((data) => {
+          let userArticlesArray = userArticles.map(element => element.articleid);
+          let allArticles = data.map(element => element.articleid);
+          let sqlArticleIds = allArticles.filter(element =>
+            !userArticlesArray.includes(element));
+          getArticlesToRateDb(sqlArticleIds)
+          .then(finalData => {
+            console.log(finalData);
+            response.end(JSON.stringify(finalData));
+        }).catch(error => response.end(JSON.stringify([])))
       })
     })
   })
@@ -354,9 +347,7 @@ let validateCredentials = (username, password) => {
       let user = users[0];
       return bcrypt.compare(password, user.password)
       .then(response => {
-        console.log(response);
         if (response) {
-          // console.log(user);
           return true;
         } else {
           return false;
@@ -386,7 +377,6 @@ let signIn = (request, response) => {
     .then( queryOutcome => {
       if (queryOutcome.length > 0) {
         let token = createToken(queryOutcome[0]);
-        console.log('This should be the token');
         // response.setHeader('jwt', token);
         response.statusCode = 200;
         response.end(token);
@@ -432,8 +422,8 @@ let getIdFromToken = (token) => {
     console.log('No Token');
   }
   return payload;
-
 }
+
 let tokenValidator = (request, response) => {
   let { authorization: token } = request.headers;
   let payload = getIdFromToken(token);

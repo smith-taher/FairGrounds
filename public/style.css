@@ -121,7 +121,7 @@ html, body {
     font-size: 1.2em;
     border-radius: 12px;
     cursor: pointer;
-    width: 50%;
+    width: 40%;
 }
 
 .view-article-button:hover {
@@ -139,14 +139,15 @@ html, body {
     border: none;
     color: white;
     padding: 15px 15px;
-    text-align: center;
     text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
+    font-size: 1.2em;
     margin: 2.5px;
     border-radius: 12px;
     cursor: pointer;
-    box-shadow: 0 9px #999;
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    align-self: center;
 }
 
 .skip-article-button:hover {
@@ -292,7 +293,6 @@ input::placeholder {
     display: inline-flex;
     width: 50%;
     margin: 5px;
-    font-family: "Comic Sans MS", cursive, sans-serif;
 }
 
 .topic-input-button {
@@ -303,11 +303,10 @@ input::placeholder {
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
+    font-size: 1.2em;
     margin-bottom: 5px;
     border-radius: 12px;
     cursor: pointer;
-    box-shadow: 0 9px #999
 }
 
 .topic-input-button:hover {
@@ -318,4 +317,9 @@ input::placeholder {
     background-color: green;
     box-shadow: 0 5px #666;
     transform: translateY(4px);
+}
+
+.view-article-div {
+    display: flex;
+    flex-direction: column;
 }

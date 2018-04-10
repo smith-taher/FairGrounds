@@ -2,7 +2,6 @@ const signIn = document.getElementById('sign-in-page');
 const rateArticles = document.getElementById('rate-articles');
 const viewArticles = document.getElementById('view-articles');
 const $viewButton = $('#view');
-const $rateButton = $('#rate');
 const $signInButton = $('#sign-in');
 const $printResult = $('.printResults');
 const $printArticleForRating = $('.printArticleForRating');
@@ -61,7 +60,7 @@ let printArticles = (source, divToAppend) => {
     $ratingsDiv.append($totalRating);
 }
 
-let printArticlesForRating = (source, divToAppend, currentArticle) => {
+let printArticlesForRating = (articlesArray, divToAppend, currentArticle) => {
 	divToAppend.empty();
 
 	let $thumbnailDiv = $('<div></div>').addClass('thumbnail');
@@ -70,7 +69,7 @@ let printArticlesForRating = (source, divToAppend, currentArticle) => {
 	let $thumbnailImgContainer = $('<div></div>').addClass('image-container');
 	$thumbnailDiv.append($thumbnailImgContainer);
 	
-	let $thumbnailImg = $('<img></img>').attr('src', source.urltoimage);
+	let $thumbnailImg = $('<img></img>').attr('src', articlesArray[currentArticle].urltoimage);
 	$thumbnailImg.attr('alt', 'Story Image');
 	$thumbnailImg.addClass('news-image');
 	$thumbnailImgContainer.append($thumbnailImg);
@@ -79,15 +78,17 @@ let printArticlesForRating = (source, divToAppend, currentArticle) => {
 	$thumbnailDiv.append($captionDiv);
 
 	let $titleH2 = $('<h2></h2>').addClass('title');
-	$titleH2.text(source.title);
+	$titleH2.text(articlesArray[currentArticle].title);
 	$captionDiv.append($titleH2);
 	
 	let $authorSourceDate = $('<h6></h6>').addClass('author-source-date');
-	$authorSourceDate.text(`By ${source.author} from ${source.source} on ${source.publishedat}`);
+    $authorSourceDate.text(`By ${articlesArray[currentArticle].author} 
+            from ${articlesArray[currentArticle].source} 
+            on ${articlesArray[currentArticle].publishedat}`);
 	$captionDiv.append($authorSourceDate);
 
 	let $descriptionH4 = $('<p></p>').addClass('description');
-	$descriptionH4.text(source.description);
+	$descriptionH4.text(articlesArray[currentArticle].description);
 	$captionDiv.append($descriptionH4);
 
 	let $buttonDiv = $('<div></div>').addClass('view-article-div');
@@ -97,7 +98,7 @@ let printArticlesForRating = (source, divToAppend, currentArticle) => {
 	$viewArticleButton.attr('type', 'button');
 	$viewArticleButton.text('View Article');
 	$viewArticleButton.click(() => {
-		window.open(source.url);
+		window.open(articlesArray[currentArticle].url);
 	});
     $buttonDiv.append($viewArticleButton);
     
@@ -124,14 +125,26 @@ let printArticlesForRating = (source, divToAppend, currentArticle) => {
     $rateForm.append($unfairText);
 
     let $topicInput = $('<select></select>').addClass('topic-input').attr('name', 'topic');
-    $science = $('<option></option>').attr('value', 'Science').text('Science');
-    $topicInput.append($science);
-    $politics = $('<option></option>').attr('value', 'Politics').text('Politics');
-    $topicInput.append($politics);
+    $business = $('<option></option>').attr('value', 'Business').text('Business');
+    $topicInput.append($business);
+    $education = $('<option></option>').attr('value', 'Education').text('Education');
+    $topicInput.append($education);
+    $elections = $('<option></option>').attr('value', 'Elections').text('Elections');
+    $topicInput.append($elections);
+    $environment = $('<option></option>').attr('value', 'Environment').text('Environment');
+    $topicInput.append($environment);
+    $foreignAffairs = $('<option></option>').attr('value', 'Foreign Affairs').text('Foreign Affairs');
+    $topicInput.append($foreignAffairs);
+    $healthcare = $('<option></option>').attr('value', 'Healthcare').text('Healthcare');
+    $topicInput.append($healthcare);
+    $immigration = $('<option></option>').attr('value', 'Immigration').text('Immigration');
+    $topicInput.append($immigration);
     $religion = $('<option></option>').attr('value', 'Religion').text('Religion');
     $topicInput.append($religion);
-    $foreignPolicy = $('<option></option>').attr('value', 'Foreign Policy').text('Foreign Policy');
-    $topicInput.append($foreignPolicy);
+    $science = $('<option></option>').attr('value', 'Science').text('Science');
+    $topicInput.append($science);
+    $taxes = $('<option></option>').attr('value', 'Taxes').text('Taxes');
+    $topicInput.append($taxes);
     $rateForm.append($topicInput);
 
     let $submitButton = $('<button></button>').addClass('topic-input-button').attr('type', 'button');
@@ -146,9 +159,17 @@ let printArticlesForRating = (source, divToAppend, currentArticle) => {
         })
         ratingsObject.written_fairly = parseInt(ratingsObject.written_fairly);
         ratingsObject.userid = getToken();
-        ratingsObject.articleid = source.articleid;
+        ratingsObject.articleid = articlesArray[currentArticle].articleid;
         postRating(ratingsObject);
-        getDBArticleForRating(currentArticle + 1, getToken());
+        articlesArray.splice(currentArticle, 1);
+        if (articlesArray.length === currentArticle + 1 || articlesArray.length === 0){
+            divToAppend.empty();
+            let $noMore = $('<div></div>').addClass('no-more');
+            $noMore.text('No more articles to rate.  Check back later!');
+            divToAppend.append($noMore);
+        } else {
+            printArticlesForRating(articlesArray, $printArticleForRating, currentArticle);
+        }
     })
     $rateForm.append($submitButton);
 
@@ -157,7 +178,14 @@ let printArticlesForRating = (source, divToAppend, currentArticle) => {
 	$skipArticleButton.attr('type', 'button');
 	$skipArticleButton.text('Skip Article');
 	$skipArticleButton.click(() => {
-		getDBArticleForRating(currentArticle + 1, getToken());
+		if (articlesArray.length === currentArticle + 1){
+            divToAppend.empty();
+            let $noMore = $('<div></div>').addClass('no-more');
+            $noMore.text('No more articles to rate.  Check back later!');
+            divToAppend.append($noMore);
+        } else {
+            printArticlesForRating(articlesArray, $printArticleForRating, currentArticle + 1);
+        }
 	});
 	$buttonDiv.append($skipArticleButton);
 }
@@ -194,6 +222,12 @@ let createSignOutButton = () => {
         let signOutButton = createSignOutButton();
         let buttonParent = document.querySelector('.navigation-top');
         buttonParent.appendChild(signOutButton);
+        let $footer = $('.navigation-bottom');
+        let $rateButton = $('<li></li>').addClass('nav-button').attr('id', 'rate');
+        $rateButton.text('Rate Articles');
+        $footer.append($rateButton);
+        showPageButton($rateButton, rateArticles);
+        $rateButton.click(() => getDBArticleForRating(0, getToken()));
       };
     })
   } catch(err) {
@@ -207,12 +241,18 @@ let getDBArticleForRating = (articleToGet, userid) => {
         {method: 'POST', body: JSON.stringify(idObject)})
         .then(response => response.json())
             .then((articles) => {
-                console.log(articles);
-                let theArticle = articles[articleToGet];
-                printArticlesForRating(theArticle, $printArticleForRating, articleToGet);
-            }
-    )
-}
+                if (articles.length === 0){
+                    $printArticleForRating.empty();
+                    let $noMore = $('<div></div>').addClass('no-more');
+                    $noMore.text('No more articles to rate.  Check back later!');
+                    $printArticleForRating.append($noMore);
+                } else {
+                    printArticlesForRating(articles, $printArticleForRating, 0);
+                }
+            }).catch(error => {
+                console.log(error);
+            })
+        }
 
 let getDBArticlesView  = () => {
     $.get('/articles', data => {
@@ -245,9 +285,7 @@ let renderButtons = () => {
         $printResult.empty();
         getDBArticlesView();
     })
-    showPageButton($rateButton, rateArticles);
-    $rateButton.click(() => getDBArticleForRating(0, getToken()));
     showPageButton($signInButton, signIn);
 }
-
+getDBArticlesView();
 renderButtons();
